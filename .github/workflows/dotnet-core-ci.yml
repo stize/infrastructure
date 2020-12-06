@@ -8,9 +8,11 @@ on:
 
 jobs:
   build:
-    env:
-      working-directory: src
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: src    
 
     steps:
     - uses: actions/checkout@v2
