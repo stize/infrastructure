@@ -1,5 +1,6 @@
 ﻿using System;
 using Pulumi;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure
 {
@@ -16,9 +17,10 @@ namespace Stize.Infrastructure
         public string Name { get; set; }
 
         /// <summary>
-        /// Resource Location
+        /// RandomId used to generate the name of this component
         /// </summary>
-        public Input<string> Location { get; set; }
+        /// <value></value>
+        public RandomId RandomId {get; set;}
 
         /// <summary>
         /// Pulumi Custom Resource Options
@@ -44,7 +46,6 @@ namespace Stize.Infrastructure
             CustomResourceOptions = cro;
         }
     }
-
 
     /// <summary>
     /// Stize infrastructure base builder

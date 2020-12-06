@@ -28,6 +28,6 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             var subnet = new Subnet(Name, Arguments, cro);
             return subnet;
-        }
+        }       
     }
 }

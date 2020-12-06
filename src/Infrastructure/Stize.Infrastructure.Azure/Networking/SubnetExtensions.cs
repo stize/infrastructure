@@ -5,6 +5,28 @@ namespace Stize.Infrastructure.Azure.Networking
 {
     public static class SubnetExtensions
     {
+
+        /// <summary>
+        /// Sets the builder name. If the builder has an RandomId associated, 
+        /// appends the hex value of the RandomId to the end of the name
+        /// </summary>
+        /// <param name="builder">Builder instance</param>
+        /// <param name="name">Builder name</param>
+        /// <returns>The builder argument</returns>
+        public static SubnetBuilder Name(this SubnetBuilder builder, Input<string> name)
+        {
+            if (builder.RandomId != null)
+            {
+                builder.Arguments.Name = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+            }
+            else
+            {
+                builder.Arguments.Name = name;
+            }
+
+            return builder;
+        }
+
         /// <summary>
         /// Assigned the VNet for this
         /// </summary>
@@ -24,7 +46,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="addressPrefix"></param>
         /// <returns></returns>
         public static SubnetBuilder AddressPrefix(this SubnetBuilder builder, Input<string> addressPrefix)
-        {            
+        {
             builder.Arguments.AddressPrefixes.Add(addressPrefix);
             return builder;
         }
@@ -94,7 +116,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SubnetBuilder EnableAzureActiveDirectoryServiceEndpoint(this SubnetBuilder builder)
         {
-            return EnableServiceEndpoint(builder, "Microsoft.AzureActiveDirectory");            
+            return EnableServiceEndpoint(builder, "Microsoft.AzureActiveDirectory");
         }
 
         /// <summary>
