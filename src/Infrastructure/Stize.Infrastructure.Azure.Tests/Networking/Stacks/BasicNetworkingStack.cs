@@ -8,9 +8,8 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
     {
         public NetworkingBasicStack()
         {
-            var builder = new VNetBuilder();
+            var builder = new VNetBuilder("vnet1");
             builder
-                .Name("vnet1")
                 .Location("westeurope")
                 .ResourceGroup("my-resource-group")
                 .AddressSpace("172.16.0.0/24");

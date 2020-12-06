@@ -14,13 +14,19 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <summary>
         /// Creates a new instance of <see cref="SubnetBuilder"/>
         /// </summary>
-        public SubnetBuilder()
-        {            
+        /// <param name="name">Subnet internal name</param>
+        public SubnetBuilder(string name) : base(name)
+        {
         }
 
+        /// <summary>
+        /// Creates the Pulumi Subnet resource object 
+        /// </summary>
+        /// <param name="cro">Custom Resource Options</param>
+        /// <returns></returns>
         public override Subnet Build(CustomResourceOptions cro)
         {
-            var subnet = new Subnet($"{Arguments.Name}-subnet", Arguments, cro);
+            var subnet = new Subnet(Name, Arguments, cro);
             return subnet;
         }
     }

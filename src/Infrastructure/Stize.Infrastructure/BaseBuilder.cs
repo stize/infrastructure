@@ -28,15 +28,18 @@ namespace Stize.Infrastructure
         /// <summary>
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
-        public BaseBuilder()
+        /// <param name="name">Pulumi internal name of the component</param>
+        public BaseBuilder(string name)
         {
+            this.Name = name;
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
         /// <param name="cro"></param>
-        public BaseBuilder(CustomResourceOptions cro)
+        public BaseBuilder(string name, CustomResourceOptions cro) : this(name)
         {
             CustomResourceOptions = cro;
         }
@@ -51,9 +54,19 @@ namespace Stize.Infrastructure
         /// <summary>
         /// Create a new instance of <see cref="BaseBuilder"/>
         /// </summary>
-        public BaseBuilder()
+        /// <param name="name">Pulumi internal name of the component</param>
+        public BaseBuilder(string name) : base(name)
         {
         }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="cro"></param>
+        public BaseBuilder(string name, CustomResourceOptions cro) : base(name, cro)
+        {
+        }        
 
         /// <summary>
         /// Generates the Pulumi object using builder's <see cref="CustomResourceOptions"/>

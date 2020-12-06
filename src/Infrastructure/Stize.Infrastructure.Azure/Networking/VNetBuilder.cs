@@ -22,14 +22,15 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <summary>
         /// Creates a new instance of <see cref="VNetBuilder"/>
         /// </summary>
-        public VNetBuilder()
+        /// <param name="name"></param>
+        public VNetBuilder(string name) : base(name)
         {         
         }
 
         /// <summary>
         /// Builds the Virtual network
         /// </summary>
-        /// <param name="cro"></param>
+        /// <param name="cro">Custom Resource Object</param>
         /// <returns></returns>
         public override VirtualNetwork Build(CustomResourceOptions cro)
         {
