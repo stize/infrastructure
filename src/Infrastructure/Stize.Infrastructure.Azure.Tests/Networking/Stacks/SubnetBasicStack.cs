@@ -15,6 +15,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Build();
 
             var subnet = new SubnetBuilder("subnet1")
+                .Parent(vnet)
                 .ResourceGroup(vnet.ResourceGroupName)
                 .InVNet(vnet.Name)
                 .AddressPrefix("172.16.0.0/24")

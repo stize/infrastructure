@@ -24,7 +24,7 @@ namespace Stize.Infrastructure
         /// <param name="builder">Builder instance</param>
         /// <param name="location">Resource location</param>
         /// <returns></returns>
-        public static B Location<B>(this B builder, string location) where B : BaseBuilder
+        public static B Location<B>(this B builder, Input<string> location) where B : BaseBuilder
         {
             builder.Location = location;
             return builder;
@@ -40,6 +40,19 @@ namespace Stize.Infrastructure
         public static B DependsOn<B>(this B builder, Resource resource) where B : BaseBuilder
         {
             builder.CustomResourceOptions.DependsOn = resource;
+            return builder;
+        }
+
+        /// <summary>
+        /// Creates a parent/child relationshipo between two resources
+        /// </summary>
+        /// <param name="builder">Builder that is creating the new <see="Resource" /></param>
+        /// <param name="resource"><see="Resource" /> to set as parent</param>
+        /// <typeparam name="B">Bulder type</typeparam>
+        /// <returns>The builder</returns>
+        public static B Parent<B>(this B builder, Resource resource) where B : BaseBuilder
+        {
+            builder.CustomResourceOptions.Parent = resource;
             return builder;
         }
     }

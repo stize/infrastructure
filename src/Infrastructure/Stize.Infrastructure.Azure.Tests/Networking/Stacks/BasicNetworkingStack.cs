@@ -1,5 +1,6 @@
 ﻿using System;
 using Pulumi;
+using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Networking;
 
 namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
@@ -8,10 +9,15 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
     {
         public NetworkingBasicStack()
         {
+
+            var rg = new ResourceGroupBuilder("rg1")
+            .Location("westeurope")
+            .Build();
+
             var builder = new VNetBuilder("vnet1");
             builder
                 .Location("westeurope")
-                .ResourceGroup("my-resource-group")
+                .ResourceGroup(rg.Name)
                 .AddressSpace("172.16.0.0/24");
 
             builder.Build();

@@ -25,7 +25,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SubnetBuilder AddressPrefix(this SubnetBuilder builder, Input<string> addressPrefix)
         {            
-            builder.Arguments.AddressPrefix = addressPrefix;
+            builder.Arguments.AddressPrefixes.Add(addressPrefix);
             return builder;
         }
 

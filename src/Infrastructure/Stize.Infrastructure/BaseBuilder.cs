@@ -18,7 +18,7 @@ namespace Stize.Infrastructure
         /// <summary>
         /// Resource Location
         /// </summary>
-        public string Location { get; set; }
+        public Input<string> Location { get; set; }
 
         /// <summary>
         /// Pulumi Custom Resource Options
