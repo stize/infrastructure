@@ -4,9 +4,16 @@ using Pulumi.Azure.Core;
 
 namespace Stize.Infrastructure.Azure
 {
+    /// <summary>
+    /// Class to build <see="ResourceGroup" /> resources
+    /// </summary>
     public class ResourceGroupBuilder : BaseBuilder<ResourceGroup>
     {
 
+        /// <summary>
+        /// ResourceGroup arguments
+        /// </summary>
+        /// <returns></returns>
         public ResourceGroupArgs Arguments { get; private set; } = new ResourceGroupArgs();
 
         /// <summary>
