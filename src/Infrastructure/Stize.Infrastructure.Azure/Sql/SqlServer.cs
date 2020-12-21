@@ -2,7 +2,7 @@ using System;
 using Pulumi;
 using Pulumi.Azure.Sql;
 
-namespace Stize.Infrastructure.Azure.Database
+namespace Stize.Infrastructure.Azure.Sql
 {
     /// <summary>
     /// Builder responsible for the creationg of SQL Server databases in Azure
