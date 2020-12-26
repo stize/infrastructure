@@ -8,15 +8,18 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
     {
         public SubnetBasicStack()
         {
+            var rg = "my-resource-group";
             var vnet = new VNetBuilder("vnet1")
                 .Location("westeurope")
-                .ResourceGroup("my-resource-group")
+                .ResourceGroup(rg)
+                .Name("vnet1")
                 .AddressSpace("172.16.0.0/24")
                 .Build();
 
             var subnet = new SubnetBuilder("subnet1")
                 .Parent(vnet)
-                .ResourceGroup(vnet.ResourceGroupName)
+                .Name("subnet1")
+                .ResourceGroup(rg)
                 .InVNet(vnet.Name)
                 .AddressPrefix("172.16.0.0/24")
                 .Build();

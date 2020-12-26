@@ -11,13 +11,15 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
         {
 
             var rg = new ResourceGroupBuilder("rg1")
+            .Name("rg1")
             .Location("westeurope")
             .Build();
 
             var builder = new VNetBuilder("vnet1");
-            builder
+            builder            
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
+                .Name("vnet1")
                 .AddressSpace("172.16.0.0/24");
 
             builder.Build();

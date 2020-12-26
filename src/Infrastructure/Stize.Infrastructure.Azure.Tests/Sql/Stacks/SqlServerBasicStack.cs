@@ -11,6 +11,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
         {
 
             var rg = new ResourceGroupBuilder("rg1")
+            .Name("rg1")
             .Location("westeurope")
             .Build();
 
@@ -19,6 +20,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
             builder
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
+                .Name("sql1")
                 .AdministratorLogin("admin")
                 .AdministratorPassword("stize");
 

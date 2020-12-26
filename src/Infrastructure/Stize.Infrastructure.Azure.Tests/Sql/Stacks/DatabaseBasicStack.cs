@@ -10,6 +10,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
         public DatabaseBasicStack()
         {
             var rg = new ResourceGroupBuilder("rg1")
+                .Name("rg1")
                 .Location("westeurope")
                 .Build();
 
@@ -23,7 +24,9 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Build();
 
             var db = new SqlDatabaseBuilder("db1")
-                .Server(server)                
+                .Server(server.Name)
+                .ResourceGroup(rg.Name)
+                .Location(server.Location)
                 .Name("my-db")
                 .Parent(server)
                 .Edition("Basic")

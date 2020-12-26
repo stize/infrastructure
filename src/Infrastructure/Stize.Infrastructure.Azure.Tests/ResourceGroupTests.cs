@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Pulumi.Azure.Core;
+using Pulumi.AzureNextGen.Resources.Latest;
 using Stize.Infrastructure.Tests.Azure.Stacks;
 using Xunit;
 

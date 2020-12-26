@@ -15,11 +15,11 @@ namespace Stize.Infrastructure.Azure
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.Name = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.ResourceGroupName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
             }
             else
             {
-                builder.Arguments.Name = name;
+                builder.Arguments.ResourceGroupName = name;
             }
 
             return builder;

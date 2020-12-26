@@ -1,6 +1,6 @@
 using System;
 using Pulumi;
-using Pulumi.Azure.Sql.Inputs;
+using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -14,20 +14,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder Name(this SqlDatabaseBuilder builder, Input<string> name)
         {
-            builder.Arguments.Name = name;
-            return builder;
-        }
-
-        /// <summary>
-        /// Azure SQL server on which the database should be created on
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="server"></param>
-        /// <returns></returns>
-        public static SqlDatabaseBuilder Server(this SqlDatabaseBuilder builder, Pulumi.Azure.Sql.SqlServer server)
-        {
-            builder.Server(server.Name);
-            builder.ResourceGroup(server.ResourceGroupName);
+            builder.Arguments.DatabaseName = name;
             return builder;
         }
 
@@ -89,7 +76,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="edition"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, Input<string> edition)
+        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, DatabaseEdition> edition)
         {
             builder.Arguments.Edition = edition;
             return builder;
@@ -115,7 +102,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder ReadScale(this SqlDatabaseBuilder builder)
         {
-            builder.Arguments.ReadScale = true;
+            builder.Arguments.ReadScale = Pulumi.AzureNextGen.Sql.Latest.ReadScale.Enabled;
             return builder;
         }
 
@@ -129,21 +116,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="objectiveName"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, Input<string> objectiveName)
+        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, ServiceObjectiveName> objectiveName)
         {
             builder.Arguments.RequestedServiceObjectiveName = objectiveName;
-            return builder;
-        }
-
-        /// <summary>
-        /// Sets the database threat detection policy
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static SqlDatabaseBuilder ThreadDetectionPolicy(this SqlDatabaseBuilder builder, DatabaseThreatDetectionPolicyArgs args)
-        {
-            builder.Arguments.ThreatDetectionPolicy = args;
             return builder;
         }
     }

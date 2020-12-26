@@ -1,6 +1,6 @@
 using System;
 using Pulumi;
-using Pulumi.Azure.Core;
+using Pulumi.AzureNextGen.Resources.Latest;
 
 namespace Stize.Infrastructure.Azure
 {

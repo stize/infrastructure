@@ -1,5 +1,6 @@
 ﻿using System;
 using Pulumi;
+using Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -17,11 +18,11 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.Name = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.SubnetName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
             }
             else
             {
-                builder.Arguments.Name = name;
+                builder.Arguments.SubnetName = name;
             }
 
             return builder;
@@ -56,9 +57,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static SubnetBuilder EnforcePrivateLinkEndpointNetworkPolicies(this SubnetBuilder builder, bool active = true)
+        public static SubnetBuilder EnforcePrivateEndpointNetworkPolicies(this SubnetBuilder builder, bool active = true)
         {
-            builder.Arguments.EnforcePrivateLinkEndpointNetworkPolicies = active;
+            builder.Arguments.PrivateEndpointNetworkPolicies = active.ToString(); // TODO Confirm if this is correct after the migration to nextgen
             return builder;
         }
 
@@ -70,7 +71,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SubnetBuilder EnforcePrivateLinkServiceNetworkPolicies(this SubnetBuilder builder, bool active = true)
         {
-            builder.Arguments.EnforcePrivateLinkServiceNetworkPolicies = active;
+            builder.Arguments.PrivateLinkServiceNetworkPolicies = active.ToString(); // TODO Confirm if this is correct after the migration to nextgen
             return builder;
         }
 
@@ -93,19 +94,15 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns>The builder</returns>
         public static SubnetBuilder EnableAllServiceEndpoints(this SubnetBuilder builder)
         {
-            builder.Arguments.ServiceEndpoints = new InputList<string>()
-            {
-                "Microsoft.AzureActiveDirectory",
-                "Microsoft.AzureCosmosDB",
-                "Microsoft.ContainerRegistry",
-                "Microsoft.EventHub",
-                "Microsoft.KeyVault",
-                "Microsoft.ServiceBus",
-                "Microsoft.Sql",
-                "Microsoft.Storage",
-                "Microsoft.Web"
-            };
-
+            EnableAzureActiveDirectoryServiceEndpoint(builder);
+            EnableAzureCosmosDbServiceEndpoint(builder);
+            EnableContainerRegistryServiceEndpoint(builder);
+            EnableEventHubServiceEndpoint(builder);
+            EnableKeyVaultServiceEndpoint(builder);
+            EnableServiceBusServiceEndpoint(builder);
+            EnableSqlServiceEndpoint(builder);
+            EnableStorageServiceEndpoint(builder);
+            EnableWebServiceEndpoint(builder);
             return builder;
         }
 
@@ -207,7 +204,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SubnetBuilder EnableServiceEndpoint(this SubnetBuilder builder, Input<string> serviceEndpoint)
         {
-            builder.Arguments.ServiceEndpoints.Add(serviceEndpoint);
+            builder.Arguments.ServiceEndpoints.Add(new ServiceEndpointPropertiesFormatArgs{
+                Service = serviceEndpoint
+            });
             return builder;
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using Pulumi;
-using Pulumi.Azure.Sql.Inputs;
+using Pulumi.AzureNextGen.Resources.Latest;
+using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -15,7 +16,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlServerBuilder Name(this SqlServerBuilder builder, Input<string> name)
         {
-            builder.Arguments.Name = name;
+            builder.Arguments.ServerName = name;
             return builder;
         }
 
@@ -25,7 +26,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder">SQL Server builder</param>
         /// <param name="resourceGroup">Resource group name</param>
         /// <returns></returns>
-        public static SqlServerBuilder ResourceGroup(this SqlServerBuilder builder, Pulumi.Azure.Core.ResourceGroup resourceGroup)
+        public static SqlServerBuilder ResourceGroup(this SqlServerBuilder builder, ResourceGroup resourceGroup)
         {
             builder.ResourceGroup(resourceGroup.Name);
             return builder;
@@ -61,7 +62,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder">SQL Server builder</param>
         /// <param name="version">Server version</param>
         /// <returns></returns>
-        public static SqlServerBuilder Version(this SqlServerBuilder builder, Input<string> version)
+        public static SqlServerBuilder Version(this SqlServerBuilder builder, InputUnion<string, ServerVersion> version)
         {
             builder.Arguments.Version = version;
             return builder;
@@ -90,17 +91,5 @@ namespace Stize.Infrastructure.Azure.Sql
             builder.Arguments.AdministratorLoginPassword = password;
             return builder;
         }
-
-        /// <summary>
-        /// Sets the Advanced audit policy for this server
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        public static SqlServerBuilder AdvancedAudit(this SqlServerBuilder builder, SqlServerExtendedAuditingPolicyArgs args)
-        {
-            builder.Arguments.ExtendedAuditingPolicy = args;
-            return builder;
-        } 
     }
 }

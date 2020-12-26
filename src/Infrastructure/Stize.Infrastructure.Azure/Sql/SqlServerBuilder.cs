@@ -1,19 +1,19 @@
 using System;
 using Pulumi;
-using Pulumi.Azure.Sql;
+using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
     /// <summary>
     /// Builder responsible for the creationg of SQL Server databases in Azure
     /// </summary>
-    public class SqlServerBuilder : BaseBuilder<SqlServer>
+    public class SqlServerBuilder : BaseBuilder<Server>
     {
         /// <summary>
         /// The database arguments
         /// </summary>
         /// <value></value>
-        public SqlServerArgs Arguments { get; private set; } = new SqlServerArgs();
+        public ServerArgs Arguments { get; private set; } = new ServerArgs();
 
         /// <summary>
         /// Indicates the replica location
@@ -25,7 +25,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// Creates a new instance of <see="SqlServerBuilder" />
         /// </summary>
         public SqlServerBuilder(string name) : base(name)
-        {
+        {            
             Arguments.Version = "12.0";
         }
 
@@ -33,7 +33,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// Creates a new instance of <see="SqlServerBuilder" />
         /// </summary>
         /// <param name="arguments">Default arguments to use</param>
-        public SqlServerBuilder(string name, SqlServerArgs arguments) : base(name)
+        public SqlServerBuilder(string name, ServerArgs arguments) : base(name)
         {
             Arguments = arguments;
         }
@@ -43,9 +43,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// </summary>
         /// <param name="cro"></param>
         /// <returns></returns>
-        public override SqlServer Build(CustomResourceOptions cro)
+        public override Server Build(CustomResourceOptions cro)
         {
-            var sql = new SqlServer(Name, Arguments, cro);            
+            var sql = new Server(Name, Arguments, cro);            
             return sql;
         }
     }

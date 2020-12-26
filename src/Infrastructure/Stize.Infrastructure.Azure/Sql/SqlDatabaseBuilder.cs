@@ -1,6 +1,5 @@
-using System;
 using Pulumi;
-using Pulumi.Azure.Sql;
+using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {

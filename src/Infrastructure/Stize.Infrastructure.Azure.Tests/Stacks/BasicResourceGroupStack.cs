@@ -9,6 +9,7 @@ namespace Stize.Infrastructure.Tests.Azure.Stacks
         public BasicResourceGroupStack()
         {
             var rg = new ResourceGroupBuilder("rg1")
+            .Name("rg1")
             .Location("westeurope")
             .Build();
         }

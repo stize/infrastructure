@@ -1,5 +1,5 @@
-﻿using System;
-using Pulumi;
+﻿using Pulumi;
+using Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -21,11 +21,15 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Virtual network address space
         /// </summary>
         /// <param name="builder">VNet Builder</param>
-        /// <param name="addressSpace">VNet address space</param>
+        /// <param name="addressPrefixes">VNet address space</param>
         /// <returns></returns>
-        public static VNetBuilder AddressSpace(this VNetBuilder builder, Input<string> addressSpace)
+        public static VNetBuilder AddressSpace(this VNetBuilder builder, InputList<string> addressPrefixes)
         {
-            builder.Arguments.AddressSpaces = addressSpace;
+            builder.Arguments.AddressSpace = new AddressSpaceArgs
+            {
+                AddressPrefixes = addressPrefixes
+            };
+
             return builder;
         }
 
@@ -41,11 +45,11 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.Name = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.VirtualNetworkName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
             }
             else
             {
-                builder.Arguments.Name = name;
+                builder.Arguments.VirtualNetworkName = name;
             }
 
             return builder;

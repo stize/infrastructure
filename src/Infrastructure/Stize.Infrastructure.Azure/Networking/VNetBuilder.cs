@@ -1,14 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using Pulumi;
-using Pulumi.Azure.Network;
-using Pulumi.Azure.Network.Inputs;
-using Pulumi.Azure.Network.Outputs;
+﻿using Pulumi;
+using Pulumi.AzureNextGen.Network.Latest;
 
 namespace Stize.Infrastructure.Azure.Networking
-{    
-
+{
     /// <summary>
     /// VNet class builder
     /// </summary>
