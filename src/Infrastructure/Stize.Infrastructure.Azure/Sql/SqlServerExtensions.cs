@@ -6,6 +6,31 @@ namespace Stize.Infrastructure.Azure.Sql
 {
     public static class SqlServerExtensions
     {
+
+        /// <summary>
+        /// Sets the resource name
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder Name(this SqlServerBuilder builder, Input<string> name)
+        {
+            builder.Arguments.Name = name;
+            return builder;
+        }
+
+        /// <summary>
+        /// Assignes the sql server to a resource group
+        /// </summary>
+        /// <param name="builder">SQL Server builder</param>
+        /// <param name="resourceGroup">Resource group name</param>
+        /// <returns></returns>
+        public static SqlServerBuilder ResourceGroup(this SqlServerBuilder builder, Pulumi.Azure.Core.ResourceGroup resourceGroup)
+        {
+            builder.ResourceGroup(resourceGroup.Name);
+            return builder;
+        }
+
         /// <summary>
         /// Assignes the sql server to a resource group
         /// </summary>

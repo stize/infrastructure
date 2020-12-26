@@ -22,7 +22,12 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public SqlDatabaseBuilder(string name) : base(name)
         {
-        }    
+        }
+
+        public SqlDatabaseBuilder(string name, DatabaseArgs arguments) : this(name)
+        {
+            Arguments = arguments;
+        }
 
         /// <summary>
         /// Creates the Pulumi database object

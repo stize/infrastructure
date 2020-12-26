@@ -19,7 +19,20 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Sets the server this database is created
+        /// Azure SQL server on which the database should be created on
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder Server(this SqlDatabaseBuilder builder, Pulumi.Azure.Sql.SqlServer server)
+        {
+            builder.Server(server.Name);
+            builder.ResourceGroup(server.ResourceGroupName);
+            return builder;
+        }
+
+        /// <summary>
+        /// Azure SQL server on which the database should be created on
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="serverName"></param>
@@ -27,6 +40,18 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder Server(this SqlDatabaseBuilder builder, Input<string> serverName)
         {
             builder.Arguments.ServerName = serverName;
+            return builder;
+        }
+
+        /// <summary>
+        /// Azure SQL resource group
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="resourceGroup"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder ResourceGroup(this SqlDatabaseBuilder builder, Input<string> resourceGroup)
+        {
+            builder.Arguments.ResourceGroupName = resourceGroup;
             return builder;
         }
 
@@ -43,7 +68,23 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Sets the database edition
+        /// Sets the elastic pool name
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder ElasticPoolName(this SqlDatabaseBuilder builder, Input<string> name)
+        {
+            builder.Arguments.ElasticPoolName = name;
+            return builder;
+        }
+
+        /// <summary>
+        //     The edition of the database to be created. Applies only if `create_mode` is `Default`.
+        //     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
+        //     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
+        //     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
+        //     Service Tiers](https://azure.microsoft.com/en-gb/documentation/articles/sql-database-service-tiers/).
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="edition"></param>
@@ -75,6 +116,34 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder ReadScale(this SqlDatabaseBuilder builder)
         {
             builder.Arguments.ReadScale = true;
+            return builder;
+        }
+
+        /// <summary>
+        //  The service objective name for the database. Valid values depend on edition and
+        //  location and may include `S0`, `S1`, `S2`, `S3`, `P1`, `P2`, `P4`, `P6`, `P11`
+        //  and `ElasticPool`. You can list the available names with the cli: ```shell az
+        //  sql db list-editions -l westus -o table ```. For further information please see
+        //  [Azure CLI - az sql db](https://docs.microsoft.com/en-us/cli/azure/sql/db?view=azure-cli-latest#az-sql-db-list-editions).
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="objectiveName"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, Input<string> objectiveName)
+        {
+            builder.Arguments.RequestedServiceObjectiveName = objectiveName;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the database threat detection policy
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder ThreadDetectionPolicy(this SqlDatabaseBuilder builder, DatabaseThreatDetectionPolicyArgs args)
+        {
+            builder.Arguments.ThreatDetectionPolicy = args;
             return builder;
         }
     }
