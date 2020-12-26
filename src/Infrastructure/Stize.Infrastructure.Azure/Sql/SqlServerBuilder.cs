@@ -16,10 +16,17 @@ namespace Stize.Infrastructure.Azure.Sql
         public SqlServerArgs Arguments { get; private set; } = new SqlServerArgs();
 
         /// <summary>
+        /// Indicates the replica location
+        /// </summary>
+        /// <value></value>
+        public Input<string> ReplicaLocation {get; set; }
+
+        /// <summary>
         /// Creates a new instance of <see="SqlServerBuilder" />
         /// </summary>
         public SqlServerBuilder(string name) : base(name)
         {
+            Arguments.Version = "12.0";
         }
 
         /// <summary>
@@ -38,7 +45,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public override SqlServer Build(CustomResourceOptions cro)
         {
-            var sql = new SqlServer(Name, Arguments, cro);
+            var sql = new SqlServer(Name, Arguments, cro);            
             return sql;
         }
     }
