@@ -10,7 +10,7 @@ jobs:
     env: 
       DOTNET_VERSION: 3.1.301
       PACKAGE_PATH: $GITHUB_WORKSPACE/artifacts/build/
-      PACKAGE_SOURCE: https://nuget.pkg.github.com/stize/index.json
+      PACKAGE_SOURCE: https://nuget.pkg.github.com/stize/index.json    
     defaults:
       run:
         shell: bash
@@ -39,5 +39,5 @@ jobs:
       run: |
           echo Packages to publish:
           ls -o ${{ env.PACKAGE_PATH}}*.*nupkg
-          dotnet nuget push ${{ env.PACKAGE_PATH}}*.nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}
-          dotnet nuget push ${{ env.PACKAGE_PATH}}*.snupkg --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}
+          dotnet nuget push ${{ env.PACKAGE_PATH}}*.nupkg --api-key ${{ secrets.PACKAGE_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}
+          dotnet nuget push ${{ env.PACKAGE_PATH}}*.snupkg --api-key ${{ secrets.PACKAGE_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}
