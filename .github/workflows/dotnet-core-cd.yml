@@ -42,4 +42,5 @@ jobs:
       run: |
           echo Packages to publish:
           ls -o ${{ env.PACKAGE_PATH}}*.*nupkg
-          dotnet nuget push ${{ env.PACKAGE_PATH}}*.nupkg --skip-duplicate --include-symbols -p:SymbolPackageFormat=snupkg          
+          dotnet nuget push ${{ env.PACKAGE_PATH}}*.nupkg --skip-duplicate
+          dotnet nuget push ${{ env.PACKAGE_PATH}}*.snupkg --skip-duplicate
