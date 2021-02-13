@@ -43,7 +43,8 @@ Then, add the Stize package repository to your local nuget configuration, if is 
 dotnet nuget add source https://nuget.pkg.github.com/stize/index.json --name stize --username ${GITHUB_USER} --password ${GITHUB_PAT} --store-password-in-clear-text
 ```
 
-> Learn [here](hhttps://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-toke) how to create your Github Personal Access Token (PAT). 
+Learn [here](hhttps://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-toke) how to create your Github Personal Access Token (PAT). 
+
 > This PAT only needs `read:packages` permission.
 
 And add the Stize.Infrastructure.Azure package to your project:
