@@ -8,9 +8,10 @@ jobs:
   release:
     runs-on: ubuntu-latest
     env: 
-      PACKAGE_SOURCE: https://nuget.pkg.github.com/stize/index.json
-      PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       DOTNET_VERSION: 3.1.301
+      PACKAGE_PATH: ${{GITHUB_WORKSPACE}}/artifacts/build/*.*nupkg
+      PACKAGE_SOURCE: https://nuget.pkg.github.com/stize/index.json
+      PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
     defaults:
       run:
         shell: bash
@@ -37,4 +38,6 @@ jobs:
       run: dotnet pack --no-restore -p:PackageVersion=${{steps.version.outputs.version}}
     - name: push nuget.org
       run: |
-          until dotnet nuget push "./artifacts/build/*.*nupkg" --api-key ${{ env.PACKAGE_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}; do echo "Retrying"; sleep 1; done
+          echo Packages to publish:
+          ls -l ${{ env.PACKAGE_PATH}}
+          until dotnet nuget push "${{ env.PACKAGE_PATH}}" --api-key ${{ env.PACKAGE_TOKEN }} --skip-duplicate --source ${{env.PACKAGE_SOURCE}}; do echo "Retrying"; sleep 1; done
