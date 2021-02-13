@@ -14,7 +14,7 @@
         <RpmPackageVendor>Stize</RpmPackageVendor>
         <Copyright>© Stize. All rights reserved.</Copyright>
         <NeutralLanguage>en-US</NeutralLanguage>
-        <PackageLicenseUrl>https://github.com/stize/dotnet/LICENSE.txt</PackageLicenseUrl>
+        <PackageLicenseUrl>https://github.com/stize/infrastructure/LICENSE.txt</PackageLicenseUrl>
         <!-- The SPDX name for the source license. See https://spdx.org/licenses/. -->
         <PackageLicenseType>Apache-2.0</PackageLicenseType>
 
@@ -39,7 +39,7 @@
         <Serviceable>true</Serviceable>
 
         <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
-        <RepositoryUrl>https://github.com/stize/dotnet</RepositoryUrl>
+        <RepositoryUrl>https://github.com/stize/infrastructure</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
 
     </PropertyGroup>
