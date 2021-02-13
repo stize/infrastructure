@@ -37,8 +37,8 @@ jobs:
     - name: Pack
       # run: dotnet pack --no-restore -p:PackageVersion=${{steps.version.outputs.version}}
       run: |
-          echo Generating package version "${{ env.PACKAGE_VESION }}"
-          dotnet pack --no-restore -p:Version=${{ env.PACKAGE_VESION }}
+          echo Generating package version "${{ env.PACKAGE_VERSION }}"
+          dotnet pack --no-restore -p:Version=${{ env.PACKAGE_VERSION }}
     - name: push nuget packages
       run: |
           echo Packages to publish:
