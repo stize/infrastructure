@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       DOTNET_VERSION: 3.1.301
-      PACKAGE_PATH: ${{GITHUB_WORKSPACE}}/artifacts/build/*.*nupkg
+      PACKAGE_PATH: $GITHUB_WORKSPACE/artifacts/build/*.*nupkg
       PACKAGE_SOURCE: https://nuget.pkg.github.com/stize/index.json
       PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
     defaults:
