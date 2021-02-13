@@ -10,7 +10,7 @@ jobs:
     env: 
       DOTNET_VERSION: 3.1.301
       PACKAGE_PATH: $GITHUB_WORKSPACE/artifacts/build/
-      PACKAGE_SOURCE: github
+      PACKAGE_SOURCE: "https://nuget.pkg.github.com/stize/infrastructure/index.json"
       PACKAGE_VERSION: ${GITHUB_REF##*/v} # Release tags should allways start with "v". e.g. "v0.0.1-alpha"
     defaults:
       run:
@@ -37,5 +37,5 @@ jobs:
       run: |
           echo Packages to publish:
           ls -o ${{ env.PACKAGE_PATH}}*.*nupkg
-          dotnet nuget push "${{ env.PACKAGE_PATH}}*.nupkg" --api-key ${{ secrets.PACKAGE_TOKEN }} --source "${{env.PACKAGE_SOURCE}}" --skip-duplicate
-          dotnet nuget push "${{ env.PACKAGE_PATH}}*.snupkg" --api-key ${{ secrets.PACKAGE_TOKEN }} --source "${{env.PACKAGE_SOURCE}}" --skip-duplicate
+          dotnet nuget push "${{ env.PACKAGE_PATH}}*.nupkg" --api-key ${{ secrets.PACKAGE_TOKEN }} --source ${{env.PACKAGE_SOURCE}} --skip-duplicate
+          dotnet nuget push "${{ env.PACKAGE_PATH}}*.snupkg" --api-key ${{ secrets.PACKAGE_TOKEN }} --source ${{env.PACKAGE_SOURCE}} --skip-duplicate
