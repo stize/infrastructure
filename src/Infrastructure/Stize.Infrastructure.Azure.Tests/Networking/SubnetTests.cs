@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var subnet = resources.OfType<Subnet>().FirstOrDefault();
 
             subnet.Should().NotBeNull("Subnet not found");
-            subnet.Name.Apply(x => x.Should().Be("vnet1"));
+            subnet.GetResourceName().Should().Be("subnet1");
             subnet.AddressPrefix.Apply(x => x.Should().Be("172.16.0.0/24"));
             subnet.ServiceEndpoints.Apply(x => x.Length.Should().Be(0));
         }

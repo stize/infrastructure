@@ -1,4 +1,4 @@
-﻿using Pulumi;
+﻿    using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
@@ -65,6 +65,6 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             builder.Arguments.Location = location;
             return builder;
-        }        
+        }
     }
 }
