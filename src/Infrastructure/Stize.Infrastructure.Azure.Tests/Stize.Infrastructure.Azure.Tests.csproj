@@ -19,8 +19,6 @@
   <ItemGroup>
     <Folder Include="Azure\" />
     <Folder Include="Azure\Networking\" />
-    <Folder Include="Networking\" />
-    <Folder Include="Networking\Stacks\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Stize.Infrastructure.Azure\Stize.Infrastructure.Azure.csproj" />
