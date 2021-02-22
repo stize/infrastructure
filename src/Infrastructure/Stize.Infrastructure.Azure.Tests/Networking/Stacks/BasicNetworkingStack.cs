@@ -15,7 +15,8 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
             .Location("westeurope")
             .Build();
 
-            var builder = new VNetBuilder("vnet1")
+            var builder = new VNetBuilder("vnet1");
+            builder            
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
                 .Name("vnet1")

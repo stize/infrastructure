@@ -19,7 +19,7 @@ namespace Stize.Infrastructure.Tests.Azure
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
 
             rg.Should().NotBeNull("Resource group not found");
-            rg.GetResourceName().Should().Be("rg1");
+            rg.Name.Apply(x => x.Should().Be("rg1"));
             rg.Location.Apply(x => x.Should().Be("westeurope"));
         }
 
@@ -29,8 +29,8 @@ namespace Stize.Infrastructure.Tests.Azure
             var resources = await Testing.RunAsync<RandomIdNameStack>();
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
             rg.Should().NotBeNull("Resource group not found");
-            rg.GetResourceName().Should().StartWith("rg1");
-            rg.GetResourceName().Should().NotBeEquivalentTo("rg1");
+            rg.Name.Apply(x => x.Should().StartWith("rg1"));
+            rg.Name.Apply(x => x.Should().NotBeEquivalentTo("rg1"));
         }
     }
 }

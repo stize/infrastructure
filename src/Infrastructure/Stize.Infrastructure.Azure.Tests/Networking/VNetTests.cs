@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var vnet = resources.OfType<VirtualNetwork>().FirstOrDefault();
 
             vnet.Should().NotBeNull("Virtual Network not found");
-            vnet.GetResourceName().Should().Be("vnet1");
+            vnet.Name.Apply(x => x.Should().Be("vnet1"));
             vnet.Location.Apply(x => x.Should().Be("westeurope"));
         }
     }

@@ -14,7 +14,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
         public async System.Threading.Tasks.Task CreateBasicServer()
         {
             var resources = await Testing.RunAsync<SqlServerBasicStack>();
-            var server = resources.OfType<Server>().FirstOrDefault();
+            var server= resources.OfType<Server>().FirstOrDefault();
             server.Should().NotBeNull("SQL Server not found");
         }
     }
