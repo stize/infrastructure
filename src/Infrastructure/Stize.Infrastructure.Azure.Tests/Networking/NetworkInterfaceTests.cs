@@ -13,10 +13,11 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Testing.RunAsync<NetworkInterfaceBasicStack>();
             var nic = resources.OfType<NetworkInterface>().FirstOrDefault();
-
+            
             nic.Should().NotBeNull("Network Interface not found");
             nic.GetResourceName().Should().Be("ni1");
             nic.Location.Apply(x => x.Should().Be("westeurope"));
+            nic.IpConfigurations.Should().NotBeNull("No Ip Configs");
         }
     }
 }

@@ -16,11 +16,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
             .Location("westeurope")
             .Build();
 
-            var builder = new NetworkSecurityGroupBuilder("nsg1")
+            var nsg = new NetworkSecurityGroupBuilder("nsg1")
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
                 .Name("nsg1")
-                .SecurityRule("DenyAllInBound", SecurityRuleDirection.Inbound, "*", "*", 100, SecurityRuleAccess.Deny, SecurityRuleProtocol.Asterisk)
                 .Build();
         }
     }

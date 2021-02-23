@@ -21,7 +21,6 @@ namespace Stize.Infrastructure.Azure
             {
                 builder.Arguments.ResourceGroupName = name;
             }
-
             return builder;
         }
 

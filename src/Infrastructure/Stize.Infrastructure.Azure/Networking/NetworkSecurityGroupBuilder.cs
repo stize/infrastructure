@@ -26,8 +26,8 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public override NetworkSecurityGroup Build(CustomResourceOptions cro)
         {
-            var vnet = new NetworkSecurityGroup(Name, Arguments, cro);
-            return vnet;
+            var nsg = new NetworkSecurityGroup(Name, Arguments, cro);
+            return nsg;
         }
     }
 }
