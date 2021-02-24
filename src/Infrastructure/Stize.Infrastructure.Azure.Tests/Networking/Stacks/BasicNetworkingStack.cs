@@ -11,9 +11,9 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
         {
 
             var rg = new ResourceGroupBuilder("rg1")
-            .Name("rg1")
-            .Location("westeurope")
-            .Build();
+                .Name("rg1")
+                .Location("westeurope")
+                .Build();
 
             var builder = new VNetBuilder("vnet1");
             builder            

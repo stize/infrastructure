@@ -12,9 +12,9 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
         {
 
             var rg = new ResourceGroupBuilder("rg1")
-            .Name("rg1")
-            .Location("westeurope")
-            .Build();
+                .Name("rg1")
+                .Location("westeurope")
+                .Build();
 
             var nsg = new NetworkSecurityGroupBuilder("nsg1")
                 .Location("westeurope")
@@ -24,7 +24,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
 
             var sr1 = new SecurityRuleBuilder("sr1")
                 .Name("sr1")
-                .NsgName(nsg.GetResourceName())
+                .NsgName(nsg.Name)
                 .Direction(SecurityRuleDirection.Inbound)
                 .Access(SecurityRuleAccess.Allow)
                 .Priority(100)
@@ -35,6 +35,21 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .DestinationPrefix("*")
                 .Protocol(SecurityRuleProtocol.Asterisk)
                 .Description("test")
+                .Build();
+
+            var sr2 = new SecurityRuleBuilder("sr2")
+                .Name("sr2")
+                .NsgName(nsg.Name)
+                .Direction(SecurityRuleDirection.Outbound)
+                .Access(SecurityRuleAccess.Deny)
+                .Priority(101)
+                .ResourceGroup(rg.Name)
+                .SourcePortRanges("22, 80-1024")
+                .DestinationPortRanges("22, 80-1024")
+                .SourcePrefix("*")
+                .DestinationPrefix("*")
+                .Protocol(SecurityRuleProtocol.Tcp)
+                .Description("test2")
                 .Build();
 
         }

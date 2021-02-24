@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -13,6 +14,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         public NetworkInterfaceArgs Arguments { get; private set; } = new NetworkInterfaceArgs();
 
+        public NetworkInterfaceIPConfigurationArgs IpConfigArgs = new NetworkInterfaceIPConfigurationArgs();
         /// <summary>
         /// Creates a new instance of <see cref="NetworkInterfaceBuilder"/>
         /// </summary>
@@ -29,8 +31,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public override NetworkInterface Build(CustomResourceOptions cro)
         {
-            var vnet = new NetworkInterface(Name, Arguments, cro);
-            return vnet;
+            Arguments.IpConfigurations = IpConfigArgs;
+            var nic = new NetworkInterface(Name, Arguments, cro);
+            return nic;
         }
     }
 }

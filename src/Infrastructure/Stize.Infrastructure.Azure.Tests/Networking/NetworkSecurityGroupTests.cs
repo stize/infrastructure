@@ -10,14 +10,14 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
     public class NetworkSecurityGroupTests
     {
         [Fact]
-        public async System.Threading.Tasks.Task CreateBasicSecurityGroup()
+        public async System.Threading.Tasks.Task CreateBasicNetworkSecurityGroup()
         {
 
             var resources = await Testing.RunAsync<NetworkSecurityGroupBasicStack>();
             var nsg = resources.OfType<NetworkSecurityGroup>().FirstOrDefault();
 
             nsg.Should().NotBeNull("NSG not found");
-            nsg.GetResourceName().Should().Be("nsg1");
+            nsg.Name.Apply(x => x.Should().Be("nsg1"));
             nsg.Location.Apply(x => x.Should().Be("westeurope"));
             
             

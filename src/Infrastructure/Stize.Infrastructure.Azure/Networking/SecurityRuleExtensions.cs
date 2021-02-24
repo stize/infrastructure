@@ -63,9 +63,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Source Port Ranges for the <see cref="SecurityRule"/>.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRanges">Source Port Ranges. Provide a single port, such as 80; a port range, such as 1024-65535; or a comma seperated list of ports and/or port ranges in a string.</param>
+        /// <param name="portRanges">Source Port Ranges. Provide a single port, such as '80'; a port range, such as '1024-65535'; or a comma seperated list of ports and/or port ranges in a string, such as '22 ,80 , 1024-65535'.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourcePortRanges(this SecurityRuleBuilder builder, InputList<string> portRanges)
+        public static SecurityRuleBuilder SourcePortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
         {
             builder.Arguments.SourcePortRanges = portRanges;
             return builder;
@@ -74,9 +74,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Destination Port Range for the <see cref="SecurityRule"/>.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRanges">Destination Port Range. Provide a single port, such as 80; a port range, such as 1024-65535; or a comma seperated list of ports and/or port ranges in a string.</param>
+        /// <param name="portRanges">Destination Port Range. Provide a single port, such as '80'; a port range, such as '1024-65535'; or a comma seperated list of ports and/or port ranges in a string, such as '22 ,80 , 1024-65535'.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationPortRanges(this SecurityRuleBuilder builder, InputList<string> portRanges)
+        public static SecurityRuleBuilder DestinationPortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
         {
             builder.Arguments.DestinationPortRanges = portRanges;
             return builder;
@@ -85,7 +85,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Priority on which the rule is processed.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="priority">Priority on which the rule is processed; the lower the number, the higher the priority.</param>
+        /// <param name="priority">Priority on which the rule is processed; the lower the number, the higher the priority. </param>
         /// <returns></returns>
         public static SecurityRuleBuilder Priority(this SecurityRuleBuilder builder, Input<int> priority)
         {
@@ -96,7 +96,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Accessiblity option for the <see cref="SecurityRule"/>.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="access">The network traffic is allowed or denied. Use <see cref="SecurityRuleAccess"/></param>
+        /// <param name="access">The network traffic is allowed or denied. Use <see cref="SecurityRuleAccess"/> struct.</param>
         /// <returns></returns>
         public static SecurityRuleBuilder Access(this SecurityRuleBuilder builder, InputUnion<string, SecurityRuleAccess> access)
         {
@@ -178,7 +178,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the network protocol that this <see cref="SecurityRule"/> applies to.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="protocol">Network protocol that this rule applies to.</param>
+        /// <param name="protocol">Network protocol that this rule applies to. Use <see cref="SecurityRuleProtocol"/> struct.</param>
         /// <returns></returns>
         public static SecurityRuleBuilder Protocol(this SecurityRuleBuilder builder, InputUnion<string, SecurityRuleProtocol> protocol)
         {

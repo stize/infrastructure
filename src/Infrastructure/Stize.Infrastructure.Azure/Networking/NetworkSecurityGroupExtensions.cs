@@ -10,7 +10,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <summary>
         /// Sets the resource group the <see cref="NetworkSecurityGroup" /> will be created on
         /// </summary>
-        /// <param name="builder">NetworkSecurityGroup Builder</param>
+        /// <param name="builder"><see cref="NetworkSecurityGroup" /> Builder</param>
         /// <param name="resourceGroup">Resource group name</param>
         /// <returns></returns>
         public static NetworkSecurityGroupBuilder ResourceGroup(this NetworkSecurityGroupBuilder builder, Input<string> resourceGroup)

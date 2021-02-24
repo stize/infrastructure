@@ -1,4 +1,5 @@
 ﻿using Pulumi;
+using Pulumi.AzureNextGen.Network.Latest;
 using Stize.Infrastructure.Azure.Networking;
 namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
 {
@@ -24,7 +25,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Name("ni1")
                 .ResourceGroup(rg)
                 .Location("westeurope")
-                .IpConfigurations("ipconfig1", subnet.GetResourceName(), "IPv4", "Dynamic")
+                .IpConfigSubnetName(subnet.Name)
+                .IpConfigName("ipconfig1")
+                .IpConfigAddressVersion(IPVersion.IPv4)
+                .IpConfigAllocationMethod(IPAllocationMethod.Dynamic)
                 .Build();
         }
     }

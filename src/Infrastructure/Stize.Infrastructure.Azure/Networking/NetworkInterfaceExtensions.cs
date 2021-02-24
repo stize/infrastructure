@@ -23,30 +23,56 @@ namespace Stize.Infrastructure.Azure.Networking
                 Subnet = new Inputs.SubnetArgs
                 {
                     Name = subnetName
-                }
+                }                
             };
             return builder;
         }
         /// <summary>
-        /// Set the Subnet for the <see cref="NetworkInterfaceIPConfigurationArgs"/>
+        /// Sets the name of this Ip Configuration for this NI
         /// </summary>
-        /// <param name="builder">NI Configurations Args</param>
-        /// <param name="subnetIp">subnet name</param>
+        /// <param name="builder">NI builder</param>
+        /// <param name="name">Ip Config name</param>
         /// <returns></returns>
-        //public static NetworkInterfaceBuilder IpConfigSubnetIp(this NetworkInterfaceBuilder builder, Input<string> subnetIp)
-        //{
-        //    builder.IpConfigArgs.PrivateIPAddress = subnetIp;
-        //    builder.Arguments.IpConfigurations.Add(builder.IpConfigArgs);
-        //    return builder;
-        //}
-        //public static NetworkInterfaceBuilder IpConfigIpAllocation(this NetworkInterfaceBuilder builder, Input<SubnetArgs> subnet)
-        //{
-        //    builder.IpConfigArgs.Subnet = subnet;
-        //    builder.Arguments.IpConfigurations.Add(builder.IpConfigArgs);
-        //    return builder;
-        //}
+        public static NetworkInterfaceBuilder IpConfigName(this NetworkInterfaceBuilder builder, Input<string> name)
+        {
+            builder.IpConfigArgs.Name = name;
+            return builder;
+        }
         /// <summary>
-        /// Sets the resource group the <see cref="Pulumi.Azure.Network.NetworkInterface" /> will be created on
+        /// Sets the Subnet for the <see cref="Inputs.NetworkInterfaceIPConfigurationArgs"/> using the subnet's Name
+        /// </summary>
+        /// <param name="builder">NI builder</param>
+        /// <param name="subnetId">Subnet Id</param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder IpConfigSubnetName(this NetworkInterfaceBuilder builder, Input<string> subnetId)
+        {
+            builder.IpConfigArgs.Subnet = new Inputs.SubnetArgs { Id = subnetId }; // TODO: Check if this successfully associates the NIC with the subnet specified.
+            return builder;
+        }
+        /// <summary>
+        /// Sets the private IP address version for the IP config for this NI
+        /// </summary>
+        /// <param name="builder">NI builder</param>
+        /// <param name="version">Address Version; i.e. 'IPv4', 'IPv6'</param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder IpConfigAddressVersion(this NetworkInterfaceBuilder builder, InputUnion<string, IPVersion> version)
+        {
+            builder.IpConfigArgs.PrivateIPAddressVersion = version;
+            return builder;
+        }
+        /// <summary>
+        /// Sets the private IP allocation method for the IP config of this NI
+        /// </summary>
+        /// <param name="builder">NI builder</param>
+        /// <param name="method">IP allocation method; i.e. 'Dynamic', 'Static'</param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder IpConfigAllocationMethod(this NetworkInterfaceBuilder builder, InputUnion<string, IPAllocationMethod> method)
+        {
+            builder.IpConfigArgs.PrivateIPAllocationMethod = method;
+            return builder;
+        }
+        /// <summary>
+        /// Sets the resource group the <see cref="NetworkInterface" /> will be created on
         /// </summary>
         /// <param name="builder">NetworkInterface Builder</param>
         /// <param name="resourceGroup">Resource group name</param>
@@ -57,7 +83,7 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
         /// <summary>
-        /// Sets the resource group the <see cref="Pulumi.Azure.Network.NetworkInterface" /> will be created on
+        /// Sets the resource group the <see cref="NetworkInterface" /> will be created on
         /// </summary>
         /// <param name="builder">NetworkInterface Builder</param>
         /// <param name="resourceGroup">Resource group name</param>
