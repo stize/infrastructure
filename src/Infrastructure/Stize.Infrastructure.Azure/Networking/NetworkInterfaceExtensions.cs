@@ -75,11 +75,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the resource group the <see cref="NetworkInterface" /> will be created on
         /// </summary>
         /// <param name="builder">NetworkInterface Builder</param>
-        /// <param name="resourceGroup">Resource group name</param>
+        /// <param name="nsgId">Network Security Group Id</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder NetworkSecurityGroup(this NetworkInterfaceBuilder builder, Input<Inputs.NetworkSecurityGroupArgs> nsg)
+        public static NetworkInterfaceBuilder NetworkSecurityGroup(this NetworkInterfaceBuilder builder, Input<string> nsgId)
         {
-            builder.Arguments.NetworkSecurityGroup = nsg;
+            builder.Arguments.NetworkSecurityGroup = new Inputs.NetworkSecurityGroupArgs { Id = nsgId };
             return builder;
         }
         /// <summary>

@@ -21,6 +21,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             nic.IpConfigurations.Apply(x => x[0].PrivateIPAddressVersion.Should().Be("IPv4"));
             nic.IpConfigurations.Apply(x => x[0].PrivateIPAllocationMethod.Should().Be("Dynamic"));
             nic.IpConfigurations.Apply(x => x[0].Subnet.Should().NotBeNull());
+            nic.NetworkSecurityGroup.Apply(x => x.Should().NotBeNull());
         }
     }
 }
