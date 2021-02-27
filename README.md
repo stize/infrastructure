@@ -121,3 +121,76 @@ These are the basic commands when working with Stize.Infrastructure and Visual S
 | dotnet test  | Execute the unit tests                  |
 
 When using VSCode, don't forget to add the C# extension to get autocomplete features. It is also possible to use Visual Studio Community/Professional/Enterprise.
+
+## Testing
+
+Stize.Infrastructure uses several extension methods documented in the [Pulumi documentation](https://www.pulumi.com/blog/unit-testing-cloud-deployments-with-dotnet/)
+
+When developing new Extensions, is always important to create the relevant unit tests to protect the project from future regressions coming from internal or external changes. Here is an example of how to run an stack that creates a Resource Group and evaluate Pulumi Output<T> objects:
+
+```cs
+using System;
+using Pulumi;
+using Stize.Infrastructure.Azure;
+
+namespace Stize.Infrastructure.Tests.Azure.Stacks
+{
+    public class BasicResourceGroupStack : Stack
+    {
+        public BasicResourceGroupStack()
+        {
+            var rg = new ResourceGroupBuilder("rg1")
+            .Name("rg1")
+            .Location("westeurope")
+            .Build();
+        }
+    }
+}
+```
+
+Note how we use the ad-hoc ```.OutputShould()``` extension, which internally uses the Pulumi ```Output<T>``` evaluation approach, to pass the value directly to FluentAssertions, leaving a cleaner and simpler testing code when evaluating primitive types:
+
+```cs
+using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Pulumi.AzureNextGen.Resources.Latest;
+using Stize.Infrastructure.Test;
+using Stize.Infrastructure.Tests.Azure.Stacks;
+using Xunit;
+
+namespace Stize.Infrastructure.Tests.Azure
+{
+    public class ResourceGroupTests
+    {    
+        [Fact]
+        public async Task LocationIsCorrect()
+        {        
+            var resources = await Testing.RunAsync<BasicResourceGroupStack>();
+            var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
+
+            rg.Should().NotBeNull("Resource group not found");
+            rg.Location.OutputShould().Be("westeurope");
+        }  
+    }
+}
+```
+
+If you are evaluating objects, you can also use Pulumi's ```GetValueAsync()``` method:
+
+```cs
+public async Task ResourceGroupHasEnvironmentTag()
+{
+    var resources = await TestAsync();
+    var resourceGroup = resources.OfType<ResourceGroup>().First();
+
+    var tags = await resourceGroup.Tags.GetValueAsync();
+    tags.Should().NotBeNull("Tags must be defined");
+    tags.Should().ContainKey("Environment");
+}
+```
+
+These extension methods in Stize are located to the following namespaces. Don't forget to include them:
+
+* GetValueAsync() -> Stize.Infrastructure
+* OutputShould() -> Stize.Infrastructure.Test
