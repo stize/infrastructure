@@ -1,5 +1,3 @@
-
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -40,9 +38,8 @@ namespace Stize.Infrastructure.Tests.Azure
             var resources = await Testing.RunAsync<RandomIdNameStack>();
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();            
             rg.Should().NotBeNull("Resource group not found");
-            var name = await rg.Name.GetValueAsync();
-            name.Should().StartWith("rg1");
-            name.Should().NotBeEquivalentTo("rg1");
+            rg.Name.OutputShould().StartWith("rg1");
+            rg.Name.OutputShould().NotBeEquivalentTo("rg1");
         }
     }
 }
