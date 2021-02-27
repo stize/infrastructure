@@ -20,7 +20,7 @@ namespace Stize.Infrastructure
         /// RandomId used to generate the name of this component
         /// </summary>
         /// <value></value>
-        public RandomId RandomId {get; set;}
+        public RandomId RandomId { get; private set; }
 
         /// <summary>
         /// Pulumi Custom Resource Options
@@ -40,18 +40,41 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <returns></returns>
+        public BaseBuilder(string name, RandomId rid) : this(name)
+        {
+            this.RandomId = rid;
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
         /// <param name="cro"></param>
         public BaseBuilder(string name, CustomResourceOptions cro) : this(name)
         {
             CustomResourceOptions = cro;
         }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <param name="cro"></param>
+        public BaseBuilder(string name, RandomId rid, CustomResourceOptions cro) : this(name)
+        {
+            RandomId = rid;
+            CustomResourceOptions = cro;
+        }        
     }
 
     /// <summary>
     /// Stize infrastructure base builder
     /// </summary>
     public abstract class BaseBuilder<T> : BaseBuilder
-    {     
+    {
         /// <summary>
         /// Create a new instance of <see cref="BaseBuilder"/>
         /// </summary>
@@ -64,10 +87,30 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <returns></returns>
+        public BaseBuilder(string name, RandomId rid) : base(name, rid)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
         /// <param name="cro"></param>
         public BaseBuilder(string name, CustomResourceOptions cro) : base(name, cro)
         {
-        }        
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <param name="cro"></param>
+        public BaseBuilder(string name, RandomId rid, CustomResourceOptions cro) : base(name, rid, cro)
+        {
+        }     
 
         /// <summary>
         /// Generates the Pulumi object using builder's <see cref="CustomResourceOptions"/>
