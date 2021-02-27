@@ -1,6 +1,7 @@
 using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Resources.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure
 {
@@ -21,6 +22,14 @@ namespace Stize.Infrastructure.Azure
         /// </summary>
         /// <param name="name">Pulumi internal name</param>
         public ResourceGroupBuilder(string name) : base(name)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see="ResourceGroupBuilder" />
+        /// </summary>
+        /// <param name="name">Pulumi internal name</param>
+        public ResourceGroupBuilder(string name, RandomId rid) : base(name, rid)
         {
         }
 

@@ -13,10 +13,9 @@ namespace Stize.Infrastructure.Tests.Azure.Stacks
                 ByteLength = 4
             });
 
-            var rg = new ResourceGroupBuilder("rg1")
+            var rg = new ResourceGroupBuilder("rg1", rid)
             .Name("rg1")
-            .Location("westeurope")
-            .UseRandomId(rid)
+            .Location("westeurope")        
             .Build();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Pulumi;
 using Pulumi.Random;
 
@@ -6,6 +7,33 @@ namespace Stize.Infrastructure
 {
     public static class BaseExtensions
     {
+        /// <summary>
+        /// Extension method extracting the value from a Pulumi Output 
+        /// <seealso cref="https://www.pulumi.com/blog/unit-testing-cloud-deployments-with-dotnet/"/>       
+        /// </summary>
+        /// <example>
+        ///     <code>
+        ///         [Test]
+        ///         public async Task StorageAccountBelongsToResourceGroup()
+        ///         {
+        ///             var resources = await TestAsync();
+        ///             var storageAccount = resources.OfType\Storage.Account>().SingleOrDefault();
+        ///             storageAccount.Should().NotBeNull("Storage account not found");
+        ///
+        ///             var resourceGroupName = await storageAccount.ResourceGroupName.GetValueAsync();
+        //              resourceGroupName.Should().Be("www-prod-rg");
+        ///         }
+        ///     </code>
+        /// </example>        
+        /// <param name="output"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Task<T> GetValueAsync<T>(this Output<T> output)
+        {
+            var tcs = new TaskCompletionSource<T>();
+            output.Apply(v => { tcs.SetResult(v); return v; });
+            return tcs.Task;
+        }
 
         /// <summary>
         /// Creates a dependency of the <see cref="=Resource"/> that is been built with another <see cref="Resource"/>
@@ -30,19 +58,6 @@ namespace Stize.Infrastructure
         public static B Parent<B>(this B builder, Resource resource) where B : BaseBuilder
         {
             builder.CustomResourceOptions.Parent = resource;
-            return builder;
-        }
-
-        /// <summary>
-        /// Instructs the builder to use a given RandomId
-        /// </summary>
-        /// <param name="builder">Builder</param>
-        /// <param name="randomId">RandomId</param>
-        /// <typeparam name="B">Builder type</typeparam>
-        /// <returns></returns>
-        public static B UseRandomId<B>(this B builder, RandomId randomId) where B : BaseBuilder
-        {
-            builder.RandomId = randomId;
             return builder;
         }
     }
