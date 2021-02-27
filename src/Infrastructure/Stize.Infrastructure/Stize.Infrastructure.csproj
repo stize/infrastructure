@@ -6,6 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Pulumi" Version="2.21.2" />
-    <PackageReference Include="Pulumi.Random" Version="2.4.2" />
+    <PackageReference Include="Pulumi.Random" Version="3.0.3" />
   </ItemGroup>
 </Project>
