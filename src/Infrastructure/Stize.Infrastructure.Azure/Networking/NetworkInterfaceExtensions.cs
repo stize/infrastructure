@@ -18,12 +18,12 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
         /// <summary>
-        /// Sets the Subnet for the <see cref="Inputs.NetworkInterfaceIPConfigurationArgs"/> using the subnet's Name
+        /// Sets the Subnet for the <see cref="Inputs.NetworkInterfaceIPConfigurationArgs"/> using the subnet's ID
         /// </summary>
         /// <param name="builder">NI builder</param>
         /// <param name="subnetId">Subnet Id</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigSubnetName(this NetworkInterfaceBuilder builder, Input<string> subnetId)
+        public static NetworkInterfaceBuilder IpConfigSubnetID(this NetworkInterfaceBuilder builder, Input<string> subnetId)
         {
             builder.IpConfigArgs.Subnet = new Inputs.SubnetArgs { Id = subnetId }; // TODO: Check if this successfully associates the NIC with the subnet specified.
             return builder;
