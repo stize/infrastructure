@@ -26,4 +26,9 @@
     <ProjectReference Include="..\Stize.Infrastructure.Test\Stize.Infrastructure.Test.csproj" />
     <ProjectReference Include="..\Stize.Infrastructure.Azure\Stize.Infrastructure.Azure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+  </ItemGroup>
 </Project>
