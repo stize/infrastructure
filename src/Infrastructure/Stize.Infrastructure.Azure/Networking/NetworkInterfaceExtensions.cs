@@ -7,27 +7,6 @@ namespace Stize.Infrastructure.Azure.Networking
     public static class NetworkInterfaceExtensions
     {
         /// <summary>
-        /// Set the name for the <see cref="NetworkInterfaceIPConfigurationArgs"/>
-        /// </summary>
-        /// <param name="builder">NI Configurations Args</param>
-        /// <param name="name">resource name</param>
-        /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigurations(this NetworkInterfaceBuilder builder, Input<string> name, Input<string> subnetName, 
-            InputUnion<string,IPVersion> privateIpAddressVersion, InputUnion<string, IPAllocationMethod> privateIpAllocationMethod)
-        {
-            builder.Arguments.IpConfigurations = new Inputs.NetworkInterfaceIPConfigurationArgs
-            {
-                Name = name,
-                PrivateIPAddressVersion = privateIpAddressVersion,
-                PrivateIPAllocationMethod = privateIpAllocationMethod,
-                Subnet = new Inputs.SubnetArgs
-                {
-                    Name = subnetName
-                }                
-            };
-            return builder;
-        }
-        /// <summary>
         /// Sets the name of this Ip Configuration for this NI
         /// </summary>
         /// <param name="builder">NI builder</param>
