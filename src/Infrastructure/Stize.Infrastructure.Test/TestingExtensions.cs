@@ -20,7 +20,7 @@ namespace Stize.Infrastructure.Test
             task.Wait();
             return task.Result.Should();
         }
-
+        
         /// <summary>
         /// Extension method to simplify how the assertions looks like
         /// </summary>
@@ -31,6 +31,6 @@ namespace Stize.Infrastructure.Test
             var task = output.GetValueAsync();
             task.Wait();
             return task.Result.Should();
-        }
+        }        
     }
 }
