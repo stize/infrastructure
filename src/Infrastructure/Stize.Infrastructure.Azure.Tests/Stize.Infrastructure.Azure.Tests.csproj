@@ -23,7 +23,7 @@
     <Folder Include="Networking\Stacks\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Stize.Infrastructure.Test\Stize.Infrastructure.Test.csproj" />
+    <ProjectReference Include="..\Stize.Infrastructure.TestTools\Stize.Infrastructure.TestTools.csproj" />
     <ProjectReference Include="..\Stize.Infrastructure.Azure\Stize.Infrastructure.Azure.csproj" />
   </ItemGroup>
   <ItemGroup>
