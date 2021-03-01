@@ -15,4 +15,7 @@
   <ItemGroup>
     <Folder Include="Networking\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>
