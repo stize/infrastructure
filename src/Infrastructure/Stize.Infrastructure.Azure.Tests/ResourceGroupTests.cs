@@ -55,6 +55,7 @@ namespace Stize.Infrastructure.Tests.Azure
 
             rg.Name.OutputShould().StartWith("rg1");
             rg.Name.OutputShould().NotBeEquivalentTo("rg1");
+            rg.Name.OutputShould().Be($"rg1-{ridHexValue}");
         }
     }
 }
