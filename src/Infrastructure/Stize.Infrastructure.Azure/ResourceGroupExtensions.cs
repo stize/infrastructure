@@ -15,7 +15,7 @@ namespace Stize.Infrastructure.Azure
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.ResourceGroupName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.ResourceGroupName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{n}-{r}"));
             }
             else
             {
@@ -34,6 +34,18 @@ namespace Stize.Infrastructure.Azure
         public static ResourceGroupBuilder Location(this ResourceGroupBuilder builder, Input<string> location)
         {
             builder.Arguments.Location = location;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the tags for this Resource Group
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        public static ResourceGroupBuilder Tags(this ResourceGroupBuilder builder, InputMap<string> tags)
+        {
+            builder.Arguments.Tags = tags;
             return builder;
         }
     }

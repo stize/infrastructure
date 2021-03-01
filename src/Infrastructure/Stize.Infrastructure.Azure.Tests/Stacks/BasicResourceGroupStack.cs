@@ -2,7 +2,7 @@
 using Pulumi;
 using Stize.Infrastructure.Azure;
 
-namespace Stize.Infrastructure.Tests.Azure.Stacks
+namespace Stize.Infrastructure.Azure.Tests.Stacks
 {
     public class BasicResourceGroupStack : Stack
     {
