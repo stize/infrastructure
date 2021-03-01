@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Azure.Storage
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.AccountName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.AccountName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{n}-{r}"));
             }
             else
             {
