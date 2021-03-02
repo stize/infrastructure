@@ -14,7 +14,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         public async System.Threading.Tasks.Task CreateBasicVnet()
         {
             
-            var resources = await Testing.RunAsync<NetworkingBasicStack>();
+            var resources = await Stize.Infrastructure.Test.Testing.RunAsync<NetworkingBasicStack>();
             var vnet = resources.OfType<VirtualNetwork>().FirstOrDefault();
 
             vnet.Should().NotBeNull("Virtual Network not found");

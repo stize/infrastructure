@@ -14,7 +14,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         public async System.Threading.Tasks.Task CreateBasicSubnet()
         {
 
-            var resources = await Testing.RunAsync<SubnetBasicStack>();
+            var resources = await Stize.Infrastructure.Test.Testing.RunAsync<SubnetBasicStack>();
             var subnet = resources.OfType<Subnet>().FirstOrDefault();
 
             subnet.Should().NotBeNull("Subnet not found");

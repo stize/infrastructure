@@ -39,7 +39,7 @@ namespace Stize.Infrastructure.Tests.Azure
         {
             var resources = await Pulumi.Deployment.TestAsync<RandomIdNameStack>(new RandomIdNameMock(), new TestOptions {IsPreview = false});
             var rid = resources.OfType<RandomId>().FirstOrDefault();
-            rid.Should().NotBeNull("RandomId is not present");
+            rid.Should().NotBeNull("a RandomId should be created");
 
             var ridHexValue = await rid.Hex.GetValueAsync();
 
@@ -55,6 +55,7 @@ namespace Stize.Infrastructure.Tests.Azure
 
             rg.Name.OutputShould().StartWith("rg1");
             rg.Name.OutputShould().NotBeEquivalentTo("rg1");
+            rg.Name.OutputShould().Be($"rg1-{ridHexValue}");
         }
     }
 }
