@@ -166,7 +166,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static StorageAccountBuilder AllowBlowPublicAccess(this StorageAccountBuilder builder)
+        public static StorageAccountBuilder AllowBlobPublicAccess(this StorageAccountBuilder builder)
         {
             builder.Arguments.AllowBlobPublicAccess = true;
             return builder;
@@ -177,7 +177,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static StorageAccountBuilder DenyBlowPublicAccess(this StorageAccountBuilder builder)
+        public static StorageAccountBuilder DenyBlobPublicAccess(this StorageAccountBuilder builder)
         {
             builder.Arguments.AllowBlobPublicAccess = false;
             return builder;
