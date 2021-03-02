@@ -35,7 +35,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Name("ni1")
                 .ResourceGroup(rg.Name)
                 .Location("westeurope")
-                .IpConfigSubnetName(subnet.Name)
+                .IpConfigSubnetID(subnet.Name)
                 .IpConfigName("ipconfig1")
                 .IpConfigAddressVersion(IPVersion.IPv4)
                 .IpConfigAllocationMethod(IPAllocationMethod.Dynamic)
