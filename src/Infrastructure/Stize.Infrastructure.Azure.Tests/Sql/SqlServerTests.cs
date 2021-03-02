@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using Pulumi.AzureNextGen.Sql.Latest;
+using Stize.Infrastructure.Test;
 using Stize.Infrastructure.Tests.Azure.Sql.Stacks;
 using Xunit;
 

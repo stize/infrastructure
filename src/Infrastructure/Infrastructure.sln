@@ -9,12 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.Azure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.Azure.Tests", "Stize.Infrastructure.Azure.Tests\Stize.Infrastructure.Azure.Tests.csproj", "{8C7182F3-2AA0-4CB1-9448-D38D625AC034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.TestTools", "Stize.Infrastructure.TestTools\Stize.Infrastructure.TestTools.csproj", "{E0F9F187-650D-4B36-9736-9B66588EA809}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8171FBA4-76E2-4C08-A534-3CEB103FDD36}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.TestTools", "Stize.Infrastructure.TestTools\Stize.Infrastructure.TestTools.csproj", "{31713F1E-E114-4E57-B1D5-DE4661986C74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +34,10 @@ Global
 		{8C7182F3-2AA0-4CB1-9448-D38D625AC034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C7182F3-2AA0-4CB1-9448-D38D625AC034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C7182F3-2AA0-4CB1-9448-D38D625AC034}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0F9F187-650D-4B36-9736-9B66588EA809}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E0F9F187-650D-4B36-9736-9B66588EA809}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E0F9F187-650D-4B36-9736-9B66588EA809}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E0F9F187-650D-4B36-9736-9B66588EA809}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

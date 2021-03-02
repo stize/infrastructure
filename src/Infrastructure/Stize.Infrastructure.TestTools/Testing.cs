@@ -6,7 +6,7 @@ using Moq;
 using Pulumi;
 using Pulumi.Testing;
 
-namespace Stize.Infrastructure.Tests
+namespace Stize.Infrastructure.Test
 {
     /// <summary>
     /// <seealso cref="https://www.pulumi.com/blog/unit-testing-cloud-deployments-with-dotnet/"/>

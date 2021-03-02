@@ -1,4 +1,5 @@
 using Pulumi;
+using Pulumi.AzureNextGen.Resources.Latest;
 using Pulumi.AzureNextGen.Storage.Latest;
 using Pulumi.AzureNextGen.Storage.Latest.Inputs;
 
@@ -38,6 +39,40 @@ namespace Stize.Infrastructure.Azure.Storage
         {
             builder.Arguments.Location = location;
             return builder;
+        }
+
+        /// <summary>
+        /// Resource Group to locate this storage account
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="resourceGroup"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder In(this StorageAccountBuilder builder, Input<string> resourceGroup)
+        {        
+            builder.Arguments.ResourceGroupName = resourceGroup;
+            return builder;    
+        }
+
+        /// <summary>
+        /// Resource Group to locate this storage account
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="resourceGroup"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder In(this StorageAccountBuilder builder, ResourceGroup resourceGroup)
+        {        
+            builder.Arguments.ResourceGroupName = resourceGroup.Name;
+            return builder;
+        }        
+
+        /// <summary>
+        /// Sets SKU to Standard_LRS
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder StandardLRS(this StorageAccountBuilder builder)
+        {
+            return Sku(builder, SkuName.Standard_LRS);
         }
 
         /// <summary>
