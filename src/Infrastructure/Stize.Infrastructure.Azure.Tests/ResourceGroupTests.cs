@@ -1,10 +1,12 @@
-
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Pulumi.AzureNextGen.Resources.Latest;
-using Stize.Infrastructure.Tests.Azure.Stacks;
+using Pulumi.Random;
+using Pulumi.Testing;
+using Stize.Infrastructure.Azure.Tests.Azure;
+using Stize.Infrastructure.Azure.Tests.Stacks;
+using Stize.Infrastructure.Test;
 using Xunit;
 
 namespace Stize.Infrastructure.Tests.Azure
@@ -14,23 +16,45 @@ namespace Stize.Infrastructure.Tests.Azure
         [Fact]
         public async Task CreateBasicResourceGroup()
         {
-            
-            var resources = await Testing.RunAsync<BasicResourceGroupStack>();
+            var resources = await Pulumi.Deployment.TestAsync<BasicResourceGroupStack>(new BasicResourceGroupMock(), new TestOptions {IsPreview = false});
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
 
             rg.Should().NotBeNull("Resource group not found");
-            rg.Name.Apply(x => x.Should().Be("rg1"));
-            rg.Location.Apply(x => x.Should().Be("westeurope"));
+            rg.Name.OutputShould().Be("rg1");
+            rg.Location.OutputShould().Be("westeurope");
         }
+
+        [Fact]
+        public async Task LocationIsCorrect()
+        {        
+            var resources = await Pulumi.Deployment.TestAsync<BasicResourceGroupStack>(new BasicResourceGroupMock(), new TestOptions {IsPreview = false});
+            var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
+
+            rg.Should().NotBeNull("Resource group not found");
+            rg.Location.OutputShould().Be("westeurope");
+        }        
 
         [Fact]
         public async Task RandomIdNamesIsGeneratedProperly()
         {
-            var resources = await Testing.RunAsync<RandomIdNameStack>();
+            var resources = await Pulumi.Deployment.TestAsync<RandomIdNameStack>(new RandomIdNameMock(), new TestOptions {IsPreview = false});
+            var rid = resources.OfType<RandomId>().FirstOrDefault();
+            rid.Should().NotBeNull("RandomId is not present");
+
+            var ridHexValue = await rid.Hex.GetValueAsync();
+
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
-            rg.Should().NotBeNull("Resource group not found");
-            rg.Name.Apply(x => x.Should().StartWith("rg1"));
-            rg.Name.Apply(x => x.Should().NotBeEquivalentTo("rg1"));
+            var tags = await rg.Tags.GetValueAsync();
+            tags.Should().NotBeNull("The resource group has no tags");            
+            tags.Should().HaveCount(2, "Not all tags are present");
+
+            tags.Should().ContainKey("env");
+            tags.Should().ContainValue("dev");
+            tags.Should().ContainKeys("uid");
+            tags.Should().ContainValue(ridHexValue);
+
+            rg.Name.OutputShould().StartWith("rg1");
+            rg.Name.OutputShould().NotBeEquivalentTo("rg1");
         }
     }
 }
