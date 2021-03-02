@@ -60,7 +60,7 @@
         <ArtifactsObjDir>$(ArtifactsConfigurationDir)$(MSBuildProjectName)\obj\</ArtifactsObjDir>
         <ArtifactsBinDir>$(ArtifactsConfigurationDir)$(MSBuildProjectName)\bin\</ArtifactsBinDir>
 
-        <OutputPath>$(ArtifactsBinDir)</OutputPath>
+        <!-- <OutputPath>$(ArtifactsBinDir)</OutputPath> -->
         <PackageOutputPath>$(ArtifactsDir)build\</PackageOutputPath>
     </PropertyGroup>
 
@@ -74,5 +74,4 @@
         <!-- Add PackageReference specific for your source control provider (see below) -->
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
     </ItemGroup>
-
 </Project>
