@@ -1,6 +1,7 @@
 ﻿using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.Random;
 using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
@@ -17,6 +18,14 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="name"></param>
         public SecurityRuleBuilder(string name) : base(name)
+        {
+
+        }
+        /// <summary>
+        /// Creates a new instance of <see cref="SecurityRuleBuilder"/>
+        /// </summary>
+        /// <param name="name"></param>
+        public SecurityRuleBuilder(string name, RandomId rid) : base(name, rid)
         {
 
         }

@@ -67,7 +67,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SecurityRuleBuilder SourcePortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
         {
-            builder.Arguments.SourcePortRanges = portRanges;
+            string[] prs = portRanges.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < prs.Length; i++)
+            {
+                builder.Arguments.SourcePortRanges.Add(prs[i].Trim());
+            }
             return builder;
         }
         /// <summary>
@@ -78,7 +82,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SecurityRuleBuilder DestinationPortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
         {
-            builder.Arguments.DestinationPortRanges = portRanges;
+            string[] prs = portRanges.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < prs.Length; i++)
+            {
+                builder.Arguments.DestinationPortRanges.Add(prs[i].Trim());
+            }
             return builder;
         }
         /// <summary>
@@ -137,7 +145,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SecurityRuleBuilder SourcePrefixes(this SecurityRuleBuilder builder, Input<string> prefixes)
         {
-            builder.Arguments.SourceAddressPrefixes = prefixes;
+            string[] pfs = prefixes.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < pfs.Length; i++)
+            {
+                builder.Arguments.DestinationAddressPrefixes.Add(pfs[i].Trim());
+            }
             return builder;
         }
         /// <summary>
@@ -149,29 +161,43 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SecurityRuleBuilder DestinationPrefixes(this SecurityRuleBuilder builder, Input<string> prefixes)
         {
-            builder.Arguments.DestinationAddressPrefixes = prefixes;
+            string[] pfs = prefixes.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < pfs.Length; i++)
+            {
+                builder.Arguments.DestinationAddressPrefixes.Add(pfs[i].Trim());
+            }
             return builder;
         }
         /// <summary>
         /// Sets the Source <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
+        /// Use comma seperated list for multiple ASGs
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="asg">Source <see cref="ApplicationSecurityGroup"/>.</param>
+        /// <param name="asg">Source <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list for multiple ASGs.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourceASG(this SecurityRuleBuilder builder, Input<Inputs.ApplicationSecurityGroupArgs> asg)
+        public static SecurityRuleBuilder SourceASGs(this SecurityRuleBuilder builder, Input<string> asgIDs)
         {
-            builder.Arguments.SourceApplicationSecurityGroups = asg;
+            string[] asgIDStrings = asgIDs.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < asgIDStrings.Length; i++)
+            {
+                builder.Arguments.SourceApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = asgIDStrings[i].Trim() });
+            }
             return builder;
         }
         /// <summary>
         /// Sets the Destination <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
+        /// Use comma seperated list for multiple ASGs
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="asg">Destination <see cref="ApplicationSecurityGroup"/>.</param>
+        /// <param name="asg">Destination <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list for multiple ASGs.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationASG(this SecurityRuleBuilder builder, Input<Inputs.ApplicationSecurityGroupArgs> asg)
+        public static SecurityRuleBuilder DestinationASGs(this SecurityRuleBuilder builder, Input<string> asgIDs)
         {
-            builder.Arguments.DestinationApplicationSecurityGroups = asg;
+            string[] asgIDStrings = asgIDs.Apply(x => x.Split(',')).GetValueAsync().Result;
+            for (int i = 0; i < asgIDStrings.Length; i++)
+            {
+                builder.Arguments.DestinationApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = asgIDStrings[i].Trim() });
+            }
             return builder;
         }
         /// <summary>
