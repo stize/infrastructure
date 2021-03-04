@@ -8,7 +8,52 @@ namespace Stize.Infrastructure.Azure.Networking
     {
 
         /// <summary>
-        /// Sets the name of this Ip Configuration for this NI
+        /// The extended location of the NIC
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="extendedLocationArgs"></param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder ExtendedLocation(this NetworkInterfaceBuilder builder, Input<Inputs.ExtendedLocationArgs> extendedLocationArgs)
+        {
+            builder.Arguments.ExtendedLocation = extendedLocationArgs;
+            return builder;
+        }
+        /// <summary>
+        /// Enable or disable IP Forwarding for the NIC
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="ipForwarding"></param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder EnableIPForwarding(this NetworkInterfaceBuilder builder, Input<bool> ipForwarding)
+        {
+            builder.Arguments.EnableIPForwarding = ipForwarding;
+            return builder;
+        }
+        /// <summary>
+        /// Enable or disable Accelerated Networking for the NIC
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="accleratedNetworking"></param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder EnableAcceleratedNetworking(this NetworkInterfaceBuilder builder, Input<bool> accleratedNetworking)
+        {
+            builder.Arguments.EnableAcceleratedNetworking = accleratedNetworking;
+            return builder;
+        }
+        /// <summary>
+        /// Sets the DNS Settings of the NIC
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="dnsSettings"></param>
+        /// <returns></returns>
+        public static NetworkInterfaceBuilder DnsSettings(this NetworkInterfaceBuilder builder, Input<Inputs.NetworkInterfaceDnsSettingsArgs> dnsSettings)
+        {
+            builder.Arguments.DnsSettings = dnsSettings;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the name of this Ip Configuration for this NIC
         /// </summary>
         /// <param name="builder">NI builder</param>
         /// <param name="name">Ip Config name</param>
@@ -30,7 +75,7 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
         /// <summary>
-        /// Sets the private IP address version for the IP config for this NI
+        /// Sets the private IP address version for the IP config for this NIC
         /// </summary>
         /// <param name="builder">NI builder</param>
         /// <param name="version">Address Version; i.e. 'IPv4', 'IPv6'</param>
@@ -41,7 +86,7 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
         /// <summary>
-        /// Sets the private IP allocation method for the IP config of this NI
+        /// Sets the private IP allocation method for the IP config of this NIC
         /// </summary>
         /// <param name="builder">NI builder</param>
         /// <param name="method">IP allocation method; i.e. 'Dynamic', 'Static'</param>
@@ -105,6 +150,18 @@ namespace Stize.Infrastructure.Azure.Networking
         public static NetworkInterfaceBuilder Location(this NetworkInterfaceBuilder builder, Input<string> location)
         {
             builder.Arguments.Location = location;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the tags for the resource
+        /// </summary>
+        /// <param name="builder">Builder instance</param>
+        /// <param name="tags">Resource tags</param>
+        /// <returns></returns
+        public static NetworkInterfaceBuilder Tags(this NetworkInterfaceBuilder builder, InputMap<string> tags)
+        {
+            builder.Arguments.Tags = tags;
             return builder;
         }
     }
