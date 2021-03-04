@@ -1,6 +1,7 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
 using Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -13,13 +14,23 @@ namespace Stize.Infrastructure.Azure.Networking
         /// NI arguments
         /// </summary>
         public NetworkInterfaceArgs Arguments { get; private set; } = new NetworkInterfaceArgs();
-
+        /// <summary>
+        /// NI IP Config arguments
+        /// </summary>
         public NetworkInterfaceIPConfigurationArgs IpConfigArgs { get; private set; } = new NetworkInterfaceIPConfigurationArgs();
         /// <summary>
         /// Creates a new instance of <see cref="NetworkInterfaceBuilder"/>
         /// </summary>
         /// <param name="name"></param>
         public NetworkInterfaceBuilder(string name) : base(name)
+        {
+
+        }
+        /// <summary>
+        /// Creates a new instance of <see cref="NetworkInterfaceBuilder"/>
+        /// </summary>
+        /// <param name="name"></param>
+        public NetworkInterfaceBuilder(string name, RandomId rid) : base(name, rid)
         {
 
         }

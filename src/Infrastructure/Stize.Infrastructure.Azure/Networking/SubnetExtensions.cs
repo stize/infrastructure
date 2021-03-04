@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.SubnetName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.SubnetName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {

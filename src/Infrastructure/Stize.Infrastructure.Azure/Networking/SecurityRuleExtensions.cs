@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.SecurityRuleName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.SecurityRuleName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {

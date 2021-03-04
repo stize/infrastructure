@@ -6,6 +6,7 @@ namespace Stize.Infrastructure.Azure.Networking
 {
     public static class NetworkInterfaceExtensions
     {
+
         /// <summary>
         /// Sets the name of this Ip Configuration for this NI
         /// </summary>
@@ -85,7 +86,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.NetworkInterfaceName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.NetworkInterfaceName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {

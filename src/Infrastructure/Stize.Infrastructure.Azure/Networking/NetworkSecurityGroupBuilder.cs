@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -15,6 +16,14 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="name"></param>
         public NetworkSecurityGroupBuilder(string name) : base(name)
+        {
+
+        }
+        /// <summary>
+        /// Creates a new instance of <see cref="NetworkSecurityGroupBuilder"/>
+        /// </summary>
+        /// <param name="name"></param>
+        public NetworkSecurityGroupBuilder(string name, RandomId rid) : base(name, rid)
         {
 
         }

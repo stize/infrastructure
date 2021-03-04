@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -20,7 +21,13 @@ namespace Stize.Infrastructure.Azure.Networking
         public VNetBuilder(string name) : base(name)
         {         
         }
-
+        /// <summary>
+        /// Creates a new instance of <see cref="VNetBuilder"/>
+        /// </summary>
+        /// <param name="name"></param>
+        public VNetBuilder(string name, RandomId rid) : base(name, rid)
+        {
+        }
         /// <summary>
         /// Builds the Virtual network
         /// </summary>

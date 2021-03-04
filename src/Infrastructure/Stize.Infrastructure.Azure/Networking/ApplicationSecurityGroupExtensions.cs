@@ -28,7 +28,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.ApplicationSecurityGroupName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.ApplicationSecurityGroupName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {
