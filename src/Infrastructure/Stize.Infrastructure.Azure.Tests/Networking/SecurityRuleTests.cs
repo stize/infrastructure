@@ -145,11 +145,13 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
+            var asg = resources.OfType<ApplicationSecurityGroup>().ToArray();
             var t = await sr.SourceApplicationSecurityGroups.GetValueAsync();
 
             for (int i = 0; i < t.Length; i++)
             {
-                t[i].Should().NotBeNull();
+                var id = await asg[i].Id.GetValueAsync();
+                t[i].Id.Should().Be(id);
             }
         }
         [Fact]
@@ -157,10 +159,13 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
+            var asg = resources.OfType<ApplicationSecurityGroup>().ToArray();
             var t = await sr.DestinationApplicationSecurityGroups.GetValueAsync();
+
             for (int i = 0; i < t.Length; i++)
             {
-                t[i].Should().NotBeNull();
+                var id = await asg[i].Id.GetValueAsync();
+                t[i].Id.Should().Be(id);
             }
         }
         [Fact]

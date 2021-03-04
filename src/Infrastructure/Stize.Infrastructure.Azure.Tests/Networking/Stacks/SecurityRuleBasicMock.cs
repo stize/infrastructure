@@ -15,11 +15,15 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
             outputs.AddRange(inputs);
 
             // Default the resource ID to `{name}_id`.
-            id ??= $"{name}_id";
-
+            if (id == null || id == "")
+            {
+                id = $"{name}_id";
+            }
+            outputs.Add("id", id);
             switch (type)
             {
                 case "azure-nextgen:network/latest:SecurityRule": return NewSecurityRule(type, name, inputs, provider, id, outputs);
+                case "azure-nextgen:network/latest:ApplicationSecurityGroup": return NewApplicationSecurityGroup(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -34,6 +38,13 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
         {
             outputs.Add("name", inputs["securityRuleName"]);
 
+            return Task.FromResult((id, (object)outputs));
+        }
+        public Task<(string? id, object state)> NewApplicationSecurityGroup(string type, string name, ImmutableDictionary<string, object> inputs,
+            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", inputs["applicationSecurityGroupName"]);
+            
             return Task.FromResult((id, (object)outputs));
         }
     }
