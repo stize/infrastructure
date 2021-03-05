@@ -4,7 +4,7 @@ using Pulumi.AzureNextGen.Network.Latest;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Networking;
 
-namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
+namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
     public class NetworkSecurityGroupBasicStack : Stack
     {
@@ -15,11 +15,12 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Name("rg1")
                 .Location("westeurope")
                 .Build();
-
+            var tags = new InputMap<string> { { "env", "dev" } };
             var nsg = new NetworkSecurityGroupBuilder("nsg1")
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
                 .Name("nsg1")
+                .Tags(tags)
                 .Build();
         }
     }

@@ -9,6 +9,8 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
     {
         public NetworkInterfaceBasicStack()
         {
+            var tags = new InputMap<string> { { "env", "dev" } };
+
             var rg = new ResourceGroupBuilder("rg1")
                 .Name("rg1")
                 .Location("westeurope")
@@ -55,6 +57,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
                 .NetworkSecurityGroup(nsg.Id)
                 .ExtendedLocation(new Inputs.ExtendedLocationArgs { Name = "easteurope", Type = ExtendedLocationTypes.EdgeZone})
                 .DnsSettings(new Inputs.NetworkInterfaceDnsSettingsArgs { })
+                .Tags(tags)
                 .Build();
         }
     }
