@@ -8,6 +8,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
     {
         public ApplicationSecurityGroupBasicStack()
         {
+            var tags = new InputMap<string> { { "env", "dev" } };
             var rg = new ResourceGroupBuilder("rg1")
                 .Name("rg1")
                 .Location("westeurope")
@@ -17,6 +18,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
                 .Name("asg1")
+                .Tags(tags)
                 .Build();
         }
         

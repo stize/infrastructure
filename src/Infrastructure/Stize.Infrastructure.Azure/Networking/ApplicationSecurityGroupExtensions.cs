@@ -48,5 +48,16 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Location = location;
             return builder;
         }
+        /// <summary>
+        /// Sets the tags for the resource
+        /// </summary>
+        /// <param name="builder">Builder instance</param>
+        /// <param name="tags">Resource tags</param>
+        /// <returns></returns
+        public static ApplicationSecurityGroupBuilder Tags(this ApplicationSecurityGroupBuilder builder, InputMap<string> tags)
+        {
+            builder.Arguments.Tags = tags;
+            return builder;
+        }
     }
 }
