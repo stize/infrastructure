@@ -14,7 +14,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
 {
     public class SecurityRuleTests
     {
-
+        /// <summary>
+        /// Checks that the resource is created correctly
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task CreateSecurityRules()
         {
@@ -24,6 +27,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             sr.Should().NotBeNull("Security Rules not found");
             sr.Length.Should().Be(2);
         }
+        /// <summary>
+        /// Checks that the name of the resource is assigned correctly
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task NameIsCorrect()
         {
@@ -31,6 +38,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.Name.GetValueAsync()).Should().Be("sr1");
         }
+        /// <summary>
+        /// Checks the access string is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task AccessIsCorrect()
         {
@@ -38,6 +49,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.Access.GetValueAsync()).Should().Be("Allow");
         }
+        /// <summary>
+        /// Checks the direction string is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DirectionIsCorrect()
         {
@@ -45,13 +60,21 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.Direction.GetValueAsync()).Should().Be("Inbound");
         }
+        /// <summary>
+        /// Checks the priority integer is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task PriorityIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
-            var sr = resources.OfType<SecurityRule>().FirstOrDefault();
-            (await sr.Priority.GetValueAsync()).Should().Be(100);
+            var sr = resources.OfType<SecurityRule>().LastOrDefault();
+            (await sr.Priority.GetValueAsync()).Should().Be(101);
         }
+        /// <summary>
+        /// Checks the SourcePortRange is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SourcePortRangeIsCorrect()
         {
@@ -59,6 +82,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.SourcePortRange.GetValueAsync()).Should().Be("*");
         }
+        /// <summary>
+        /// Checks the SourcePortRanges are correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SourcePortRangesIsCorrect()
         {
@@ -74,6 +101,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
                 }
             }
         }
+        /// <summary>
+        /// Checks the DestinationPortRange is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DestinationPortRangeIsCorrect()
         {
@@ -81,6 +112,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.DestinationPortRange.GetValueAsync()).Should().Be("*");
         }
+        /// <summary>
+        /// Checks the DestinationPortRanges are correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DestinationPortRangesIsCorrect()
         {
@@ -96,6 +131,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
                 }
             }
         }
+        /// <summary>
+        /// Checks the SourceAddressPrefix is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SourceAddressPrefixIsCorrect()
         {
@@ -103,6 +142,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.SourceAddressPrefix.GetValueAsync()).Should().Be("*");
         }
+        /// <summary>
+        /// Checks the SourceAddressPrefixes are correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SourceAddressPrefixesIsCorrect()
         {
@@ -118,6 +161,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
                 }
             }
         }
+        /// <summary>
+        /// Checks the DestinationAddressPrefix is correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DestinationAddressPrefixIsCorrect()
         {
@@ -125,6 +172,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.DestinationAddressPrefix.GetValueAsync()).Should().Be("*");
         }
+        /// <summary>
+        /// Checks the DestinationAddressPrefixes are correctly assigned
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DestinationAddressPrefixesIsCorrect()
         {
@@ -140,34 +191,39 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
                 }
             }            
         }
+        /// <summary>
+        /// Checks the first Source ASG in the list by using the properties from the last SR and the first ASG defined
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task SourceApplicationSecurityGroupsIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            var asg = resources.OfType<ApplicationSecurityGroup>().ToArray();
+            var asg = resources.OfType<ApplicationSecurityGroup>().FirstOrDefault();
             var t = await sr.SourceApplicationSecurityGroups.GetValueAsync();
 
-            for (int i = 0; i < t.Length; i++)
-            {
-                var id = await asg[i].Id.GetValueAsync();
-                t[i].Id.Should().Be(id);
-            }
+            var id = await asg.Id.GetValueAsync();
+            t[0].Id.Should().Be(id);
         }
+        /// <summary>
+        /// Checks the first Destination ASG in the list by using the properties from the last SR and the last ASG defined
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DestinationApplicationSecurityGroupsIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            var asg = resources.OfType<ApplicationSecurityGroup>().ToArray();
+            var asg = resources.OfType<ApplicationSecurityGroup>().LastOrDefault();
             var t = await sr.DestinationApplicationSecurityGroups.GetValueAsync();
-
-            for (int i = 0; i < t.Length; i++)
-            {
-                var id = await asg[i].Id.GetValueAsync();
-                t[i].Id.Should().Be(id);
-            }
+            var id = await asg.Id.GetValueAsync();
+            t[0].Id.Should().Be(id);
         }
+        /// <summary>
+        /// Checks the protocol string is assigned correctly
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task ProtocolIsCorrect()
         {
@@ -175,12 +231,16 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().FirstOrDefault();
             (await sr.Protocol.GetValueAsync()).Should().Be("*");
         }
+        /// <summary>
+        /// Checks the description string is assigned correctly
+        /// </summary>
+        /// <returns></returns>
         [Fact]
         public async Task DescriptionIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
-            var sr = resources.OfType<SecurityRule>().FirstOrDefault();
-            (await sr.Description.GetValueAsync()).Should().Be("test");
+            var sr = resources.OfType<SecurityRule>().LastOrDefault();
+            (await sr.Description.GetValueAsync()).Should().Be("test2");
         }
     }
 }
