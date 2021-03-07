@@ -45,7 +45,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.VirtualNetworkName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.VirtualNetworkName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {

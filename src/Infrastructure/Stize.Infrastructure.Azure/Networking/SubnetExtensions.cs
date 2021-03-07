@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             if (builder.RandomId != null)
             {
-                builder.Arguments.SubnetName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
+                builder.Arguments.SubnetName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
             }
             else
             {
@@ -44,11 +44,14 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the address prefix for this VNet
         /// </summary>
         /// <param name="builder">The builder</param>
-        /// <param name="addressPrefix"></param>
+        /// <param name="addressPrefix">Address prefix for subnet</param>
         /// <returns></returns>
         public static SubnetBuilder AddressPrefix(this SubnetBuilder builder, Input<string> addressPrefix)
         {
-            builder.Arguments.AddressPrefixes.Add(addressPrefix);
+            /// Fix: Commented line produces an error when trying to perform pulumi update to azure - I think AddressPrefixes is in preview only
+            //builder.Arguments.AddressPrefixes.Add(addressPrefix);
+
+            builder.Arguments.AddressPrefix = addressPrefix;
             return builder;
         }
 

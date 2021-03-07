@@ -1,6 +1,7 @@
 ﻿using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -16,6 +17,13 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="name">Subnet internal name</param>
         public SubnetBuilder(string name) : base(name)
+        {
+        }
+        /// <summary>
+        /// Creates a new instance of <see cref="SubnetBuilder"/>
+        /// </summary>
+        /// <param name="name">Subnet internal name</param>
+        public SubnetBuilder(string name, RandomId rid) : base(name, rid)
         {
         }
 

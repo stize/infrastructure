@@ -1,5 +1,6 @@
 using Pulumi;
 using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -22,8 +23,29 @@ namespace Stize.Infrastructure.Azure.Sql
         public SqlDatabaseBuilder(string name) : base(name)
         {
         }
-
+        /// <summary>
+        /// Creates a new instance of <see="SqlDatabaseBuilder" />
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public SqlDatabaseBuilder(string name, RandomId rid) : base(name, rid)
+        {
+        }
+        /// <summary>
+        /// Creates a new instance of <see="SqlDatabaseBuilder" />
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public SqlDatabaseBuilder(string name, DatabaseArgs arguments) : this(name)
+        {
+            Arguments = arguments;
+        }
+        /// <summary>
+        /// Creates a new instance of <see="SqlDatabaseBuilder" />
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public SqlDatabaseBuilder(string name, DatabaseArgs arguments, RandomId rid) : this(name, rid)
         {
             Arguments = arguments;
         }

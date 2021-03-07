@@ -1,6 +1,7 @@
 using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -28,12 +29,27 @@ namespace Stize.Infrastructure.Azure.Sql
         {            
             Arguments.Version = "12.0";
         }
+        /// <summary>
+        /// Creates a new instance of <see="SqlServerBuilder" />
+        /// </summary>
+        public SqlServerBuilder(string name, RandomId rid) : base(name, rid)
+        {
+            Arguments.Version = "12.0";
+        }
 
         /// <summary>
         /// Creates a new instance of <see="SqlServerBuilder" />
         /// </summary>
         /// <param name="arguments">Default arguments to use</param>
         public SqlServerBuilder(string name, ServerArgs arguments) : base(name)
+        {
+            Arguments = arguments;
+        }
+        /// <summary>
+        /// Creates a new instance of <see="SqlServerBuilder" />
+        /// </summary>
+        /// <param name="arguments">Default arguments to use</param>
+        public SqlServerBuilder(string name, ServerArgs arguments, RandomId rid) : base(name, rid)
         {
             Arguments = arguments;
         }

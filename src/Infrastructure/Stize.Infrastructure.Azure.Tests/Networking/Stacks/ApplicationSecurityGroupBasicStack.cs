@@ -1,28 +1,26 @@
-﻿using System;
-using Pulumi;
+﻿using Pulumi;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Networking;
 
 namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
 {
-    public class NetworkingBasicStack : Stack
+    public class ApplicationSecurityGroupBasicStack : Stack
     {
-        public NetworkingBasicStack()
+        public ApplicationSecurityGroupBasicStack()
         {
-
+            var tags = new InputMap<string> { { "env", "dev" } };
             var rg = new ResourceGroupBuilder("rg1")
                 .Name("rg1")
                 .Location("westeurope")
                 .Build();
 
-            var builder = new VNetBuilder("vnet1");
-            builder            
+            var asg = new ApplicationSecurityGroupBuilder("asg1")
                 .Location("westeurope")
                 .ResourceGroup(rg.Name)
-                .Name("vnet1")
-                .AddressSpace("172.16.0.0/24");
-
-            builder.Build();
+                .Name("asg1")
+                .Tags(tags)
+                .Build();
         }
+        
     }
 }

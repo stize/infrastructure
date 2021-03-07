@@ -40,7 +40,7 @@ namespace Stize.Infrastructure
         }
 
         /// <summary>
-        /// Creates a dependency of the <see cref="=Resource"/> that is been built with another <see cref="Resource"/>
+        /// Creates a dependency of the <see cref="Resource"/> that is been built with another <see cref="Resource"/>
         /// </summary>
         /// <typeparam name="B"></typeparam>
         /// <param name="builder"></param>

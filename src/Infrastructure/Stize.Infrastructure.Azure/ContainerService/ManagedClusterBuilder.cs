@@ -1,6 +1,7 @@
 using System;
 using Pulumi;
 using Pulumi.AzureNextGen.ContainerService.Latest;
+using Pulumi.Random;
 
 namespace Stize.Infrastructure.Azure.ContainerService
 {
@@ -17,6 +18,14 @@ namespace Stize.Infrastructure.Azure.ContainerService
         public ManagedClusterBuilder(string name) : base(name)
         {
         }
+        /// <summary>
+        /// Creates a new instance of <see="ManagedClusterBuilder" />
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ManagedClusterBuilder(string name, RandomId rid) : base(name, rid)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of <see="ManagedClusterBuilder" />
@@ -25,6 +34,16 @@ namespace Stize.Infrastructure.Azure.ContainerService
         /// <param name="arguments"></param>
         /// <returns></returns>
         public ManagedClusterBuilder(string name, ManagedClusterArgs arguments) : this(name)
+        {
+            Arguments = arguments;
+        }
+        /// <summary>
+        /// Creates a new instance of <see="ManagedClusterBuilder" />
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public ManagedClusterBuilder(string name, ManagedClusterArgs arguments, RandomId rid) : this(name, rid)
         {
             Arguments = arguments;
         }
