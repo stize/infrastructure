@@ -28,9 +28,9 @@ namespace Stize.Infrastructure.Test
             var expectValue = $"{baseName}-{rid}";
 
             var context = new ResourceContext(rid);
+
             INamingStrategy namingStrategy = new DefaultNamingStrategy(context);
             var name = namingStrategy.GenerateName(baseName);
-
             name.OutputShould().Be(expectValue);
         }
 
@@ -41,7 +41,6 @@ namespace Stize.Infrastructure.Test
             var env = "dev";
             var expectValue = $"{baseName}-{env}";
             var context = new ResourceContext(null, env);
-            
             INamingStrategy namingStrategy = new DefaultNamingStrategy(context);
             var name = namingStrategy.GenerateName(baseName);
 
