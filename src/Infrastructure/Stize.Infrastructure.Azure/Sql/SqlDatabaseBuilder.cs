@@ -1,5 +1,6 @@
 using Pulumi;
 using Pulumi.AzureNextGen.Sql.Latest;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -23,6 +24,13 @@ namespace Stize.Infrastructure.Azure.Sql
         {
         }
 
+        /// <summary>
+        /// Creates a new instance of <see="SqlServerBuilder" />
+        /// </summary>
+        public SqlDatabaseBuilder(string name, ResourceContext context) : base(name, context)
+        {
+        }
+
         public SqlDatabaseBuilder(string name, DatabaseArgs arguments) : this(name)
         {
             Arguments = arguments;
@@ -35,7 +43,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public override Database Build(CustomResourceOptions cro)
         {
-            var db = new Database(this.Name, this.Arguments, cro);
+            Arguments.DatabaseName = ResourceStrategy.Naming.GenerateName(Arguments.DatabaseName);
+            ResourceStrategy.Tagging.AddTags(Arguments.Tags);
+            var db = new Database(Name, Arguments, cro);
             return db;
         }
     }

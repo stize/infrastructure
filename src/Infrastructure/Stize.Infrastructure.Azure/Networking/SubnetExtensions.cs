@@ -16,15 +16,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns>The builder argument</returns>
         public static SubnetBuilder Name(this SubnetBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.SubnetName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
-            }
-            else
-            {
-                builder.Arguments.SubnetName = name;
-            }
-
+            builder.Arguments.SubnetName = name;            
             return builder;
         }
 

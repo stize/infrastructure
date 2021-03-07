@@ -43,15 +43,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns>The builder argument</returns>
         public static VNetBuilder Name(this VNetBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.VirtualNetworkName = builder.RandomId.Hex.Apply(r => $"{name}-{r}");
-            }
-            else
-            {
-                builder.Arguments.VirtualNetworkName = name;
-            }
-
+            builder.Arguments.VirtualNetworkName = name;
             return builder;
         }
 

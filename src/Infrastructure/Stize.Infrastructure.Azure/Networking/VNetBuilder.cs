@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -22,12 +23,32 @@ namespace Stize.Infrastructure.Azure.Networking
         }
 
         /// <summary>
+        /// Creates a new instance of <see cref="SubnetBuilder"/>
+        /// </summary>
+        /// <param name="name">Subnet internal name</param>
+        /// <param name="context">The resource context</param>
+        /// <param name="cro">The CustomResourceOptions</param>
+        public VNetBuilder(string name, ResourceContext context, CustomResourceOptions cro) : base(name, context, cro)
+        {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="SubnetBuilder"/>
+        /// </summary>
+        /// <param name="name">Subnet internal name</param>
+        public VNetBuilder(string name, CustomResourceOptions cro) : base(name, cro)
+        {
+        }
+
+        /// <summary>
         /// Builds the Virtual network
         /// </summary>
         /// <param name="cro">Custom Resource Object</param>
         /// <returns></returns>
         public override VirtualNetwork Build(CustomResourceOptions cro)
         {
+            Arguments.VirtualNetworkName = ResourceStrategy.Naming.GenerateName(Arguments.VirtualNetworkName);
+            ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var vnet = new VirtualNetwork(Name, Arguments, cro);
             return vnet;
         }

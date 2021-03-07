@@ -1,6 +1,7 @@
 ﻿using System;
 using Pulumi;
 using Pulumi.Random;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure
 {
@@ -17,10 +18,24 @@ namespace Stize.Infrastructure
         public string Name { get; set; }
 
         /// <summary>
-        /// RandomId used to generate the name of this component
+        /// Resource tags
         /// </summary>
-        /// <value></value>
-        public RandomId RandomId { get; private set; }
+        public InputMap<string> Tags { get; private set; } = new InputMap<string>();
+
+        /// <summary>
+        /// Resource context on which the object will be created on
+        /// </summary>
+        public ResourceContext Context { get; private set; }
+
+        /// <summary>
+        /// Resource location is is deployed to
+        /// </summary>
+        public Input<string> Location { get; set; }
+
+        /// <summary>
+        /// The resource strategy this builder should use to generate things like name or tags
+        /// </summary>
+        public IResourceStrategy ResourceStrategy { get; private set; }
 
         /// <summary>
         /// Pulumi Custom Resource Options
@@ -31,20 +46,8 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
-        public BaseBuilder(string name)
+        public BaseBuilder(string name) : this(name, new ResourceContext())
         {
-            this.Name = name;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="BaseBuilder"/>
-        /// </summary>
-        /// <param name="name">Pulumi internal name of the component</param>
-        /// <param name="rid">RandomId generator this builder should use</param>
-        /// <returns></returns>
-        public BaseBuilder(string name, RandomId rid) : this(name)
-        {
-            this.RandomId = rid;
         }
 
         /// <summary>
@@ -61,11 +64,26 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
-        /// <param name="rid">RandomId generator this builder should use</param>
-        /// <param name="cro"></param>
-        public BaseBuilder(string name, RandomId rid, CustomResourceOptions cro) : this(name)
+        /// <param name="context">Context generator this builder should use</param>
+        /// <returns></returns>
+        public BaseBuilder(string name, ResourceContext context)
         {
-            RandomId = rid;
+            Name = name;
+            Context = context;
+            ResourceStrategy = Strategies.ResourceStrategy.Default(context);
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="BaseBuilder"/>
+        /// </summary>
+        /// <param name="name">Pulumi internal name of the component</param>
+        /// <param name="context">Context generator this builder should use</param>
+        /// <param name="cro"></param>
+        public BaseBuilder(string name, ResourceContext context, CustomResourceOptions cro)
+        {
+            Name = name;
+            Context = context;
+            ResourceStrategy = Strategies.ResourceStrategy.Default(context);
             CustomResourceOptions = cro;
         }        
     }
@@ -87,9 +105,9 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
-        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <param name="context">Context generator this builder should use</param>
         /// <returns></returns>
-        public BaseBuilder(string name, RandomId rid) : base(name, rid)
+        public BaseBuilder(string name, ResourceContext context) : base(name, context)
         {
         }
 
@@ -106,9 +124,9 @@ namespace Stize.Infrastructure
         /// Creates a new instance of <see cref="BaseBuilder"/>
         /// </summary>
         /// <param name="name">Pulumi internal name of the component</param>
-        /// <param name="rid">RandomId generator this builder should use</param>
+        /// <param name="context">Context generator this builder should use</param>
         /// <param name="cro"></param>
-        public BaseBuilder(string name, RandomId rid, CustomResourceOptions cro) : base(name, rid, cro)
+        public BaseBuilder(string name, ResourceContext context, CustomResourceOptions cro) : base(name, context, cro)
         {
         }     
 

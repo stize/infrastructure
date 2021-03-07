@@ -1,6 +1,7 @@
 using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Sql.Latest;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -26,6 +27,14 @@ namespace Stize.Infrastructure.Azure.Sql
         /// </summary>
         public SqlServerBuilder(string name) : base(name)
         {            
+            Arguments.Version = "12.0";
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see="SqlServerBuilder" />
+        /// </summary>
+        public SqlServerBuilder(string name, ResourceContext context) : base(name,context)
+        {
             Arguments.Version = "12.0";
         }
 
