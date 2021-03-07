@@ -40,6 +40,10 @@ namespace Stize.Infrastructure.Azure.Tests.Storage
 
             storage.Should().NotBeNull("an storage account should be created");
             storage.Name.OutputShould().Be($"account1-{ridHexValue}");
+            storage.Kind.OutputShould().Be(Kind.StorageV2.ToString());
+
+            var sku = await storage.Sku.GetValueAsync();
+            sku.Name.Should().Be(SkuName.Standard_LRS.ToString());
         }
     }
 }
