@@ -17,11 +17,24 @@ namespace Stize.Infrastructure.Strategies
         /// <summary>
         /// Creates a new instance of <see cref="DefaultNamingStrategy"/>
         /// </summary>
+        public DefaultNamingStrategy()
+        {
+            this.context = new ResourceContext();
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="DefaultNamingStrategy"/>
+        /// </summary>
         public DefaultNamingStrategy(ResourceContext context)
         {
             this.context = context;
         }
 
+        /// <summary>
+        /// Generates a new using a combination of name+environment+randomid
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public Output<string> GenerateName(Input<string> name)
         {
             Output<string> result;
