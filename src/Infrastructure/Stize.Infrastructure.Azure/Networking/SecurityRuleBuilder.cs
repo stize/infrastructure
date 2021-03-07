@@ -1,8 +1,7 @@
 ﻿using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
-using Pulumi.Random;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -19,15 +18,13 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="name"></param>
         public SecurityRuleBuilder(string name) : base(name)
         {
-
         }
         /// <summary>
         /// Creates a new instance of <see cref="SecurityRuleBuilder"/>
         /// </summary>
         /// <param name="name"></param>
-        public SecurityRuleBuilder(string name, RandomId rid) : base(name, rid)
+        public SecurityRuleBuilder(string name, ResourceContext context) : base(name, context)
         {
-
         }
 
         /// <summary>
@@ -37,6 +34,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public override SecurityRule Build(CustomResourceOptions cro)
         {
+            Arguments.SecurityRuleName = ResourceStrategy.Naming.GenerateName(Arguments.SecurityRuleName);
             var sr = new SecurityRule(Name, Arguments, cro);
             return sr;
         }

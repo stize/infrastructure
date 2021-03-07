@@ -1,6 +1,5 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -28,14 +27,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns>The builder argument</returns>
         public static NetworkSecurityGroupBuilder Name(this NetworkSecurityGroupBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.NetworkSecurityGroupName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.NetworkSecurityGroupName = name;
-            }
+            builder.Arguments.NetworkSecurityGroupName = name;           
             return builder;
         }
 

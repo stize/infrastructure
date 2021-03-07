@@ -3,6 +3,7 @@ using Pulumi;
 using Pulumi.Random;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Storage;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
 {
@@ -10,19 +11,19 @@ namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
     {
         public RandomIdStorageStack()
         {
-            var rg = new ResourceGroupBuilder("rg1")
-            .Name("rg1")
-            .Location("westeurope")
-            .Build();
-
             var rid = new RandomId("random1", new RandomIdArgs
             {
                 ByteLength = 4
             });
 
-            var hexValue = rid.Hex.GetValueAsync();
+            var context = new ResourceContext(rid.Hex);
 
-            var storage = new StorageAccountBuilder("account1", rid)
+            var rg = new ResourceGroupBuilder("rg1", context)
+            .Name("rg1")
+            .Location("westeurope")
+            .Build();      
+
+            var storage = new StorageAccountBuilder("account1", context)
             .Name("account1")
             .In(rg)
             .Location("westeurope")

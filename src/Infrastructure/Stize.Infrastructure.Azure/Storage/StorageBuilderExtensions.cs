@@ -17,15 +17,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns>The builder argument</returns>
         public static StorageAccountBuilder Name(this StorageAccountBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.AccountName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{n}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.AccountName = name;
-            }
-
+            builder.Arguments.AccountName = name;
             return builder;
         }
 
@@ -242,6 +234,102 @@ namespace Stize.Infrastructure.Azure.Storage
         public static StorageAccountBuilder Kind(this StorageAccountBuilder builder, Kind kind)
         {
             builder.Arguments.Kind = kind;
+            return builder;
+        }
+
+        /// <summary>
+        /// Enfoces https traffic
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder EnableHttpsTrafficOnly(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.EnableHttpsTrafficOnly = true;
+            return builder;
+        }
+
+        /// <summary>
+        /// Removes the https traffic enforcement
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder DisableHttpsTrafficOnly(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.EnableHttpsTrafficOnly = false;
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures a custom domain for this storage
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="name"></param>
+        /// <param name="useSubDomain"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder UseCustomDomain(this StorageAccountBuilder builder, Input<string> name, Input<bool> useSubDomain)
+        {
+            builder.Arguments.CustomDomain = new CustomDomainArgs
+            {
+                Name = name,
+                UseSubDomainName = useSubDomain
+            };
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configures a custom domain for this storage
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder UseCustomDomain(this StorageAccountBuilder builder, Input<CustomDomainArgs> args)
+        {
+            builder.Arguments.CustomDomain = args;
+            return builder;
+        }
+
+        /// <summary>
+        /// Allows public access to this storage
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowPublicAccess(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.AllowBlobPublicAccess = true;
+            return builder;
+        }
+
+        /// <summary>
+        /// Denies public access to this storage
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder DenyPulicAccess(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.AllowBlobPublicAccess = false;
+            return builder;
+        }
+
+        /// <summary>
+        /// Allows the access with a SAS key
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowSharedKeyAccess(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.AllowSharedKeyAccess = true;
+            return builder;
+        }
+
+        /// <summary>
+        /// Denies the access with a SAS key
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder DenySharedKeyAccess(this StorageAccountBuilder builder)
+        {
+            builder.Arguments.AllowSharedKeyAccess = false;
             return builder;
         }
     }

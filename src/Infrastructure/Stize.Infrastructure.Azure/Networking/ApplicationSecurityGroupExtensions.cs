@@ -25,15 +25,8 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="name">Builder name</param>
         /// <returns>The builder argument</returns>
         public static ApplicationSecurityGroupBuilder Name(this ApplicationSecurityGroupBuilder builder, Input<string> name)
-        {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.ApplicationSecurityGroupName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.ApplicationSecurityGroupName = name;
-            }
+        {            
+            builder.Arguments.ApplicationSecurityGroupName = name;
             return builder;
         }
 

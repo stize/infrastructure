@@ -64,5 +64,17 @@ namespace Stize.Infrastructure
             builder.CustomResourceOptions.Parent = resource;
             return builder;
         }
+
+        /// <summary>
+        /// Adds the default tags for the new resource
+        /// </summary>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static B AddTag<B>(this B builder, string key, Input<string> value) where B : BaseBuilder
+        {
+            builder.Tags.Add(key, value);
+            return builder;
+        }
     }
 }

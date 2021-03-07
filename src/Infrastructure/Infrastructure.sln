@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.TestTools", "Stize.Infrastructure.TestTools\Stize.Infrastructure.TestTools.csproj", "{31713F1E-E114-4E57-B1D5-DE4661986C74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stize.Infrastructure.Test", "Stize.Infrastructure.Test\Stize.Infrastructure.Test.csproj", "{7492533B-B5B3-4E3A-B422-3C5D82DCD1C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31713F1E-E114-4E57-B1D5-DE4661986C74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7492533B-B5B3-4E3A-B422-3C5D82DCD1C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7492533B-B5B3-4E3A-B422-3C5D82DCD1C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7492533B-B5B3-4E3A-B422-3C5D82DCD1C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7492533B-B5B3-4E3A-B422-3C5D82DCD1C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,16 +16,10 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public static SecurityRuleBuilder Name(this SecurityRuleBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.SecurityRuleName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.SecurityRuleName = name;
-            }
+            builder.Arguments.SecurityRuleName = name;            
             return builder;
         }
+
         /// <summary>
         /// Sets the direction of traffic that the <see cref="SecurityRule"/> will affect
         /// </summary>
@@ -37,6 +31,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Direction = direction;
             return builder;
         }
+
         /// <summary>
         /// Sets the Source Port Range for the <see cref="SecurityRule"/>.
         /// </summary>
@@ -48,6 +43,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.SourcePortRange = portRange;
             return builder;
         }
+
         /// <summary>
         /// Sets the Destination Port Range for the <see cref="SecurityRule"/>.
         /// </summary>
@@ -59,6 +55,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.DestinationPortRange = portRange;
             return builder;
         }
+
         /// <summary>
         /// Sets the Source Port Ranges for the <see cref="SecurityRule"/>.
         /// </summary>
@@ -74,6 +71,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the Destination Port Range for the <see cref="SecurityRule"/>.
         /// </summary>
@@ -89,6 +87,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the Priority on which the rule is processed.
         /// </summary>
@@ -100,6 +99,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Priority = priority;
             return builder;
         }
+
         /// <summary>
         /// Sets the Accessiblity option for the <see cref="SecurityRule"/>.
         /// </summary>
@@ -111,6 +111,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Access = access;
             return builder;
         }
+
         /// <summary>
         /// Sets the Source address for the <see cref="SecurityRule"/>.
         /// This is required if <see cref="SourcePrefixes(SecurityRuleBuilder, Input{string})"/> is not specified. 
@@ -123,6 +124,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.SourceAddressPrefix = prefix;
             return builder;
         }
+
         /// <summary>
         /// Sets the Destination address for the <see cref="SecurityRule"/>.
         /// This is required if <see cref="DestinationPrefixes(SecurityRuleBuilder, Input{string})"/> is not specified.
@@ -136,6 +138,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.DestinationAddressPrefix = prefix;
             return builder;
         }
+
         /// <summary>
         /// Sets the Source addresses for the security rule.
         /// This is required if <see cref="SourcePrefix(SecurityRuleBuilder, Input{string})"/> is not specified.
@@ -152,6 +155,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the Destination addresses for the <see cref="SecurityRule"/>.
         /// This is required if DestinationPrefix is not specified.
@@ -168,6 +172,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the Source <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
         /// Use comma seperated list for multiple ASGs
@@ -184,6 +189,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the Destination <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
         /// Use comma seperated list for multiple ASGs
@@ -200,6 +206,7 @@ namespace Stize.Infrastructure.Azure.Networking
             }
             return builder;
         }
+
         /// <summary>
         /// Sets the network protocol that this <see cref="SecurityRule"/> applies to.
         /// </summary>
@@ -211,6 +218,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Protocol = protocol;
             return builder;
         }
+
         /// <summary>
         /// Sets the description of <see cref="SecurityRule"/>.
         /// </summary>
@@ -222,6 +230,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.Description = desc;
             return builder;
         }
+
         /// <summary>
         /// Sets the <see cref="Pulumi.AzureNextGen.Resources.Latest.ResourceGroup"/> the <see cref="SecurityRule"/> will be created on
         /// </summary>
@@ -233,6 +242,7 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.ResourceGroupName = resoureGroupName;
             return builder;
         }
+
         /// <summary>
         /// Sets the <see cref="NetworkSecurityGroup"/> that the <see cref="SecurityRule"/> will be assigned to.
         /// </summary>

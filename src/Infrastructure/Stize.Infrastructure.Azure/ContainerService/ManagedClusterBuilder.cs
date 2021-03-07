@@ -2,6 +2,7 @@ using System;
 using Pulumi;
 using Pulumi.AzureNextGen.ContainerService.Latest;
 using Pulumi.Random;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.ContainerService
 {
@@ -23,7 +24,7 @@ namespace Stize.Infrastructure.Azure.ContainerService
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ManagedClusterBuilder(string name, RandomId rid) : base(name, rid)
+        public ManagedClusterBuilder(string name, ResourceContext context) : base(name, context)
         {
         }
 
@@ -43,7 +44,7 @@ namespace Stize.Infrastructure.Azure.ContainerService
         /// <param name="name"></param>
         /// <param name="arguments"></param>
         /// <returns></returns>
-        public ManagedClusterBuilder(string name, ManagedClusterArgs arguments, RandomId rid) : this(name, rid)
+        public ManagedClusterBuilder(string name, ManagedClusterArgs arguments, ResourceContext context) : this(name, context)
         {
             Arguments = arguments;
         }

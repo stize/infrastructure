@@ -2,6 +2,7 @@ using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Storage.Latest;
 using Pulumi.Random;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Storage
 {
@@ -24,7 +25,8 @@ namespace Stize.Infrastructure.Azure.Storage
         /// Creates a new instance of <see cref="SubnetBuilder"/>
         /// </summary>
         /// <param name="name">Subnet internal name</param>
-        public StorageAccountBuilder(string name, RandomId rid) : base(name, rid)
+        /// <param name="context">The resource context</param>
+        public StorageAccountBuilder(string name, ResourceContext context) : base(name, context)
         {
         }
 
@@ -32,7 +34,9 @@ namespace Stize.Infrastructure.Azure.Storage
         /// Creates a new instance of <see cref="SubnetBuilder"/>
         /// </summary>
         /// <param name="name">Subnet internal name</param>
-        public StorageAccountBuilder(string name, RandomId rid, CustomResourceOptions cro) : base(name, rid, cro)
+        /// <param name="context">The resource context</param>
+        /// <param name="cro">The CustomResourceOptions</param>
+        public StorageAccountBuilder(string name, ResourceContext context, CustomResourceOptions cro) : base(name, context, cro)
         {
         }
 
@@ -51,6 +55,8 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public override StorageAccount Build(CustomResourceOptions cro)
         {
+            Arguments.AccountName = ResourceStrategy.Naming.GenerateName(Arguments.AccountName);
+            ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var account = new StorageAccount(Name, Arguments, cro);
             return account;
         }

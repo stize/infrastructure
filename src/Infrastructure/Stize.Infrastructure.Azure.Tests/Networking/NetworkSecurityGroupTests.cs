@@ -48,10 +48,12 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var nsg = resources.OfType<NetworkSecurityGroup>().FirstOrDefault();
             var testTags = new Dictionary<string, string>() { { "env", "dev"} };
             var tags = await nsg.Tags.GetValueAsync();
+            tags?.Should().NotBeNull();
+
             foreach (var tag in testTags)
             {
-                tags.ContainsKey(tag.Key);
-                tags.ContainsValue(tag.Value);
+                tags?.ContainsKey(tag.Key);
+                tags?.ContainsValue(tag.Value);
             }
         }
     }

@@ -42,20 +42,28 @@ namespace Stize.Infrastructure.Tests.Azure
             rid.Should().NotBeNull("a RandomId should be created");
 
             var ridHexValue = await rid.Hex.GetValueAsync();
+            var env = "dev";
 
             var rg = resources.OfType<ResourceGroup>().FirstOrDefault();
             var tags = await rg.Tags.GetValueAsync();
-            tags.Should().NotBeNull("The resource group has no tags");            
-            tags.Should().HaveCount(2, "Not all tags are present");
-
-            tags.Should().ContainKey("env");
-            tags.Should().ContainValue("dev");
-            tags.Should().ContainKeys("uid");
+            tags.Should().NotBeNull("the resource should have tags");
+            // Strategy tags
+            tags.Should().ContainKey("environment");
+            tags.Should().ContainValue(env);
+            tags.Should().ContainKeys("instanceId");
             tags.Should().ContainValue(ridHexValue);
+            tags.Should().ContainKeys("managedBy");
+            tags.Should().ContainValue("Stize");
+            tags.Should().ContainKeys("createdWith");
+            tags.Should().ContainValue("pulumi");
+            // Custom tags
+            tags.Should().ContainKeys("my");
+            tags.Should().ContainValue("tag");
+            // Tag count validation            
+            tags.Should().HaveCount(5, "all tags should be present");
 
-            rg.Name.OutputShould().StartWith("rg1");
-            rg.Name.OutputShould().NotBeEquivalentTo("rg1");
-            rg.Name.OutputShould().Be($"rg1-{ridHexValue}");
+            rg.Name.OutputShould().Be($"rg1-{env}-{ridHexValue}");
+            rg.Location.OutputShould().Be("westeurope");
         }
     }
 }

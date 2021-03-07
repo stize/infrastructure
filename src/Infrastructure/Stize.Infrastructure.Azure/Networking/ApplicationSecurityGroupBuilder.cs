@@ -1,6 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
-using Pulumi.Random;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -23,9 +23,8 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Creates a new instance of <see cref="ApplicationSecurityGroupBuilder"/>
         /// </summary>
         /// <param name="name"></param>
-        public ApplicationSecurityGroupBuilder(string name, RandomId rid) : base(name, rid)
+        public ApplicationSecurityGroupBuilder(string name, ResourceContext context) : base(name, context)
         {
-
         }
 
         /// <summary>
