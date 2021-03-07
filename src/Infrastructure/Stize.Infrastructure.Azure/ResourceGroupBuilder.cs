@@ -2,6 +2,7 @@ using System;
 using Pulumi;
 using Pulumi.AzureNextGen.Resources.Latest;
 using Pulumi.Random;
+using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure
 {
@@ -29,7 +30,8 @@ namespace Stize.Infrastructure.Azure
         /// Creates a new instance of <see="ResourceGroupBuilder" />
         /// </summary>
         /// <param name="name">Pulumi internal name</param>
-        public ResourceGroupBuilder(string name, RandomId rid) : base(name, rid)
+        /// <param name="context">The context the resources is created on</param>
+        public ResourceGroupBuilder(string name, ResourceContext context) : base(name, context)
         {
         }
 
@@ -50,6 +52,8 @@ namespace Stize.Infrastructure.Azure
         /// <returns></returns>
         public override ResourceGroup Build(CustomResourceOptions cro)
         {
+            Arguments.ResourceGroupName = ResourceStrategy?.Naming?.GenerateName(Arguments.ResourceGroupName);
+            ResourceStrategy?.Tagging?.AddTags(Arguments.Tags);
             var rg = new ResourceGroup(Name, Arguments, cro);
             return rg;
         }

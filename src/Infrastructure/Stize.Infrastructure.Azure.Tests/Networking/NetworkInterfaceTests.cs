@@ -96,7 +96,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var subnet = resources.OfType<Subnet>().LastOrDefault();
             var t = await nic.IpConfigurations.GetValueAsync();
             var id = await subnet.Id.GetValueAsync();
-            t[0].Subnet.Id.Should().Be(id);
+            t[0]?.Subnet?.Id?.Should().Be(id);
         }
         /// <summary>
         /// Checks the NSG associated with the NIC by checking if the Id of NSG property in the NIC to see if it matches the Id of the NSG resource created
@@ -110,7 +110,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var nsg = resources.OfType<NetworkSecurityGroup>().LastOrDefault();
             var t = await nic.NetworkSecurityGroup.GetValueAsync();
             var id = await nsg.Id.GetValueAsync();
-            t.Id.Should().Be(id);
+            t?.Id.Should().Be(id);
         }
         /// <summary>
         /// Checks the NSG associated with the NIC by checking if the Id of NSG property in the NIC to see if it matches the Id of the NSG resource created
@@ -123,10 +123,11 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var nic = resources.OfType<NetworkInterface>().LastOrDefault();
             var tags = await nic.Tags.GetValueAsync();
             var testTags = new Dictionary<string, string>() { { "env", "dev" } };
+            tags?.Should().NotBeNull();
             foreach (var tag in testTags)
             {
-                tags.ContainsKey(tag.Key);
-                tags.ContainsValue(tag.Value);
+                tags?.ContainsKey(tag.Key);
+                tags?.ContainsValue(tag.Value);
             }            
         }
     }

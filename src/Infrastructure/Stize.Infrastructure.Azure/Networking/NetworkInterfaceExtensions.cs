@@ -129,15 +129,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns>The builder argument</returns>
         public static NetworkInterfaceBuilder Name(this NetworkInterfaceBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.NetworkInterfaceName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{name}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.NetworkInterfaceName = name;
-            }
-
+            builder.Arguments.NetworkInterfaceName = name;
             return builder;
         }
 

@@ -50,10 +50,12 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var asg = resources.OfType<ApplicationSecurityGroup>().FirstOrDefault();
             var testTags = new Dictionary<string, string>() { { "env", "dev" } };
             var tags = await asg.Tags.GetValueAsync();
+            tags?.Should().NotBeNull();
+
             foreach (var tag in testTags)
             {
-                tags.ContainsKey(tag.Key);
-                tags.ContainsValue(tag.Value);
+                tags?.ContainsKey(tag.Key);
+                tags?.ContainsValue(tag.Value);
             }
         }
     }

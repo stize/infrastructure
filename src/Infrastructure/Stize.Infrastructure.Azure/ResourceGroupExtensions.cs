@@ -5,22 +5,14 @@ namespace Stize.Infrastructure.Azure
     public static class ResourceGroupExtensions
     {
         /// <summary>
-        /// Sets the builder name. If the builder has an RandomId associated, 
-        /// appends the hex value of the RandomId to the end of the name
+        /// Sets the builder name using the builder resource strategy
         /// </summary>
         /// <param name="builder">Builder instance</param>
         /// <param name="name">Builder name</param>
         /// <returns>The builder argument</returns>
         public static ResourceGroupBuilder Name(this ResourceGroupBuilder builder, Input<string> name)
         {
-            if (builder.RandomId != null)
-            {
-                builder.Arguments.ResourceGroupName = name.Apply(n => builder.RandomId.Hex.Apply(r => $"{n}-{r}"));
-            }
-            else
-            {
-                builder.Arguments.ResourceGroupName = name;
-            }
+            builder.Arguments.ResourceGroupName = name;
             return builder;
         }
 
