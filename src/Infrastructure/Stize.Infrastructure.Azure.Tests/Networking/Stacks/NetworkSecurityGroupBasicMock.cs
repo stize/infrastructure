@@ -22,7 +22,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             outputs.Add("id", id);
             switch (type)
             {
-                case "azure-nextgen:network/latest:NetworkSecurityGroup": return NewNetworkSecurityGroup(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:NetworkSecurityGroup": return NewNetworkSecurityGroup(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }

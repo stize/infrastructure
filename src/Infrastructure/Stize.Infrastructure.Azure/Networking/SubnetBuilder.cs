@@ -1,6 +1,6 @@
 ﻿using System;
 using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 using Pulumi.Random;
 using Stize.Infrastructure.Strategies;
 

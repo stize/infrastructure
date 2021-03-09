@@ -19,8 +19,8 @@ namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
 
             switch (type)
             {
-                case "azure-nextgen:resources/latest:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
-                case "azure-nextgen:storage/latest:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);                
+                case "azure-native:resources:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
+                case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);                
                 default: return Task.FromResult((id, (object)outputs));
             }
         }

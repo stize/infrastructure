@@ -1,5 +1,6 @@
 using System;
 using Pulumi;
+using Pulumi.AzureNative.Sql.Latest;
 using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
@@ -76,7 +77,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="edition"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, DatabaseEdition> edition)
+        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, Pulumi.AzureNextGen.Sql.Latest.DatabaseEdition> edition)
         {
             builder.Arguments.Edition = edition;
             return builder;
@@ -116,7 +117,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="objectiveName"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, ServiceObjectiveName> objectiveName)
+        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, Pulumi.AzureNextGen.Sql.Latest.ServiceObjectiveName> objectiveName)
         {
             builder.Arguments.RequestedServiceObjectiveName = objectiveName;
             return builder;

@@ -1,6 +1,6 @@
 using System;
 using Pulumi;
-using Pulumi.AzureNextGen.Storage.Latest;
+using Pulumi.AzureNative.Storage;
 using Pulumi.Random;
 using Stize.Infrastructure.Strategies;
 

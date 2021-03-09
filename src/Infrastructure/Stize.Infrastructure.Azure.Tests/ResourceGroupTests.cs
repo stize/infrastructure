@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Pulumi.AzureNextGen.Resources.Latest;
+using Pulumi.AzureNative.Resources;
 using Pulumi.Random;
 using Pulumi.Testing;
 using Stize.Infrastructure.Azure.Tests.Azure;
