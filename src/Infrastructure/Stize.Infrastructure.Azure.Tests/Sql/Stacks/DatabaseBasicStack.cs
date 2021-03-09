@@ -30,7 +30,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Name("my-db")
                 .Parent(server)
                 .Edition("Basic")
-                .RequestedServiceObjectiveName("S0")
+                .ServiceObjectiveName("S0")
                 .Build();
         }
     }

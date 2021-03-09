@@ -1,7 +1,7 @@
 using System;
 using Pulumi;
+using Pulumi.AzureNative.Sql;
 using Pulumi.AzureNative.Sql.Latest;
-using Pulumi.AzureNextGen.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -56,14 +56,14 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Sets the elastic pool name
+        /// Sets the elastic pool id
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="name"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder ElasticPoolName(this SqlDatabaseBuilder builder, Input<string> name)
+        public static SqlDatabaseBuilder ElasticPoolName(this SqlDatabaseBuilder builder, Input<string> id)
         {
-            builder.Arguments.ElasticPoolName = name;
+            builder.Arguments.ElasticPoolId = id;
             return builder;
         }
 
@@ -77,9 +77,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="edition"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, Pulumi.AzureNextGen.Sql.Latest.DatabaseEdition> edition)
+        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, DatabaseEdition> edition)
         {
-            builder.Arguments.Edition = edition;
+            builder.SkuArguments.Tier = edition.ToString();
             return builder;
         }
 
@@ -103,7 +103,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder ReadScale(this SqlDatabaseBuilder builder)
         {
-            builder.Arguments.ReadScale = Pulumi.AzureNextGen.Sql.Latest.ReadScale.Enabled;
+            builder.Arguments.ReadScale = Pulumi.AzureNative.Sql.DatabaseReadScale.Enabled;
             return builder;
         }
 
@@ -117,9 +117,47 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="objectiveName"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder RequestedServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, Pulumi.AzureNextGen.Sql.Latest.ServiceObjectiveName> objectiveName)
+        public static SqlDatabaseBuilder ServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, ServiceObjectiveName> objectiveName)
         {
-            builder.Arguments.RequestedServiceObjectiveName = objectiveName;
+            //TODO: Need to fix this migration issue
+            builder.SkuArguments.Name = objectiveName.ToString();
+            return builder;
+        }
+
+        /// <summary>
+        /// Capacity of the particular SKU
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SkuCapacity(this SqlDatabaseBuilder builder, Input<int> capacity)
+        {
+            builder.SkuArguments.Capacity = capacity;
+            return builder;
+        }
+
+        /// <summary>
+        /// Size of the particular SKU
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SkuSize(this SqlDatabaseBuilder builder, Input<string> size)
+        {
+            builder.SkuArguments.Size = size;
+            return builder;
+        }
+
+        /// <summary>
+        /// Family of the particular SKU. 
+        /// If the service has different generations of hardware, for the same SKU, then that can be captured here.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="family"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SkuFamily(this SqlDatabaseBuilder builder, Input<string> family)
+        {
+            builder.SkuArguments.Family = family;
             return builder;
         }
     }
