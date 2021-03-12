@@ -29,8 +29,8 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Location(server.Location)
                 .Name("my-db")
                 .Parent(server)
-                .Edition("Basic")
-                .ServiceObjectiveName("S0")
+                .SkuTier("Basic")
+                .SkuServiceObjectiveName("S0")
                 .Build();
         }
     }

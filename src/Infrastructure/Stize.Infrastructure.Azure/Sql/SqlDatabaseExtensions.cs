@@ -1,4 +1,3 @@
-using System;
 using Pulumi;
 using Pulumi.AzureNative.Sql;
 using Pulumi.AzureNative.Sql.Latest;
@@ -61,14 +60,14 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder ElasticPoolName(this SqlDatabaseBuilder builder, Input<string> id)
+        public static SqlDatabaseBuilder ElasticPoolId(this SqlDatabaseBuilder builder, Input<string> id)
         {
             builder.Arguments.ElasticPoolId = id;
             return builder;
         }
 
         /// <summary>
-        //     The edition of the database to be created. Applies only if `create_mode` is `Default`.
+        //     The edition/tier of the database to be created. Applies only if `create_mode` is `Default`.
         //     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
         //     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
         //     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
@@ -77,9 +76,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="edition"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder Edition(this SqlDatabaseBuilder builder, InputUnion<string, DatabaseEdition> edition)
+        public static SqlDatabaseBuilder SkuTier(this SqlDatabaseBuilder builder, Input<string> edition)
         {
-            builder.SkuArguments.Tier = edition.ToString();
+            builder.SkuArguments.Tier = edition;
             return builder;
         }
 
@@ -91,7 +90,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder RestoreFrom(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
-            builder.Arguments.CreateMode = "Restore";
+            builder.Arguments.CreateMode = Pulumi.AzureNative.Sql.CreateMode.Restore;
             builder.Arguments.SourceDatabaseId = databaseId;
             return builder;
         }
@@ -103,12 +102,12 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder ReadScale(this SqlDatabaseBuilder builder)
         {
-            builder.Arguments.ReadScale = Pulumi.AzureNative.Sql.DatabaseReadScale.Enabled;
+            builder.Arguments.ReadScale = DatabaseReadScale.Enabled;
             return builder;
         }
 
         /// <summary>
-        //  The service objective name for the database. Valid values depend on edition and
+        //  The Sku name / service objective name for the database. Valid values depend on edition and
         //  location and may include `S0`, `S1`, `S2`, `S3`, `P1`, `P2`, `P4`, `P6`, `P11`
         //  and `ElasticPool`. You can list the available names with the cli: ```shell az
         //  sql db list-editions -l westus -o table ```. For further information please see
@@ -117,10 +116,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="objectiveName"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder ServiceObjectiveName(this SqlDatabaseBuilder builder, InputUnion<string, ServiceObjectiveName> objectiveName)
+        public static SqlDatabaseBuilder SkuServiceObjectiveName(this SqlDatabaseBuilder builder, Input<string> objectiveName)
         {
-            //TODO: Need to fix this migration issue
-            builder.SkuArguments.Name = objectiveName.ToString();
+            builder.SkuArguments.Name = objectiveName;
             return builder;
         }
 
