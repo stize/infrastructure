@@ -1,6 +1,6 @@
 ﻿using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Pulumi.AzureNative.Network;
+using Inputs = Pulumi.AzureNative.Network.Inputs;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Networking;
 namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks

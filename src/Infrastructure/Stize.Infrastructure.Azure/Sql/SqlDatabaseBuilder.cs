@@ -1,5 +1,8 @@
 using Pulumi;
-using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.AzureNative.Sql;
+using Pulumi.AzureNative.Sql.Inputs;
+
+
 using Stize.Infrastructure.Strategies;
 
 namespace Stize.Infrastructure.Azure.Sql
@@ -14,6 +17,11 @@ namespace Stize.Infrastructure.Azure.Sql
         /// </summary>
         /// <returns></returns>
         public DatabaseArgs Arguments {get; private set; } = new DatabaseArgs();
+
+        /// <summary>
+        /// The database SKU arguments.
+        /// </summary>
+        public SkuArgs SkuArguments { get; private set; } = new SkuArgs();
 
         /// <summary>
         /// Creates a new instance of <see="SqlDatabaseBuilder" />
@@ -54,6 +62,7 @@ namespace Stize.Infrastructure.Azure.Sql
         {
             Arguments.DatabaseName = ResourceStrategy.Naming.GenerateName(Arguments.DatabaseName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
+            Arguments.Sku = SkuArguments;
             var db = new Database(Name, Arguments, cro);
             return db;
         }

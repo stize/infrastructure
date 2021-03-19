@@ -1,10 +1,10 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Pulumi.Testing;
 
-namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
+namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
 {
-    public class BasicStorageMock : IMocks
+    public class DatabaseBasicMock : IMocks
     {
         public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id)
@@ -15,12 +15,15 @@ namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
             outputs.AddRange(inputs);
 
             // Default the resource ID to `{name}_id`.
-            id ??= $"{name}_id";
+            if (id == null || id == "")
+            {
+                id = $"{name}_id";
+            }
 
             switch (type)
             {
-                case "azure-native:resources:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
-                case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);                
+                case "azure-native:sql:Database": return NewDatabase(type, name, inputs, provider, id, outputs);
+                case "azure-native:sql:Server": return NewServer(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -32,18 +35,17 @@ namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
             return Task.FromResult((object)inputs);
         }
 
-        public Task<(string? id, object state)> NewResourceGroup(string type, string name, ImmutableDictionary<string, object> inputs,
+        public Task<(string? id, object state)> NewDatabase(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["resourceGroupName"]);
+            outputs.Add("name", inputs["databaseName"]);
             return Task.FromResult((id, (object)outputs));
         }
-
-        public Task<(string? id, object state)> NewStorageAccount(string type, string name, ImmutableDictionary<string, object> inputs,
+        public Task<(string? id, object state)> NewServer(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["accountName"]);
+            outputs.Add("name", inputs["serverName"]);
             return Task.FromResult((id, (object)outputs));
-        }        
+        }
     }
 }

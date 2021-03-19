@@ -1,6 +1,6 @@
 using System;
 using Pulumi;
-using Pulumi.AzureNextGen.ContainerService.Latest;
+using Pulumi.AzureNative.ContainerService;
 using Pulumi.Random;
 using Stize.Infrastructure.Strategies;
 

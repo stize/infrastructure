@@ -1,7 +1,7 @@
 ﻿using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
-using Pulumi.AzureNextGen.Resources.Latest;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Pulumi.AzureNative.Network;
+using Pulumi.AzureNative.Resources;
+using Inputs = Pulumi.AzureNative.Network.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -232,10 +232,10 @@ namespace Stize.Infrastructure.Azure.Networking
         }
 
         /// <summary>
-        /// Sets the <see cref="Pulumi.AzureNextGen.Resources.Latest.ResourceGroup"/> the <see cref="SecurityRule"/> will be created on
+        /// Sets the <see cref="Pulumi.AzureNative.Resources.ResourceGroup"/> the <see cref="SecurityRule"/> will be created on
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="resoureGroupName"><see cref="Pulumi.AzureNextGen.Resources.Latest.ResourceGroup"/> name</param>
+        /// <param name="resoureGroupName"><see cref="Pulumi.AzureNative.Resources.ResourceGroup"/> name</param>
         /// <returns></returns>
         public static SecurityRuleBuilder ResourceGroup(this SecurityRuleBuilder builder, Input<string> resoureGroupName)
         {

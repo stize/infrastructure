@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
-using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.AzureNative.Sql;
+using Pulumi.Testing;
 using Stize.Infrastructure.Test;
 using Stize.Infrastructure.Tests.Azure.Sql.Stacks;
 using Xunit;
@@ -12,11 +14,21 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
     {        
 
         [Fact]
-        public async System.Threading.Tasks.Task CreateBasicServer()
+        public async Task CreateBasicServer()
         {
-            var resources = await Testing.RunAsync<SqlServerBasicStack>();
-            var server= resources.OfType<Server>().FirstOrDefault();
+            var resources = await Pulumi.Deployment.TestAsync<SqlServerBasicStack>(new SqlServerBasicMock(), new TestOptions { IsPreview = false });
+            var server = resources.OfType<Server>().FirstOrDefault();
             server.Should().NotBeNull("SQL Server not found");
+            
+        }
+
+        [Fact]
+        public async Task AdminLoginIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<SqlServerBasicStack>(new SqlServerBasicMock(), new TestOptions { IsPreview = false });
+            var server = resources.OfType<Server>().FirstOrDefault();
+            (await server.AdministratorLogin.GetValueAsync()).Should().Be("admin");
+            (await server.AdministratorLoginPassword.GetValueAsync()).Should().Be("stize");
         }
     }
 }

@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 using Pulumi.Testing;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Inputs = Pulumi.AzureNative.Network.Inputs;
 using Stize.Infrastructure.Test;
 using Stize.Infrastructure.Tests.Azure.Networking.Stacks;
 using Xunit;

@@ -1,6 +1,6 @@
 using System;
 using Pulumi.AzureAD;
-using Pulumi.AzureNextGen.ContainerService.Latest.Inputs;
+using Pulumi.AzureNative.ContainerService.Inputs;
 using Pulumi.Random;
 using Pulumi.Tls;
 

@@ -1,7 +1,7 @@
 using System;
 using Pulumi;
-using Pulumi.AzureNextGen.Resources.Latest;
-using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.AzureNative.Resources;
+using Pulumi.AzureNative.Sql;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -62,7 +62,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder">SQL Server builder</param>
         /// <param name="version">Server version</param>
         /// <returns></returns>
-        public static SqlServerBuilder Version(this SqlServerBuilder builder, InputUnion<string, ServerVersion> version)
+        public static SqlServerBuilder Version(this SqlServerBuilder builder, Input<string> version)
         {
             builder.Arguments.Version = version;
             return builder;

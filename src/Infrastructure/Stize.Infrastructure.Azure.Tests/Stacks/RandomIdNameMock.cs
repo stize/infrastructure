@@ -20,7 +20,7 @@ namespace Stize.Infrastructure.Azure.Tests.Stacks
             switch (type)
             {
                 case "random:index/randomId:RandomId": return NewRandomId(type, name ,inputs, provider, id, outputs);
-                case "azure-nextgen:resources/latest:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
+                case "azure-native:resources:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
