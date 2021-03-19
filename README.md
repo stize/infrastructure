@@ -2,6 +2,8 @@
 
 # Stize Infrastructure as Code
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/54767652389a4d2eb3d159f920091133)](https://app.codacy.com/gh/stize/infrastructure?utm_source=github.com&utm_medium=referral&utm_content=stize/infrastructure&utm_campaign=Badge_Grade_Settings)
+
 The aim of this project is provide automated infrastructure provisioning for Stize , simplifying the platform setup and speeding up development and deploying times by packing up reusable, modular Infrastructure configurations.
 
 # Contributing
