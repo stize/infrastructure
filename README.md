@@ -1,4 +1,4 @@
-![.NET Core](https://github.com/stize/infrastructure/workflows/.NET%20Core/badge.svg)
+![.NET Core](https://github.com/stize/infrastructure/workflows/.NET%20Core/badge.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/6bb45cd6dbe8403e8d37f379ef11893a)](https://www.codacy.com/gh/stize/infrastructure/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stize/infrastructure&amp;utm_campaign=Badge_Grade)
 
 # Stize Infrastructure as Code
 
