@@ -218,7 +218,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <summary>
         /// Sets the Storage kind to FileStorage
         /// </summary>
-        /// <param name="builder"></param>
+        /// <param name="builder"></param> 
         /// <returns></returns>
         public static StorageAccountBuilder FileStorage(this StorageAccountBuilder builder)
         {
@@ -305,7 +305,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static StorageAccountBuilder DenyPulicAccess(this StorageAccountBuilder builder)
+        public static StorageAccountBuilder DenyPublicAccess(this StorageAccountBuilder builder)
         {
             builder.Arguments.AllowBlobPublicAccess = false;
             return builder;
