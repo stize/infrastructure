@@ -39,10 +39,11 @@ namespace Stize.Infrastructure.Azure.Networking
         public override PrivateZone Build(CustomResourceOptions cro)
         {
             Arguments.PrivateZoneName = ResourceStrategy.Naming.GenerateName(Arguments.PrivateZoneName);
-            Arguments.Location = "global";
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var zone = new PrivateZone(Name, Arguments, cro);
             return zone;
         }
     }
 }
+
+
