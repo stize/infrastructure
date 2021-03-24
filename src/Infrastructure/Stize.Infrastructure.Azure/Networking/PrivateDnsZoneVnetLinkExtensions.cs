@@ -1,6 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
-using Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -48,9 +48,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="builder"></param>
         /// <param name="vnet"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneVnetLinkBuilder LinkToVnet(this PrivateDnsZoneVnetLinkBuilder builder, VirtualNetwork vnet)
+        public static PrivateDnsZoneVnetLinkBuilder LinkTo(this PrivateDnsZoneVnetLinkBuilder builder, Input<VirtualNetwork> vnet)
         {
-            builder.Arguments.VirtualNetwork = new SubResourceArgs { Id = vnet.Id };
+            builder.Arguments.VirtualNetwork = new Inputs.SubResourceArgs { Id = vnet.Apply(v => v.Id) };
             return builder;
         }
 

@@ -1,7 +1,7 @@
 ﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
 using Stize.Infrastructure.Strategies;
-using Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -11,7 +11,6 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Private DNS Zone Arguments
         /// </summary>
         public VirtualNetworkLinkArgs Arguments { get; private set; } = new VirtualNetworkLinkArgs();
-
 
         /// <summary>
         /// Creates a new instance of <see cref="VirtualNetworkLink"/>
@@ -27,7 +26,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="name"></param>
         /// <param name="context"></param>
-        public PrivateDnsZoneVnetLinkBuilder(string name, ResourceContext context) : base(name)
+        public PrivateDnsZoneVnetLinkBuilder(string name, ResourceContext context) : base(name, context)
         {
 
         }
@@ -39,7 +38,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public override VirtualNetworkLink Build(CustomResourceOptions cro)
         {
-            Arguments.PrivateZoneName = ResourceStrategy.Naming.GenerateName(Arguments.VirtualNetworkLinkName);
+            Arguments.VirtualNetworkLinkName = ResourceStrategy.Naming.GenerateName(Arguments.VirtualNetworkLinkName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var zone = new VirtualNetworkLink(Name, Arguments, cro);
             return zone;

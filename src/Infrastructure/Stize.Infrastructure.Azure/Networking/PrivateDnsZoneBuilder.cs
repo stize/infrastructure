@@ -1,5 +1,4 @@
-﻿using System;
-using Pulumi;
+﻿using Pulumi;
 using Pulumi.AzureNextGen.Network.Latest;
 using Stize.Infrastructure.Strategies;
 
@@ -26,7 +25,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="name"></param>
         /// <param name="context"></param>
-        public PrivateDnsZoneBuilder(string name, ResourceContext context) : base(name)
+        public PrivateDnsZoneBuilder(string name, ResourceContext context) : base(name, context)
         {
 
         }
@@ -38,7 +37,6 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <returns></returns>
         public override PrivateZone Build(CustomResourceOptions cro)
         {
-            Arguments.PrivateZoneName = ResourceStrategy.Naming.GenerateName(Arguments.PrivateZoneName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var zone = new PrivateZone(Name, Arguments, cro);
             return zone;

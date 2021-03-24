@@ -48,13 +48,24 @@ namespace Stize.Infrastructure.Azure.Networking
         }
 
         /// <summary>
-        /// Enfoces private link endpoint network policies
+        /// Disable private link endpoint network policies
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static SubnetBuilder EnforcePrivateEndpointNetworkPolicies(this SubnetBuilder builder, bool active = true)
+        public static SubnetBuilder DisablePrivateEndpointNetworkPolicies(this SubnetBuilder builder)
         {
-            builder.Arguments.PrivateEndpointNetworkPolicies = active.ToString(); // TODO Confirm if this is correct after the migration to nextgen
+            builder.Arguments.PrivateEndpointNetworkPolicies = "Disabled"; 
+            return builder;
+        }
+
+        /// <summary>
+        /// Enable private link endpoint network policies
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SubnetBuilder EnablePrivateEndpointNetworkPolicies(this SubnetBuilder builder)
+        {
+            builder.Arguments.PrivateEndpointNetworkPolicies = "Enabled";
             return builder;
         }
 

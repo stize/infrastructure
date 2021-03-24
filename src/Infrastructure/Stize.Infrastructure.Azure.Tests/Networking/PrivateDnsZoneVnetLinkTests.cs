@@ -40,7 +40,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking
 
 
         /// <summary>
-        /// Checks the location for the resource is assigned correctly
+        /// Checks that uto registration of virtual machine records in the virtual network in the Private DNS zone is enabled
         /// </summary>
         /// <returns></returns>
         [Fact]

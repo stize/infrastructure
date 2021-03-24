@@ -23,7 +23,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
                 .Name("link1")
                 .Location("global")
                 .PrivateDnsZone("zone1")
-                .LinkToVnet(vnet)
+                .LinkTo(vnet)
                 .In(rg.Name)
                 .EnableAutoRegistration()
                 .Build();
