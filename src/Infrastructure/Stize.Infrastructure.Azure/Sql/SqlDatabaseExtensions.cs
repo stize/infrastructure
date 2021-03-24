@@ -1,6 +1,5 @@
 using Pulumi;
 using Pulumi.AzureNative.Sql;
-using Pulumi.AzureNative.Sql.Latest;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -67,11 +66,11 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        //     The edition/tier of the database to be created. Applies only if `create_mode` is `Default`.
-        //     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
-        //     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
-        //     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
-        //     Service Tiers](https://azure.microsoft.com/en-gb/documentation/articles/sql-database-service-tiers/).
+        ///     The edition/tier of the database to be created. Applies only if `create_mode` is `Default`.
+        ///     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
+        ///     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
+        ///     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
+        ///     Service Tiers](https://azure.microsoft.com/en-gb/documentation/articles/sql-database-service-tiers/).
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="edition"></param>
@@ -86,17 +85,72 @@ namespace Stize.Infrastructure.Azure.Sql
         /// Restores the database from an existing one
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="databaseId"></param>
+        /// <param name="databaseId">Resource ID of the database to restore from</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder RestoreFrom(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder SetAsBackupRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
-            builder.Arguments.CreateMode = Pulumi.AzureNative.Sql.CreateMode.Restore;
+            builder.Arguments.CreateMode = CreateMode.Restore;
             builder.Arguments.SourceDatabaseId = databaseId;
             return builder;
         }
 
         /// <summary>
-        /// Enables the read scale
+        /// Sets this database to be a secondary replica of an existing database, using the existing primary database's resource ID.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId">Resource ID of the primary database</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsSecondary(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        {
+            builder.Arguments.CreateMode = CreateMode.Secondary;
+            builder.Arguments.SourceDatabaseId = databaseId;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the database to be a copy of an existing database
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId">Resource ID of the database to copy</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsCopy(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        {
+            builder.Arguments.CreateMode = CreateMode.Copy;
+            builder.Arguments.SourceDatabaseId = databaseId;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the database to be a restoration of a geo-replicated backup database.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId">Resource ID of the database to recover</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsRecovery(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        {
+            builder.Arguments.CreateMode = CreateMode.Recovery;
+            builder.Arguments.SourceDatabaseId = databaseId;
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the database to be a restoration of a point in time of an existing database, using the existing database's resource ID and the point in time (ISO8601 format) to restore from.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId">Resource ID of the database to restore from</param>
+        /// <param name="restorePointInTime">The point in time (ISO8601 format) of the source database</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsPointInTimeRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> restorePointInTime)
+        {
+            builder.Arguments.CreateMode = CreateMode.PointInTimeRestore;
+            builder.Arguments.SourceDatabaseId = databaseId;
+            builder.Arguments.RestorePointInTime = restorePointInTime;
+            return builder;
+        }
+
+        /// <summary>
+        /// The state of read-only routing. If enabled, connections that have application intent set to readonly in their 
+        /// connection string may be routed to a readonly secondary replica in the same region.
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
