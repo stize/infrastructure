@@ -1,5 +1,6 @@
 using System;
 using Pulumi;
+using Pulumi.AzureNative.Sql;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.Sql;
 
@@ -23,7 +24,22 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Parent(rg)
                 .Build();
 
-            var db = new SqlDatabaseBuilder("db1")
+            var db = new SqlDatabaseBuilder("primaryDB")
+                .Server(server.Name)
+                .ResourceGroup(rg.Name)
+                .Location(server.Location)
+                .Name("primaryDB")
+                .Parent(server)
+                .SkuTier("Basic")
+                .SkuServiceObjectiveName("S0")
+                .StorageAccountType(StorageAccountType.GRS)
+                .MaxDatabaseSizeGB(250)
+                .MinCapacity(100)
+                .DatabaseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .SampleData(SampleName.AdventureWorksLT)
+                .Build();
+
+            var secondary = new SqlDatabaseBuilder("db1")
                 .Server(server.Name)
                 .ResourceGroup(rg.Name)
                 .Location(server.Location)
@@ -31,6 +47,13 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Parent(server)
                 .SkuTier("Basic")
                 .SkuServiceObjectiveName("S0")
+                .StorageAccountType(StorageAccountType.GRS)
+                .MaxDatabaseSizeGB(250)
+                .MinCapacity(100)
+                .DatabaseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .SampleData(SampleName.AdventureWorksLT)
+                .SetAsSecondary(db.Id)
+                .SecondaryType(SecondaryType.Named)
                 .Build();
         }
     }

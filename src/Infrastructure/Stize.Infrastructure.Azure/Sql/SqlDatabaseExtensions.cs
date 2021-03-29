@@ -199,6 +199,22 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
+        ///     The edition/tier of the database to be created. Applies only if `create_mode` is `Default`.
+        ///     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
+        ///     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
+        ///     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
+        ///     Service Tiers](https://azure.microsoft.com/en-gb/documentation/articles/sql-database-service-tiers/).
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="edition"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SkuTier(this SqlDatabaseBuilder builder, Input<string> edition)
+        {
+            builder.SkuArguments.Tier = edition;
+            return builder;
+        }
+
+        /// <summary>
         /// Capacity of the particular SKU
         /// </summary>
         /// <param name="builder"></param>
@@ -234,6 +250,74 @@ namespace Stize.Infrastructure.Azure.Sql
             builder.SkuArguments.Family = family;
             return builder;
         }
+
+        /// <summary>
+        /// Provides enhanced availability by spreading replicas across availability zones within one region.
+        /// Sets the Zone Redundant property to 'true'.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder EnableZoneRedundant(this SqlDatabaseBuilder builder)
+        {
+            builder.Arguments.ZoneRedundant = true;
+            return builder;
+        }
+
+        /// <summary>
+        /// The max size of the database expressed in bytes.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="size">Provide max database size in GB.</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder MaxDatabaseSizeGB(this SqlDatabaseBuilder builder, Input<double> size)
+        {
+            var bytes = size.Apply(e => e * 1073741824);
+            builder.Arguments.MaxSizeBytes = bytes;
+            return builder;
+        }
+
+        /// <summary>
+        /// Minimal capacity that database will always have allocated, if not paused
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder MinCapacity(this SqlDatabaseBuilder builder, Input<double> capacity)
+        {
+            builder.Arguments.MinCapacity = capacity; // No idea what capacity actually is - TODO: find out what capacity is/does
+            return builder;
+        }
+
+        /// <summary>
+        /// The storage account type used to store backups for this database
+        /// Default: 'GRS'
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="saType"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder StorageAccountType(this SqlDatabaseBuilder builder, InputUnion<string, StorageAccountType> saType = null)
+        {
+            builder.Arguments.StorageAccountType = saType ?? "GRS";
+            return builder;
+        }
+        /// <summary>
+        /// Database collation defines the rules that sort and compare data, and cannot be changed after database creation.
+        /// The default database collation is 'SQL_Latin1_General_CP1_CI_AS'.
+        /// For more details: https://docs.microsoft.com/en-us/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-ver15
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="collation"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder DatabaseCollation(this SqlDatabaseBuilder builder, Input<string> collation = null)
+        {
+            // Maybe create enum for the Collation and then 
+            // create several optional bool arguments (true = sensitive, false = insensitive) for the collation option suffixes: 
+            // _CS, _AS, _KS, _WS, _VSS, _BIN, _BIN2, _UTF8
+            // https://docs.microsoft.com/en-us/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-ver15
+            builder.Arguments.Collation = collation ?? "SQL_Latin1_General_CP1_CI_AS";
+            return builder;
+        }
+
         /// <summary>
         /// Sample data to populate the database
         /// </summary>

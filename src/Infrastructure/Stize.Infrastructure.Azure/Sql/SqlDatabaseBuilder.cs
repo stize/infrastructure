@@ -63,6 +63,8 @@ namespace Stize.Infrastructure.Azure.Sql
             Arguments.DatabaseName = ResourceStrategy.Naming.GenerateName(Arguments.DatabaseName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             Arguments.Sku = SkuArguments;
+            if (Arguments.ZoneRedundant == null) 
+                Arguments.ZoneRedundant = false;
             var db = new Database(Name, Arguments, cro);
             return db;
         }

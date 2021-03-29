@@ -83,5 +83,55 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
             (await db.Sku.GetValueAsync())?.Family.Should().Be(family);
         }
 
+        [Fact]
+        public async Task StorageAccountTypeIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().FirstOrDefault();
+            (await db.StorageAccountType.GetValueAsync()).Should().Be("GRS");
+        }
+
+        [Fact]
+        public async Task MaxDatabaseSizeIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().FirstOrDefault();
+            (await db.MaxSizeBytes.GetValueAsync()).Should().Be(268435456000);
+            
+        }
+
+        [Fact]
+        public async Task MinCapacityIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().FirstOrDefault();
+            (await db.MinCapacity.GetValueAsync()).Should().Be(100);
+
+        }
+
+        [Fact]
+        public async Task DatabaseCollationIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().FirstOrDefault();
+            (await db.Collation.GetValueAsync()).Should().Be("SQL_Latin1_General_CP1_CI_AS");
+        }
+
+        [Fact]
+        public async Task SecondaryTypeIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().ToArray();
+            (await db[1].CreateMode.GetValueAsync()).Should().Be("Secondary");
+            (await db[1].SecondaryType.GetValueAsync()).Should().Be("Named");
+        }
+
+        [Fact]
+        public async Task ZoneRedundancyIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var db = resources.OfType<Database>().FirstOrDefault();
+            (await db.ZoneRedundant.GetValueAsync()).Should().Be(false);
+        }
     }
 }
