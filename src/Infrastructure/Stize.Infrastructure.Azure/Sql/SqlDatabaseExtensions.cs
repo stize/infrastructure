@@ -1,5 +1,6 @@
 using Pulumi;
 using Pulumi.AzureNative.Sql;
+using System;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -66,18 +67,13 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        ///     The edition/tier of the database to be created. Applies only if `create_mode` is `Default`.
-        ///     Valid values are: `Basic`, `Standard`, `Premium`, `DataWarehouse`, `Business`,
-        ///     `BusinessCritical`, `Free`, `GeneralPurpose`, `Hyperscale`, `Premium`, `PremiumRS`,
-        ///     `Standard`, `Stretch`, `System`, `System2`, or `Web`. Please see [Azure SQL Database
-        ///     Service Tiers](https://azure.microsoft.com/en-gb/documentation/articles/sql-database-service-tiers/).
+        /// Regular database creation
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="edition"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SkuTier(this SqlDatabaseBuilder builder, Input<string> edition)
+        public static SqlDatabaseBuilder SetAsRegular(this SqlDatabaseBuilder builder)
         {
-            builder.SkuArguments.Tier = edition;
+            builder.Arguments.CreateMode = CreateMode.Default;
             return builder;
         }
 
@@ -87,10 +83,16 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="databaseId">Resource ID of the database to restore from</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsBackupRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
-            builder.Arguments.CreateMode = CreateMode.Restore;
-            builder.Arguments.SourceDatabaseId = databaseId;
+            /*TODO: NEED HELP - WHAT TO NAME THE TWO METHODS?
+             * If sourceDatabaseId is the database�s original resource ID, then sourceDatabaseDeletionDate must be specified. 
+             * Otherwise sourceDatabaseId must be the restorable dropped database resource ID and sourceDatabaseDeletionDate is ignored. 
+             * restorePointInTime may also be specified to restore from an earlier point in time.
+             * https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/
+             */
+            builder.Arguments.CreateMode = CreateMode.Restore; 
+            builder.Arguments.RestorableDroppedDatabaseId = databaseId;
             return builder;
         }
 
@@ -129,7 +131,7 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder SetAsRecovery(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             builder.Arguments.CreateMode = CreateMode.Recovery;
-            builder.Arguments.SourceDatabaseId = databaseId;
+            builder.Arguments.RecoverableDatabaseId = databaseId;
             return builder;
         }
 
@@ -142,9 +144,29 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder SetAsPointInTimeRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> restorePointInTime)
         {
+            //Possibly make use of DateTime class then convert it in here
             builder.Arguments.CreateMode = CreateMode.PointInTimeRestore;
-            builder.Arguments.SourceDatabaseId = databaseId;
+            builder.Arguments.SourceDatabaseId = databaseId;            
             builder.Arguments.RestorePointInTime = restorePointInTime;
+            return builder;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId"></param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsLongTermRetentionRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        {
+            builder.Arguments.CreateMode = CreateMode.RestoreLongTermRetentionBackup;
+            builder.Arguments.RecoveryServicesRecoveryPointId = databaseId;
+            return builder;
+        }
+
+        public static SqlDatabaseBuilder SecondaryType(this SqlDatabaseBuilder builder, InputUnion<string, SecondaryType> secondaryType)
+        {
+            builder.Arguments.SecondaryType = secondaryType;
             return builder;
         }
 
@@ -161,11 +183,11 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        //  The Sku name / service objective name for the database. Valid values depend on edition and
-        //  location and may include `S0`, `S1`, `S2`, `S3`, `P1`, `P2`, `P4`, `P6`, `P11`
-        //  and `ElasticPool`. You can list the available names with the cli: ```shell az
-        //  sql db list-editions -l westus -o table ```. For further information please see
-        //  [Azure CLI - az sql db](https://docs.microsoft.com/en-us/cli/azure/sql/db?view=azure-cli-latest#az-sql-db-list-editions).
+        ///  The Sku name / service objective name for the database. Valid values depend on edition and
+        ///  location and may include `S0`, `S1`, `S2`, `S3`, `P1`, `P2`, `P4`, `P6`, `P11`
+        ///  and `ElasticPool`. You can list the available names with the cli: ```shell az
+        ///  sql db list-editions -l westus -o table ```. For further information please see
+        ///  [Azure CLI - az sql db](https://docs.microsoft.com/en-us/cli/azure/sql/db?view=azure-cli-latest#az-sql-db-list-editions).
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="objectiveName"></param>
@@ -210,6 +232,17 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder SkuFamily(this SqlDatabaseBuilder builder, Input<string> family)
         {
             builder.SkuArguments.Family = family;
+            return builder;
+        }
+        /// <summary>
+        /// Sample data to populate the database
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="sampleData">Sample data type</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SampleData(this SqlDatabaseBuilder builder, InputUnion<string, SampleName> sampleData)
+        {
+            builder.Arguments.SampleName = sampleData;
             return builder;
         }
     }
