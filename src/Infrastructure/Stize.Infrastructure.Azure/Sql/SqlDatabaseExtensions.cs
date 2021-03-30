@@ -86,7 +86,7 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             /*TODO: NEED HELP - WHAT TO NAME THE TWO METHODS?
-             * If sourceDatabaseId is the databaseï¿½s original resource ID, then sourceDatabaseDeletionDate must be specified. 
+             * If sourceDatabaseId is the database’s original resource ID, then sourceDatabaseDeletionDate must be specified. 
              * Otherwise sourceDatabaseId must be the restorable dropped database resource ID and sourceDatabaseDeletionDate is ignored. 
              * restorePointInTime may also be specified to restore from an earlier point in time.
              * https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/
@@ -152,7 +152,8 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// 
+        /// Creates a database by restoring from a long term retention vault. 
+        /// recoveryServicesRecoveryPointResourceId must be specified as the recovery point resource ID.
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="databaseId"></param>
@@ -310,10 +311,6 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder DatabaseCollation(this SqlDatabaseBuilder builder, Input<string> collation = null)
         {
-            // Maybe create enum for the Collation and then 
-            // create several optional bool arguments (true = sensitive, false = insensitive) for the collation option suffixes: 
-            // _CS, _AS, _KS, _WS, _VSS, _BIN, _BIN2, _UTF8
-            // https://docs.microsoft.com/en-us/sql/relational-databases/collations/collation-and-unicode-support?view=sql-server-ver15
             builder.Arguments.Collation = collation ?? "SQL_Latin1_General_CP1_CI_AS";
             return builder;
         }
