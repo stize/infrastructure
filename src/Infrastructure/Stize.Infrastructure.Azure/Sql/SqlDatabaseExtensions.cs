@@ -1,6 +1,5 @@
 using Pulumi;
 using Pulumi.AzureNative.Sql;
-using System;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -67,32 +66,15 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Regular database creation
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsRegular(this SqlDatabaseBuilder builder)
-        {
-            builder.Arguments.CreateMode = CreateMode.Default;
-            return builder;
-        }
-
-        /// <summary>
         /// Restores the database from an existing one
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="databaseId">Resource ID of the database to restore from</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder SetAsBackupRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
-            /*TODO: NEED HELP - WHAT TO NAME THE TWO METHODS?
-             * If sourceDatabaseId is the database’s original resource ID, then sourceDatabaseDeletionDate must be specified. 
-             * Otherwise sourceDatabaseId must be the restorable dropped database resource ID and sourceDatabaseDeletionDate is ignored. 
-             * restorePointInTime may also be specified to restore from an earlier point in time.
-             * https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/
-             */
-            builder.Arguments.CreateMode = CreateMode.Restore; 
-            builder.Arguments.RestorableDroppedDatabaseId = databaseId;
+            builder.Arguments.CreateMode = CreateMode.Restore;
+            builder.Arguments.SourceDatabaseId = databaseId;
             return builder;
         }
 
@@ -131,7 +113,7 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlDatabaseBuilder SetAsRecovery(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             builder.Arguments.CreateMode = CreateMode.Recovery;
-            builder.Arguments.RecoverableDatabaseId = databaseId;
+            builder.Arguments.SourceDatabaseId = databaseId;
             return builder;
         }
 
@@ -144,9 +126,8 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder SetAsPointInTimeRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> restorePointInTime)
         {
-            //Possibly make use of DateTime class then convert it in here
             builder.Arguments.CreateMode = CreateMode.PointInTimeRestore;
-            builder.Arguments.SourceDatabaseId = databaseId;            
+            builder.Arguments.SourceDatabaseId = databaseId;
             builder.Arguments.RestorePointInTime = restorePointInTime;
             return builder;
         }
@@ -160,6 +141,12 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder SetAsLongTermRetentionRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
+            //TODO: Needs to be properly tested!
+            //User must pass in the recoveryServicesRecoveryPointId, which is associated with a database
+            //stored in a long term retention vault.
+            //For the user to pass this resource Id they need to acquire it.
+            //Possibly able to get resource id through 'Pulumi.AzureNative.RecoveryServices'
+
             builder.Arguments.CreateMode = CreateMode.RestoreLongTermRetentionBackup;
             builder.Arguments.RecoveryServicesRecoveryPointId = databaseId;
             return builder;
