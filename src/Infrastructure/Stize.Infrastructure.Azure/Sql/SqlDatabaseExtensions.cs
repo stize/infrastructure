@@ -66,15 +66,48 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Restores the database from an existing one
+        /// Restores a deleted database using the Restorable Dropped Database Resource ID.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="databaseId">Resource ID of the database to restore from</param>
+        /// <param name="databaseId">Resource ID of the Restorable Dropped Database to restore from</param>
+        /// <param name="pointInTime">Point in time that you want to restore from. Only specify to restore from an earlier point in time.</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsBackupRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> pointInTime = null)
         {
+            /* TODO: Improve usability of the method
+             * "sourceDatabaseId must be the restorable dropped database resource ID and sourceDatabaseDeletionDate is ignored." - https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
+             * ^ documentation states to assign SourcedDatabaseId - must use RestorableDroppedDatabaseId when using CreateMode.Restore
+             * Currently, user must pass the RestorableDroppedDatabaseId. This isn't friendly though as they would need to know the id.
+             * More friendly for user to input a db name, server name, and rg name (and optional point in time to restore for more earlier backups)
+             * It is possible to access a dropped (deleted) database using PS command Get-AzureRmSqlDeletedDatabaseBackup and providing parameters (resourcegroup, server, database)
+             * There is a GetDatabase function provided by Pulumi, but it doesn't seem to be able to grab deleted databases. and there is no GetDeletedDatabase function.
+            */
             builder.Arguments.CreateMode = CreateMode.Restore;
-            builder.Arguments.SourceDatabaseId = databaseId;
+            builder.Arguments.RestorableDroppedDatabaseId = databaseId;
+            builder.Arguments.RestorePointInTime = pointInTime ?? null;
+            return builder;
+        }
+
+        /// <summary>
+        /// Restores a deleted database using the database's original resource ID.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="databaseId">Original Resource ID of the database to restore from.</param>
+        /// <param name="deletionDate">Deletion date of the database in (ISO 8601 format).</param>
+        /// <param name="pointInTime">Point in time that you want to restore from (ISO 8601 format). Only specify to restore from an earlier point in time.</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> deletionDate, 
+            Input<string> pointInTime = null)
+        {
+            /* Same comments SetAsRestore() method. 
+             * This method seems redundant as you don't need to set SourceDatabaseDeletionDate to restore a deleted database - the RestorableDroppedDatabaseId will suffice.
+             * "If sourceDatabaseId is the database’s original resource ID, then sourceDatabaseDeletionDate must be specified." - https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
+             * ^ documentation states to assign SourceDatabaseId with the original resource Id of the database - though, CreateMode.Restore requires RestorableDroppedDatabaseId.
+            */
+            builder.Arguments.CreateMode = CreateMode.Restore;
+            builder.Arguments.RestorableDroppedDatabaseId = databaseId;
+            builder.Arguments.SourceDatabaseDeletionDate = deletionDate;
+            builder.Arguments.RestorePointInTime = pointInTime ?? null;
             return builder;
         }
 
@@ -108,12 +141,17 @@ namespace Stize.Infrastructure.Azure.Sql
         /// Sets the database to be a restoration of a geo-replicated backup database.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="databaseId">Resource ID of the database to recover</param>
+        /// <param name="databaseId">Recoverable Database Resource ID of the database to restore</param>
         /// <returns></returns>
         public static SqlDatabaseBuilder SetAsRecovery(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
+            /* TODO: May need improvement and needs to be properly tested!
+             * User must pass in the recoverableDatabaseId, which is associated with a database stored in the recoverable databases of the server.
+             * Format of recoverableDatabaseId:
+             * 'subscriptions/subscription-id/resourceGroups/resource-group-name/providers/Microsoft.Sql/servers/server-name/recoverableDatabases/recoverable-database-name'
+            */
             builder.Arguments.CreateMode = CreateMode.Recovery;
-            builder.Arguments.SourceDatabaseId = databaseId;
+            builder.Arguments.RecoverableDatabaseId = databaseId;
             return builder;
         }
 
@@ -141,12 +179,13 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlDatabaseBuilder SetAsLongTermRetentionRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
-            //TODO: Needs to be properly tested!
-            //User must pass in the recoveryServicesRecoveryPointId, which is associated with a database
-            //stored in a long term retention vault.
-            //For the user to pass this resource Id they need to acquire it.
-            //Possibly able to get resource id through 'Pulumi.AzureNative.RecoveryServices'
-
+            /* TODO: May need improvement and needs to be properly tested!
+             * User must pass in the recoveryServicesRecoveryPointId, which is associated with a database
+             * stored in a long term retention vault.
+             * Possibly able to get resource id through 'Pulumi.AzureNative.RecoveryServices'
+             * Format of RecoveryServicesRecoveryPointId:
+             * '/subscriptions/subscription-id/resourceGroups/resource-group-name/providers/Microsoft.RecoveryServices/vault/vault-name/backupFabrics/Azure/protectionContainers/protection-container-name/protectedItems/protected-item-name/recoveryPoints/recovery-point-Id'
+            */
             builder.Arguments.CreateMode = CreateMode.RestoreLongTermRetentionBackup;
             builder.Arguments.RecoveryServicesRecoveryPointId = databaseId;
             return builder;
