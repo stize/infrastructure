@@ -305,7 +305,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder EnableZoneRedundant(this SqlDatabaseBuilder builder)
+        public static SqlDatabaseBuilder EnableZoneRedundancy(this SqlDatabaseBuilder builder)
         {
             builder.Arguments.ZoneRedundant = true;
             return builder;
