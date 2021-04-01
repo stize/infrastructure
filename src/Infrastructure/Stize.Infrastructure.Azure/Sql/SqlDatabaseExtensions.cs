@@ -72,7 +72,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="databaseId">Resource ID of the Restorable Dropped Database to restore from</param>
         /// <param name="pointInTime">Point in time that you want to restore from. Only specify to restore from an earlier point in time.</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> pointInTime = null)
+        public static SqlDatabaseBuilder CreateAsRestoreOf(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> pointInTime = null)
         {
             /* TODO: Improve usability of the method
              * "sourceDatabaseId must be the restorable dropped database resource ID and sourceDatabaseDeletionDate is ignored." - https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
@@ -96,7 +96,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="deletionDate">Deletion date of the database in (ISO 8601 format).</param>
         /// <param name="pointInTime">Point in time that you want to restore from (ISO 8601 format). Only specify to restore from an earlier point in time.</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> deletionDate, 
+        public static SqlDatabaseBuilder CreateAsRestoreOf(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> deletionDate, 
             Input<string> pointInTime = null)
         {
             /* Same comments SetAsRestore() method. 
@@ -117,7 +117,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="databaseId">Resource ID of the primary database</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsSecondary(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder CreateAsSecondary(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             builder.Arguments.CreateMode = CreateMode.Secondary;
             builder.Arguments.SourceDatabaseId = databaseId;
@@ -130,7 +130,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="databaseId">Resource ID of the database to copy</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsCopy(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder CreateAsCopy(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             builder.Arguments.CreateMode = CreateMode.Copy;
             builder.Arguments.SourceDatabaseId = databaseId;
@@ -144,7 +144,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="databaseId">Recoverable Database Resource ID of the database to restore</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsRecovery(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder CreateAsRecoveryOf(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             /* TODO: May need improvement and needs to be properly tested!
              * User must pass in the recoverableDatabaseId, which is associated with a database stored in the recoverable databases of the server.
@@ -163,7 +163,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="databaseId">Resource ID of the database to restore from</param>
         /// <param name="restorePointInTime">The point in time (ISO8601 format) of the source database</param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsPointInTimeRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> restorePointInTime)
+        public static SqlDatabaseBuilder CreateAsPointInTimeRestore(this SqlDatabaseBuilder builder, Input<string> databaseId, Input<string> restorePointInTime)
         {
             builder.Arguments.CreateMode = CreateMode.PointInTimeRestore;
             builder.Arguments.SourceDatabaseId = databaseId;
@@ -178,7 +178,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="databaseId"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder SetAsLongTermRetentionRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
+        public static SqlDatabaseBuilder CreateAsLongTermRetentionRestore(this SqlDatabaseBuilder builder, Input<string> databaseId)
         {
             /* TODO: May need improvement and needs to be properly tested!
              * User must pass in the recoveryServicesRecoveryPointId, which is associated with a database

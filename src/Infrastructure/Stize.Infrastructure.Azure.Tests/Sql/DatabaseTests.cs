@@ -123,7 +123,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
             var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
             var db = resources.OfType<Database>().ToArray();
             (await db[1].CreateMode.GetValueAsync()).Should().Be("Secondary");
-            (await db[1].SecondaryType.GetValueAsync()).Should().Be("Named");
+            (await db[1].SecondaryType.GetValueAsync()).Should().Be("Geo");
         }
 
         [Fact]

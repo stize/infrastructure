@@ -39,7 +39,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .SampleData(SampleName.AdventureWorksLT)
                 .Build();
 
-            var secondary = new SqlDatabaseBuilder("db1")
+            var secondary = new SqlDatabaseBuilder("secondaryDB")
                 .Server(server.Name)
                 .ResourceGroup(rg.Name)
                 .Location(server.Location)
@@ -52,8 +52,8 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .MinCapacity(100)
                 .DatabaseCollation("SQL_Latin1_General_CP1_CI_AS")
                 .SampleData(SampleName.AdventureWorksLT)
-                .SetAsSecondary(db.Id)
-                .SecondaryType(SecondaryType.Named)
+                .CreateAsSecondary(db.Id)
+                .SecondaryType(SecondaryType.Geo)
                 .Build();
         }
     }
