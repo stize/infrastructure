@@ -138,7 +138,8 @@ namespace Stize.Infrastructure.Azure.Sql
         }
 
         /// <summary>
-        /// Sets the database to be a restoration of a geo-replicated backup database.
+        /// "Sets the database to be a restoration of a geo-replicated backup database."
+        /// https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="databaseId">Recoverable Database Resource ID of the database to restore</param>
