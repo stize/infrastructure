@@ -28,6 +28,26 @@ namespace Stize.Infrastructure.Azure.Sql
             builder.Arguments.ServerName = serverName;
             return builder;
         }
+        /// <summary>
+        /// Generates a new SQL server to host the database, using the provided admin login credentials for the server. 
+        /// Useful for when creating a geo-replica backup for a database.
+        /// The location and resource group arguments for the new server are assumed from the database.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="serverName">Name for the new server</param>
+        /// <param name="adminLogin">Administrator login for the new server</param>
+        /// <param name="adminPassword">Administrator password for the new server</param>
+        /// <returns></returns>
+        public static SqlDatabaseBuilder Server(this SqlDatabaseBuilder builder, Input<string> serverName, Input<string> adminLogin, Input<string> adminPassword)
+        {
+            builder.NewServerArgs = new ServerArgs
+            {
+                ServerName = serverName,
+                AdministratorLogin = adminLogin,
+                AdministratorLoginPassword = adminPassword
+            };
+            return builder;
+        }
 
         /// <summary>
         /// Azure SQL resource group

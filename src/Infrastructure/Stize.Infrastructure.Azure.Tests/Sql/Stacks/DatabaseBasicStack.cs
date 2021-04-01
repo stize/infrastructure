@@ -40,18 +40,12 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Build();
 
             var secondary = new SqlDatabaseBuilder("secondaryDB")
-                .Server(server.Name)
+                .Server("secondaryServer", "stize", "pa$5word")
                 .ResourceGroup(rg.Name)
-                .Location(server.Location)
+                .Location("westeurope")
                 .Name("my-db")
-                .Parent(server)
                 .SkuTier("Basic")
                 .SkuServiceObjectiveName("S0")
-                .StorageAccountType(StorageAccountType.GRS)
-                .MaxDatabaseSizeGB(250)
-                .MinCapacity(100)
-                .DatabaseCollation("SQL_Latin1_General_CP1_CI_AS")
-                .SampleData(SampleName.AdventureWorksLT)
                 .CreateAsSecondary(db.Id)
                 .SecondaryType(SecondaryType.Geo)
                 .Build();

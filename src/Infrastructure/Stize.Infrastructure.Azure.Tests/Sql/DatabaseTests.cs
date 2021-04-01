@@ -133,5 +133,14 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
             var db = resources.OfType<Database>().FirstOrDefault();
             (await db.ZoneRedundant.GetValueAsync()).Should().Be(false);
         }
+
+        [Fact]
+        public async Task CreateSecondaryServerTest()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<DatabaseBasicStack>(new DatabaseBasicMock(), new TestOptions { IsPreview = false });
+            var server = resources.OfType<Server>().Last();
+            server.Should().NotBeNull();
+            (await server.Name.GetValueAsync()).Should().Be("secondaryServer");
+        }
     }
 }
