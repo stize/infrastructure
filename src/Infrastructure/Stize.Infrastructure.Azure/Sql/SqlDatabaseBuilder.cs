@@ -24,6 +24,11 @@ namespace Stize.Infrastructure.Azure.Sql
         public SkuArgs SkuArguments { get; private set; } = new SkuArgs();
 
         /// <summary>
+        /// Used to store server arguments for when a new server is required (used in <see cref="SqlDatabaseExtensions.Server(SqlDatabaseBuilder, Input{string}, Input{string}, Input{string})"/>)
+        /// </summary>
+        public ServerArgs NewServerArgs { get; set; }
+
+        /// <summary>
         /// Creates a new instance of <see="SqlDatabaseBuilder" />
         /// </summary>
         /// <param name="name"></param>
@@ -53,6 +58,18 @@ namespace Stize.Infrastructure.Azure.Sql
             Arguments = arguments;
         }
 
+        private void NewServerBuilder()
+        {
+            var secondaryServer = new SqlServerBuilder(this.NewServerArgs.ServerName.Apply(e => e).GetValueAsync().Result)
+                .Name(this.NewServerArgs.ServerName)
+                .ResourceGroup(this.Arguments.ResourceGroupName)
+                .Location(this.Arguments.Location)
+                .AdministratorLogin(this.NewServerArgs.AdministratorLogin)
+                .AdministratorPassword(this.NewServerArgs.AdministratorLoginPassword)
+                .Build();
+            this.Arguments.ServerName = secondaryServer.Name;
+        }
+
         /// <summary>
         /// Creates the Pulumi database object
         /// </summary>
@@ -63,6 +80,10 @@ namespace Stize.Infrastructure.Azure.Sql
             Arguments.DatabaseName = ResourceStrategy.Naming.GenerateName(Arguments.DatabaseName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             Arguments.Sku = SkuArguments;
+            if (Arguments.ZoneRedundant == null) 
+                Arguments.ZoneRedundant = false;
+            if (Arguments.ServerName == null) 
+                NewServerBuilder();
             var db = new Database(Name, Arguments, cro);
             return db;
         }
