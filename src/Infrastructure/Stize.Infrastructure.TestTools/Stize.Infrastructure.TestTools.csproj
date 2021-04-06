@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="Pulumi" Version="2.23.1" />
+    <PackageReference Include="Pulumi" Version="2.24.1" />
   </ItemGroup>
 
   <ItemGroup>

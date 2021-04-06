@@ -141,7 +141,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <returns></returns>
         public static SqlServerBuilder IdentityType(this SqlServerBuilder builder, InputUnion<string, IdentityType> identityType)
         {
-            builder.Arguments.Identity = new Pulumi.AzureNative.Sql.Inputs.ResourceIdentityArgs { Type = identityType};
+            builder.Arguments.Identity = new Pulumi.AzureNative.Sql.Inputs.ResourceIdentityWithUserAssignedIdentitiesArgs { Type = identityType};
             return builder;
         }
     }
