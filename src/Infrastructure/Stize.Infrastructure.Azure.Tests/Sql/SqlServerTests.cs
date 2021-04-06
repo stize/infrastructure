@@ -28,7 +28,6 @@ namespace Stize.Infrastructure.Tests.Azure.Sql
             var resources = await Pulumi.Deployment.TestAsync<SqlServerBasicStack>(new SqlServerBasicMock(), new TestOptions { IsPreview = false });
             var server = resources.OfType<Server>().FirstOrDefault();
             (await server.AdministratorLogin.GetValueAsync()).Should().Be("stize");
-            (await server.AdministratorLoginPassword.GetValueAsync()).Should().Be("pa$5word");
         }
 
         [Fact]
