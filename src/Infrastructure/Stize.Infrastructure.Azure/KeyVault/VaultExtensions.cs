@@ -227,6 +227,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
         /// <returns></returns>
         public static VaultBuilder SoftDeleteRetentionDays(this VaultBuilder builder, Input<int> days)
         {
+            builder.Properties.EnableSoftDelete = true;
             builder.Properties.SoftDeleteRetentionInDays = days;
             return builder;
         }
@@ -238,21 +239,21 @@ namespace Stize.Infrastructure.Azure.KeyVault
          * <Complete>                                           Name    : SkuName
          *                                                  }
          * <Complete>  TenantId                         : string
-         * <Pending>   AccessPolicies                   : List<AccessPolicyEntryArgs 
+         * <Partial>   AccessPolicies                   : List<AccessPolicyEntryArgs 
          *                                                  { 
-         * <Pending>                                            ObjectId        : string
-         * <Pending>                                            Permissions     : PermissionsArgs
+         * <Partial>                                            ObjectId        : string
+         * <Partial>                                            Permissions     : PermissionsArgs
          *                                                                          {
-         * <Pending>                                                                    [Certifications]    : List<Union<string, CertificatePermissions>>
-         * <Pending>                                                                    [Keys]              : List<Union<string, KeyPermissions>>
-         * <Pending>                                                                    [Secrets]           : List<Union<string, SecretPermissions>>
-         * <Pending>                                                                    [Storage]           : List<Union<string, StoragePermissions>>
+         * <Partial>                                                                    [Certifications]    : List<Union<string, CertificatePermissions>>
+         * <Partial>                                                                    [Keys]              : List<Union<string, KeyPermissions>>
+         * <Partial>                                                                    [Secrets]           : List<Union<string, SecretPermissions>>
+         * <Partial>                                                                    [Storage]           : List<Union<string, StoragePermissions>>
          *                                                                          }
-         * <Pending>                                            TenantId        : string
+         * <Partial>                                            TenantId        : string
          * <Pending>                                            [ApplicationId] : string
          *                                                  }
          *                                                >
-         * <Pending>   [CreateMode]                     : CreateMode
+         * <Complete>  [CreateMode]                     : CreateMode
          * <Complete>  [EnablePurgeProtection]          : bool
          * <Complete>  [EnableRbacAuthorization         : bool
          * <Complete>  [EnableSoftDelete]               : bool
