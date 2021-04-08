@@ -248,16 +248,16 @@ namespace Stize.Infrastructure.Azure.KeyVault
          * <Complete>  TenantId                         : string
          * <Partial>   AccessPolicies                   : List<AccessPolicyEntryArgs 
          *                                                  { 
-         * <Partial>                                            ObjectId        : string
-         * <Partial>                                            Permissions     : PermissionsArgs
+         * <Complete>                                           ObjectId        : string
+         * <Complete>                                           Permissions     : PermissionsArgs
          *                                                                          {
-         * <Partial>                                                                    [Certifications]    : List<Union<string, CertificatePermissions>>
-         * <Partial>                                                                    [Keys]              : List<Union<string, KeyPermissions>>
-         * <Partial>                                                                    [Secrets]           : List<Union<string, SecretPermissions>>
-         * <Partial>                                                                    [Storage]           : List<Union<string, StoragePermissions>>
+         * <Complete>                                                                   [Certifications]    : List<Union<string, CertificatePermissions>>
+         * <Complete>                                                                   [Keys]              : List<Union<string, KeyPermissions>>
+         * <Complete>                                                                   [Storage]           : List<Union<string, StoragePermissions>>
+         * <Complete>                                                                   [Secrets]           : List<Union<string, SecretPermissions>>
          *                                                                          }
-         * <Partial>                                            TenantId        : string
-         * <Pending>                                            [ApplicationId] : string
+         * <Complete>                                           TenantId        : string
+         * <Complete>                                           [ApplicationId] : string
          *                                                  }
          *                                                >
          * <Complete>  [CreateMode]                     : CreateMode
