@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stize.Infrastructure.Azure.Tests.KeyVault.Stacks
+namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
 {
     public class VaultBasicMock : IMocks
     {

@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Pulumi.AzureNative.KeyVault;
+using Pulumi.AzureNative.KeyVault.Inputs;
 
 namespace Stize.Infrastructure.Azure.KeyVault
 {
@@ -176,6 +177,12 @@ namespace Stize.Infrastructure.Azure.KeyVault
             return builder;
         }
 
+        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, AccessPolicyEntryArgs args)
+        {
+            builder.Properties.AccessPolicies.Add(args);
+            return builder;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -187,8 +194,8 @@ namespace Stize.Infrastructure.Azure.KeyVault
         /// <param name="storagePerms"></param>
         /// <param name="secretPerms"></param>
         /// <returns></returns>
-        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, Input<string> objectId, Input<string> tenantId, 
-            InputList<Union<string, CertificatePermissions>> certPerms = null, InputList<Union<string, KeyPermissions>> keyPerms = null, 
+        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, Input<string> objectId, Input<string> tenantId,
+            InputList<Union<string, CertificatePermissions>> certPerms = null, InputList<Union<string, KeyPermissions>> keyPerms = null,
             InputList<Union<string, StoragePermissions>> storagePerms = null, InputList<Union<string, SecretPermissions>> secretPerms = null)
         {
             builder.Properties.AccessPolicies.Add(new Pulumi.AzureNative.KeyVault.Inputs.AccessPolicyEntryArgs
@@ -205,7 +212,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
             });
             return builder;
         }
-
+        
         /// <summary>
         /// Sets the create mode of the vault to recover.
         /// Recovers a Vault that is in soft-delete retention by specifying the name of the deleted value using the <see cref="Name(VaultBuilder, Input{string})"/> method.
