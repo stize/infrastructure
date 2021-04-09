@@ -29,6 +29,11 @@ namespace Stize.Infrastructure.Azure.KeyVault
             
         };
 
+        public NetworkRuleSetArgs NetworkRuleSet { get; private set; } = new NetworkRuleSetArgs() 
+        {
+            Bypass = NetworkRuleBypassOptions.AzureServices,
+        };
+
         /// <summary>
         /// Creates a new instance of <see="VaultBuilder" />
         /// </summary>
@@ -64,6 +69,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
 
         public override Vault Build(CustomResourceOptions cro)
         {
+            Properties.NetworkAcls = NetworkRuleSet;
             Arguments.Properties = Properties;
             var vault = new Vault(Name, Arguments, cro);
             return vault;

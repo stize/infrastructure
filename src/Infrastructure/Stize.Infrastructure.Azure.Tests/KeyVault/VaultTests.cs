@@ -79,12 +79,46 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
         }
 
         [Fact]
+        public async Task DefaultActionIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
+            var vault = resources.OfType<Vault>().FirstOrDefault();
+            (await vault.Properties.GetValueAsync()).NetworkAcls?.DefaultAction.Should().Be("Allow");
+        }
+
+        [Fact]
+        public async Task AllowedVNetsAreCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
+            var vault = resources.OfType<Vault>().FirstOrDefault();
+            (await vault.Properties.GetValueAsync()).NetworkAcls?.VirtualNetworkRules.Should().HaveCount(1);
+        }
+
+        [Fact]
+        public async Task AllowedIPAddressesAreCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
+            var vault = resources.OfType<Vault>().FirstOrDefault();
+            (await vault.Properties.GetValueAsync()).NetworkAcls?.IpRules.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public async Task ProvisioningStateIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
+            var vault = resources.OfType<Vault>().FirstOrDefault();
+            (await vault.Properties.GetValueAsync()).ProvisioningState.Should().Be("Succeeded");
+        }
+
+        [Fact]
         public async Task DisableSoftDeleteIsCorrect()
         {
             var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
             var vault = resources.OfType<Vault>().LastOrDefault();
             (await vault.Properties.GetValueAsync()).EnableSoftDelete.Should().Be(false);
         }
+
+        
 
         [Fact]
         public async Task RecoveryModeIsCorrect()
@@ -100,6 +134,14 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
             var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
             var vault = resources.OfType<Vault>().LastOrDefault();
             (await vault.Properties.GetValueAsync()).EnableRbacAuthorization.Should().Be(true);
+        }
+
+        [Fact]
+        public async Task DisallowBypassIsCorrect()
+        {
+            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
+            var vault = resources.OfType<Vault>().LastOrDefault();
+            (await vault.Properties.GetValueAsync()).NetworkAcls?.Bypass.Should().Be("None");
         }
     }
 }

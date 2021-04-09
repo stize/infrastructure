@@ -1,6 +1,8 @@
 ﻿using Pulumi;
 using Pulumi.AzureNative.KeyVault;
 using Pulumi.AzureNative.KeyVault.Inputs;
+using System;
+using System.Collections.Generic;
 
 namespace Stize.Infrastructure.Azure.KeyVault
 {
@@ -177,42 +179,23 @@ namespace Stize.Infrastructure.Azure.KeyVault
             return builder;
         }
 
-        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, AccessPolicyEntryArgs args)
-        {
-            builder.Properties.AccessPolicies.Add(args);
-            return builder;
-        }
-
         /// <summary>
-        /// 
+        /// Adds Access Policies to the Vault. Use the <see cref="AccessPolicyBuilder"/> to construct an AccessPolicy and pass it into this method.
+        /// Multiple Access Policies can be passed through this method, through additional arguments.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="objectId"></param>
-        /// <param name="tenantId"></param>
-        /// <param name="certPerms"></param>
-        /// <param name="keyPerms"></param>
-        /// <param name="storagePerms"></param>
-        /// <param name="secretPerms"></param>
+        /// <param name="args">Add an Access Policy to the Vault by passing an AccessPolicyEntryArgs. Use the <see cref="AccessPolicyBuilder"/> to construct an AccessPolicy and pass it into this method. 
+        /// Multiple Access Policies can be passed through additional arguments.</param>
         /// <returns></returns>
-        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, Input<string> objectId, Input<string> tenantId,
-            InputList<Union<string, CertificatePermissions>> certPerms = null, InputList<Union<string, KeyPermissions>> keyPerms = null,
-            InputList<Union<string, StoragePermissions>> storagePerms = null, InputList<Union<string, SecretPermissions>> secretPerms = null)
+        public static VaultBuilder AddAccessPolicy(this VaultBuilder builder, params AccessPolicyEntryArgs[] args)
         {
-            builder.Properties.AccessPolicies.Add(new Pulumi.AzureNative.KeyVault.Inputs.AccessPolicyEntryArgs
+            foreach (var ap in args)
             {
-                ObjectId = objectId,
-                TenantId = tenantId,
-                Permissions = new Pulumi.AzureNative.KeyVault.Inputs.PermissionsArgs
-                {
-                    Certificates = certPerms,
-                    Keys = keyPerms,
-                    Storage = storagePerms,
-                    Secrets = secretPerms
-                }
-            });
+                builder.Properties.AccessPolicies.Add(ap);
+            }
             return builder;
         }
-        
+                
         /// <summary>
         /// Sets the create mode of the vault to recover.
         /// Recovers a Vault that is in soft-delete retention by specifying the name of the deleted value using the <see cref="Name(VaultBuilder, Input{string})"/> method.
@@ -239,6 +222,85 @@ namespace Stize.Infrastructure.Azure.KeyVault
             return builder;
         }
 
+        /// <summary>
+        /// Disallow firewall bypass for Microsoft Services. This setting is related to firewall only. 
+        /// In order to access this key vault, the trusted service must also be given explicit permissions through Access policies.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static VaultBuilder DisallowBypassForAzureServices(this VaultBuilder builder)
+        {
+            builder.NetworkRuleSet.Bypass = NetworkRuleBypassOptions.None;
+            return builder;
+        }
+
+        /// <summary>
+        /// The default action when no rule from Ip Rules and from Virtual Network Rules match. This is only used after the bypass property has been evaluated.
+        /// Valid values: 'Allow' or 'Deny'
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="action">The default type of action for incoming traffic. Valid values: 'Allow' or 'Deny'</param>
+        /// <returns></returns>
+        public static VaultBuilder DefaultAction(this VaultBuilder builder, InputUnion<string, NetworkRuleAction> action)
+        {
+            builder.NetworkRuleSet.DefaultAction = action;
+            return builder;
+        }
+
+        /// <summary>
+        /// Add accessibility to the Vault from network locations using IPv4 address ranges in CIDR notation, such as '126.51.78.91' or '126.51.78.0/24'.
+        /// Multiple IP addresses can be passed through this method, through additional arguments.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="ipAddresses">IPv4 address ranges in CIDR notation, such as '126.51.78.91' or '126.51.78.0/24'.
+        /// Multiple IP addresses can be passed through additional arguments.</param>
+        /// <returns></returns>
+        public static VaultBuilder AllowedIPAddresses(this VaultBuilder builder, params Input<string>[] ipAddresses)
+        {
+            //TODO: Needs functional testing
+            var ipRules = new List<Input<IPRuleArgs>>();
+            foreach (var ip in ipAddresses)
+            {
+                ipRules.Add(new IPRuleArgs { Value = ip });
+            }
+            builder.NetworkRuleSet.IpRules = ipRules;
+            return builder;
+        }
+
+        /// <summary>
+        /// Add accessibility from Virtual Networks (VNets) to the Vault, using the resource ID of the Subnet(s).
+        /// Multiple Subnets can be passed through this method, through additional arguments of type (string, bool).
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="subnets">Resource ID of the Subnet(s) and whether missing service endpoints should be ignored. 
+        /// Multiple Subnets can be passed through this method, through concatenating additional arguments. Value must be of type tuple (string, bool)</param>
+        /// <returns></returns>
+        public static VaultBuilder AllowedVirtualNetworks(this VaultBuilder builder, params (Input<string> subnetId, Input<bool> ignoreMissingVnetServiceEndpoint)[] subnets)
+        {
+            var snetRules = new List<Input<VirtualNetworkRuleArgs>>();
+            foreach (var (subnetId, ignoreMissingVnetServiceEndpoint) in subnets)
+            {
+                snetRules.Add(new VirtualNetworkRuleArgs { Id = subnetId, IgnoreMissingVnetServiceEndpoint = ignoreMissingVnetServiceEndpoint }); 
+            }
+            builder.NetworkRuleSet.VirtualNetworkRules = snetRules;
+            return builder;
+        }
+
+
+        /// <summary>
+        /// Provisioning state of the vault. Valid values: 'Succeeded' or 'RegisteringDns'.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="state">Provisioning state of the vault. Valid values: 'Succeeded' or 'RegisteringDns'.</param>
+        /// <returns></returns>
+        public static VaultBuilder ProvisioningState(this VaultBuilder builder, InputUnion<string, VaultProvisioningState> state)
+        {
+            builder.Properties.ProvisioningState = state;
+            return builder;
+        }
+
+
+
         /*             Properties of Vault:
          * <Complete>  Sku                              : SkuArgs
          *                                                  { 
@@ -246,7 +308,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
          * <Complete>                                           Name    : SkuName
          *                                                  }
          * <Complete>  TenantId                         : string
-         * <Partial>   AccessPolicies                   : List<AccessPolicyEntryArgs 
+         * <Complete>  AccessPolicies                   : List<AccessPolicyEntryArgs 
          *                                                  { 
          * <Complete>                                           ObjectId        : string
          * <Complete>                                           Permissions     : PermissionsArgs
@@ -267,21 +329,21 @@ namespace Stize.Infrastructure.Azure.KeyVault
          * <Complete>  [EnabledForDeployment]           : bool
          * <Complete>  [EnabledForDiskEncryption]       : bool
          * <Complete>  [EnabledForTemplateDeployment]   : bool
-         * <Pending>   [NetworkAcls]                    : NetworkRuleSetArgs 
+         * <Complete>  [NetworkAcls]                    : NetworkRuleSetArgs 
          *                                                  { 
-         * <Pending>                                            ByPass              : NetworkRuleBypassOptions
-         * <Pending>                                            DefaultAction       : NetworkRuleAction
-         * <Pending>                                            IpRules             : IPRuleArgs 
+         * <Complete>                                           ByPass              : NetworkRuleBypassOptions
+         * <Complete>                                           DefaultAction       : NetworkRuleAction
+         * <Complete>                                           IpRules             : IPRuleArgs 
          *                                                                              {
-         * <Pending>                                                                        Value : string
+         * <Complete>                                                                       Value : string
          *                                                                              }
-         * <Pending>                                            VirtualNetworkRules : VirtualNetworkRuleArgs
+         * <Complete>                                           VirtualNetworkRules : VirtualNetworkRuleArgs
          *                                                                              {
-         * <Pending>                                                                        Id : string
+         * <Complete>                                                                       Id : string
          * <Pending>                                                                        [IgnoreMissingVnetServiceEndpoint] : bool
          *                                                                              }
          *                                                  }
-         * <Pending>   [ProisioningState]               : VaultProvisioningState
+         * <Complete>  [ProisioningState]               : VaultProvisioningState
          * <Complete>  [SoftDeleteRetentionDays]        : int
          * <Pending>   [VaultUri]                       : string
          * 
