@@ -49,7 +49,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
         /// <param name="builder"></param>
         /// <param name="name">Name of the Secret</param>
         /// <returns></returns>
-        public static SecretBuilder SecretName(this SecretBuilder builder, Input<string> name)
+        public static SecretBuilder Name(this SecretBuilder builder, Input<string> name)
         {
             builder.Arguments.SecretName = name;
             return builder;

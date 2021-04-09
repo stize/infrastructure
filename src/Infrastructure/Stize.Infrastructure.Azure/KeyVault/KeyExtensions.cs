@@ -50,7 +50,7 @@ namespace Stize.Infrastructure.Azure.KeyVault
         /// <param name="builder"></param>
         /// <param name="name">Name of the Key</param>
         /// <returns></returns>
-        public static KeyBuilder KeyName(this KeyBuilder builder, Input<string> name)
+        public static KeyBuilder Name(this KeyBuilder builder, Input<string> name)
         {
             builder.Arguments.KeyName = name;
             return builder;
@@ -101,9 +101,9 @@ namespace Stize.Infrastructure.Azure.KeyVault
         /// <param name="builder"></param>
         /// <param name="ops"></param>
         /// <returns></returns>
-        public static KeyBuilder CurveName(this KeyBuilder builder, params InputUnion<string, JsonWebKeyOperation>[] ops)
+        public static KeyBuilder CurveName(this KeyBuilder builder, InputUnion<string, JsonWebKeyCurveName> curve)
         {
-            builder.Properties.KeyOps = ops;
+            builder.Properties.CurveName = curve;
             return builder;
         }
 
