@@ -1,14 +1,13 @@
 ﻿using Pulumi;
-using Pulumi.AzureNative.KeyVault;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.KeyVault;
 using Stize.Infrastructure.Azure.Networking;
 
 namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
 {
-    public class KeyBasicStack : Stack
+    public class SecretBasicStack : Stack
     {
-        public KeyBasicStack()
+        public SecretBasicStack()
         {
             var rg = new ResourceGroupBuilder("rg1")
                 .Name("rg1")
@@ -31,24 +30,14 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 .AddAccessPolicy(ap1)
                 .Build();
 
-            var key = new KeyBuilder("key1")
-                .Name("key1")
+            var secret1 = new SecretBuilder("secret1")
+                .Name("secret1")
                 .VaultName(kv1.Name)
                 .ResourceGroup(rg.Name)
-                .KeyType(JsonWebKeyType.RSA)
-                .KeySizeInBits(2048)
-                .KeyOps(JsonWebKeyOperation.Encrypt, JsonWebKeyOperation.Decrypt)
+                .Value("supermegasecret")
                 .ActivationDate("2021-05-25")
                 .ExpiryDate("2021-05-26")
-                .IsEnabled(true)
-                .Build();
-
-            var key2 = new KeyBuilder("key2")
-                .Name("key2")
-                .VaultName(kv1.Name)
-                .ResourceGroup(rg.Name)
-                .KeyType(JsonWebKeyType.EC)
-                .CurveName(JsonWebKeyCurveName.P_256)
+                .ContentType("Contains a secret.")
                 .IsEnabled(true)
                 .Build();
         }

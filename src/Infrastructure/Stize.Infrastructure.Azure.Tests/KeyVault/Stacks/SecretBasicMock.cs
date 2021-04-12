@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
 {
-    public class KeyBasicMock : IMocks
+    public class SecretBasicMock : IMocks
     {
         public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs, string? provider, string? id)
         {
@@ -21,7 +21,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
             outputs.Add("id", id);
             switch (type)
             {
-                case "azure-native:keyvault:Key": return NewKey(type, name, inputs, provider, id, outputs);
+                case "azure-native:keyvault:Secret": return NewSecret(type, name, inputs, provider, id, outputs);
                 case "azure-native:keyvault:Vault": return NewVault(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
@@ -32,11 +32,10 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
             // Default to returning whatever we got as input.
             return Task.FromResult((object)inputs);
         }
-        public Task<(string? id, object state)> NewKey(string type, string name, ImmutableDictionary<string, object> inputs,
+        public Task<(string? id, object state)> NewSecret(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["keyName"]);
-            outputs.Add("properties", inputs["properties"]);
+            outputs.Add("name", inputs["secretName"]);
 
             return Task.FromResult((id, (object)outputs));
         }

@@ -3,9 +3,6 @@ using Pulumi.AzureNative.KeyVault;
 using Stize.Infrastructure.Azure;
 using Stize.Infrastructure.Azure.KeyVault;
 using Stize.Infrastructure.Azure.Networking;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
 {
@@ -28,6 +25,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 .Name("subnet1")
                 .ResourceGroup(rg.Name)
                 .InVNet(vnet1.Name)
+                .EnableKeyVaultServiceEndpoint()
                 .Build();
             var ap1 = new AccessPolicyBuilder()
                 .TenantId("00000000-0000-0000-0000-000000000000")
@@ -62,7 +60,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 .ProvisioningState(VaultProvisioningState.Succeeded)
                 .DefaultAction("Allow")
                 .AllowedIPAddresses("192.168.20.51", "192.169.20.0/16")
-                .AllowedVirtualNetworks((subnet1.Id, true))
+                .AllowedVirtualNetworks(subnet1.Id, false)
                 .Build();
             var kv2 = new VaultBuilder("kv2")
                 .Location("westeurope")

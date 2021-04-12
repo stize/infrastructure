@@ -31,14 +31,6 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
         }
 
         [Fact]
-        public async Task VaultNameIsCorrect()
-        {
-            var resources = await Pulumi.Deployment.TestAsync<KeyBasicStack>(new KeyBasicMock(), new TestOptions { IsPreview = false });
-            var key = resources.OfType<Key>().FirstOrDefault();
-            (await key.Kty.GetValueAsync()).Should().Be("kv1");
-        }
-
-        [Fact]
         public async Task RSAKeySizeIsCorrect()
         {
             var resources = await Pulumi.Deployment.TestAsync<KeyBasicStack>(new KeyBasicMock(), new TestOptions { IsPreview = false });
@@ -75,7 +67,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
         {
             var resources = await Pulumi.Deployment.TestAsync<KeyBasicStack>(new KeyBasicMock(), new TestOptions { IsPreview = false });
             var key = resources.OfType<Key>().FirstOrDefault();
-            (await key.Attributes.GetValueAsync())?.NotBefore.Should().Be(1618009200);
+            (await key.Attributes.GetValueAsync())?.NotBefore.Should().Be(1621900800);
         }
 
         [Fact]
@@ -83,7 +75,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
         {
             var resources = await Pulumi.Deployment.TestAsync<KeyBasicStack>(new KeyBasicMock(), new TestOptions { IsPreview = false });
             var key = resources.OfType<Key>().FirstOrDefault();
-            (await key.Attributes.GetValueAsync())?.Expires.Should().Be(1618095600);
+            (await key.Attributes.GetValueAsync())?.Expires.Should().Be(1621987200);
         }
     }
 }
