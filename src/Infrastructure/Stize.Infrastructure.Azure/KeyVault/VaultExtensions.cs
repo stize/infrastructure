@@ -268,21 +268,16 @@ namespace Stize.Infrastructure.Azure.KeyVault
         }
 
         /// <summary>
-        /// Add accessibility from Virtual Networks (VNets) to the Vault, using the resource ID of the Subnet(s).
-        /// Multiple Subnets can be passed through this method, through additional arguments of type (string, bool).
+        /// Add accessibility from Virtual Networks (VNets) to the Vault, using the resource ID of the Subnet.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="subnets">Resource ID of the Subnet(s) and whether missing service endpoints should be ignored. 
-        /// Multiple Subnets can be passed through this method, through concatenating additional arguments. Value must be of type tuple (string, bool)</param>
+        /// <param name="subnetId">Resource ID of the Subnet.</param>
+        /// <param name="ignoreMissingVnetServiceEndpoint">Whether missing service endpoint for KeyVault on the Subnet should be ignored.</param>
         /// <returns></returns>
-        public static VaultBuilder AllowedVirtualNetworks(this VaultBuilder builder, params (Input<string> subnetId, Input<bool> ignoreMissingVnetServiceEndpoint)[] subnets)
+        public static VaultBuilder AllowedVirtualNetworks(this VaultBuilder builder,Input<string> subnetId, bool ignoreMissingVnetServiceEndpoint = false)
         {
-            var snetRules = new List<Input<VirtualNetworkRuleArgs>>();
-            foreach (var (subnetId, ignoreMissingVnetServiceEndpoint) in subnets)
-            {
-                snetRules.Add(new VirtualNetworkRuleArgs { Id = subnetId, IgnoreMissingVnetServiceEndpoint = ignoreMissingVnetServiceEndpoint }); 
-            }
-            builder.NetworkRuleSet.VirtualNetworkRules = snetRules;
+            var snetRule = new VirtualNetworkRuleArgs { Id = subnetId, IgnoreMissingVnetServiceEndpoint = ignoreMissingVnetServiceEndpoint };
+            builder.NetworkRuleSet.VirtualNetworkRules.Add(snetRule);
             return builder;
         }
 
