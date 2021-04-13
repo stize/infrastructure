@@ -23,6 +23,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
             {
                 case "azure-native:keyvault:Secret": return NewSecret(type, name, inputs, provider, id, outputs);
                 case "azure-native:keyvault:Vault": return NewVault(type, name, inputs, provider, id, outputs);
+                case "azure-native:resources:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -46,7 +47,13 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
 
             return Task.FromResult((id, (object)outputs));
         }
+        public Task<(string? id, object state)> NewResourceGroup(string type, string name, ImmutableDictionary<string, object> inputs,
+            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", inputs["resourceGroupName"]);
 
+            return Task.FromResult((id, (object)outputs));
+        }
 
     }
 }
