@@ -235,15 +235,25 @@ namespace Stize.Infrastructure.Azure.KeyVault
         }
 
         /// <summary>
-        /// The default action when no rule from Ip Rules and from Virtual Network Rules match. This is only used after the bypass property has been evaluated.
-        /// Valid values: 'Allow' or 'Deny'
+        /// Allow access to this key vault from all networks, including the internet.
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="action">The default type of action for incoming traffic. Valid values: 'Allow' or 'Deny'</param>
         /// <returns></returns>
-        public static VaultBuilder DefaultAction(this VaultBuilder builder, InputUnion<string, NetworkRuleAction> action)
+        public static VaultBuilder AllowFullNetworkAccess(this VaultBuilder builder)
         {
-            builder.NetworkRuleSet.DefaultAction = action;
+            builder.NetworkRuleSet.DefaultAction = NetworkRuleAction.Allow;
+            return builder;
+        }
+
+        /// <summary>
+        /// Allow only selected networks to access this key vault.
+        /// To allow access from networks use the <see cref="AllowedIPAddresses(VaultBuilder, Input{string}[])"/> and <see cref="AllowedVirtualNetworks(VaultBuilder, Input{string}, bool)"/> methods.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static VaultBuilder AllowOnlySelectNetworkAccess(this VaultBuilder builder)
+        {
+            builder.NetworkRuleSet.DefaultAction = NetworkRuleAction.Deny;
             return builder;
         }
 
@@ -293,55 +303,5 @@ namespace Stize.Infrastructure.Azure.KeyVault
             builder.Properties.ProvisioningState = state;
             return builder;
         }
-
-
-
-        /*             Properties of Vault:
-         * <Complete>  Sku                              : SkuArgs
-         *                                                  { 
-         * <Complete>                                           Family  : SkuFamily
-         * <Complete>                                           Name    : SkuName
-         *                                                  }
-         * <Complete>  TenantId                         : string
-         * <Complete>  AccessPolicies                   : List<AccessPolicyEntryArgs 
-         *                                                  { 
-         * <Complete>                                           ObjectId        : string
-         * <Complete>                                           Permissions     : PermissionsArgs
-         *                                                                          {
-         * <Complete>                                                                   [Certifications]    : List<Union<string, CertificatePermissions>>
-         * <Complete>                                                                   [Keys]              : List<Union<string, KeyPermissions>>
-         * <Complete>                                                                   [Storage]           : List<Union<string, StoragePermissions>>
-         * <Complete>                                                                   [Secrets]           : List<Union<string, SecretPermissions>>
-         *                                                                          }
-         * <Complete>                                           TenantId        : string
-         * <Complete>                                           [ApplicationId] : string
-         *                                                  }
-         *                                                >
-         * <Complete>  [CreateMode]                     : CreateMode
-         * <Complete>  [EnablePurgeProtection]          : bool
-         * <Complete>  [EnableRbacAuthorization         : bool
-         * <Complete>  [EnableSoftDelete]               : bool
-         * <Complete>  [EnabledForDeployment]           : bool
-         * <Complete>  [EnabledForDiskEncryption]       : bool
-         * <Complete>  [EnabledForTemplateDeployment]   : bool
-         * <Complete>  [NetworkAcls]                    : NetworkRuleSetArgs 
-         *                                                  { 
-         * <Complete>                                           ByPass              : NetworkRuleBypassOptions
-         * <Complete>                                           DefaultAction       : NetworkRuleAction
-         * <Complete>                                           IpRules             : IPRuleArgs 
-         *                                                                              {
-         * <Complete>                                                                       Value : string
-         *                                                                              }
-         * <Complete>                                           VirtualNetworkRules : VirtualNetworkRuleArgs
-         *                                                                              {
-         * <Complete>                                                                       Id : string
-         * <Pending>                                                                        [IgnoreMissingVnetServiceEndpoint] : bool
-         *                                                                              }
-         *                                                  }
-         * <Complete>  [ProisioningState]               : VaultProvisioningState
-         * <Complete>  [SoftDeleteRetentionDays]        : int
-         * <Pending>   [VaultUri]                       : string
-         * 
-         */
     }
 }

@@ -58,7 +58,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 .EnablePurgeProtection()
                 .SoftDeleteRetentionDays(60)
                 .ProvisioningState(VaultProvisioningState.Succeeded)
-                .DefaultAction("Allow")
+                .AllowFullNetworkAccess()
                 .AllowedIPAddresses("192.168.20.51", "192.169.20.0/16")
                 .AllowedVirtualNetworks(subnet1.Id, false)
                 .Build();
@@ -69,6 +69,7 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 .TenantId("00000000-0000-0000-0000-000000000000")
                 .DisableSoftDelete()
                 .EnableRbacAuthorization()
+                .AllowOnlySelectNetworkAccess()
                 .RecoverVault()
                 .DisallowBypassForAzureServices()
                 .Build();

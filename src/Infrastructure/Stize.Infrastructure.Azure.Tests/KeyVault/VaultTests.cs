@@ -82,8 +82,9 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
         public async Task DefaultActionIsCorrect()
         {
             var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
-            var vault = resources.OfType<Vault>().FirstOrDefault();
-            (await vault.Properties.GetValueAsync()).NetworkAcls?.DefaultAction.Should().Be("Allow");
+            var vault = resources.OfType<Vault>().ToArray();
+            (await vault[0].Properties.GetValueAsync()).NetworkAcls?.DefaultAction.Should().Be("Allow");
+            (await vault[1].Properties.GetValueAsync()).NetworkAcls?.DefaultAction.Should().Be("Deny");
         }
 
         [Fact]
