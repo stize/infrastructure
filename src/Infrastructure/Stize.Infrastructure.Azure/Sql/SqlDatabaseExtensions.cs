@@ -121,7 +121,7 @@ namespace Stize.Infrastructure.Azure.Sql
         {
             /* Same comments SetAsRestore() method. 
              * This method seems redundant as you don't need to set SourceDatabaseDeletionDate to restore a deleted database - the RestorableDroppedDatabaseId will suffice.
-             * "If sourceDatabaseId is the database’s original resource ID, then sourceDatabaseDeletionDate must be specified." - https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
+             * "If sourceDatabaseId is the databaseâ€™s original resource ID, then sourceDatabaseDeletionDate must be specified." - https://www.pulumi.com/docs/reference/pkg/azure-native/sql/database/#createmode_csharp
              * ^ documentation states to assign SourceDatabaseId with the original resource Id of the database - though, CreateMode.Restore requires RestorableDroppedDatabaseId.
             */
             builder.Arguments.CreateMode = CreateMode.Restore;
@@ -338,14 +338,14 @@ namespace Stize.Infrastructure.Azure.Sql
 
         /// <summary>
         /// The storage account type used to store backups for this database
-        /// Default: 'GRS'
+        /// Default: 'Geo'
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="saType"></param>
         /// <returns></returns>
         public static SqlDatabaseBuilder StorageAccountType(this SqlDatabaseBuilder builder, InputUnion<string, RequestedBackupStorageRedundancy> saType = null)
         {
-            builder.Arguments.RequestedBackupStorageRedundancy = saType ?? "GRS";
+            builder.Arguments.RequestedBackupStorageRedundancy = saType ?? "Geo";
             return builder;
         }
         /// <summary>
