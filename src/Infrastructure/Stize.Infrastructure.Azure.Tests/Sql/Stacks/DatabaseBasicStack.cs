@@ -32,7 +32,7 @@ namespace Stize.Infrastructure.Tests.Azure.Sql.Stacks
                 .Parent(server)
                 .SkuTier("Basic")
                 .SkuServiceObjectiveName("S0")
-                .StorageAccountType(StorageAccountType.GRS)
+                .StorageAccountType(RequestedBackupStorageRedundancy.Geo)
                 .MaxDatabaseSizeGB(250)
                 .MinCapacity(100)
                 .DatabaseCollation("SQL_Latin1_General_CP1_CI_AS")

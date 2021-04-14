@@ -119,16 +119,6 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault
             (await vault.Properties.GetValueAsync()).EnableSoftDelete.Should().Be(false);
         }
 
-        
-
-        [Fact]
-        public async Task RecoveryModeIsCorrect()
-        {
-            var resources = await Pulumi.Deployment.TestAsync<VaultBasicStack>(new VaultBasicMock(), new TestOptions { IsPreview = false });
-            var vault = resources.OfType<Vault>().LastOrDefault();
-            (await vault.Properties.GetValueAsync()).CreateMode.Should().Be("recover");
-        }
-
         [Fact]
         public async Task EnableRbacAuthIsCorrect()
         {

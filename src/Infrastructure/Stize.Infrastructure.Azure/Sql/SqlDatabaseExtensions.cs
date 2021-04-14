@@ -343,9 +343,9 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder"></param>
         /// <param name="saType"></param>
         /// <returns></returns>
-        public static SqlDatabaseBuilder StorageAccountType(this SqlDatabaseBuilder builder, InputUnion<string, StorageAccountType> saType = null)
+        public static SqlDatabaseBuilder StorageAccountType(this SqlDatabaseBuilder builder, InputUnion<string, RequestedBackupStorageRedundancy> saType = null)
         {
-            builder.Arguments.StorageAccountType = saType ?? "GRS";
+            builder.Arguments.RequestedBackupStorageRedundancy = saType ?? "GRS";
             return builder;
         }
         /// <summary>
