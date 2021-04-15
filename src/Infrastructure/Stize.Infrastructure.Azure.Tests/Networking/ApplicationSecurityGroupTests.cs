@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 using Pulumi.Testing;
 using Stize.Infrastructure.Tests.Azure.Networking.Stacks;
 using System;

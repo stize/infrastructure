@@ -1,7 +1,7 @@
 using System;
 using Pulumi;
-using Pulumi.AzureNextGen.Resources.Latest;
-using Pulumi.AzureNextGen.Sql.Latest;
+using Pulumi.AzureNative.Resources;
+using Pulumi.AzureNative.Sql;
 
 namespace Stize.Infrastructure.Azure.Sql
 {
@@ -62,7 +62,7 @@ namespace Stize.Infrastructure.Azure.Sql
         /// <param name="builder">SQL Server builder</param>
         /// <param name="version">Server version</param>
         /// <returns></returns>
-        public static SqlServerBuilder Version(this SqlServerBuilder builder, InputUnion<string, ServerVersion> version)
+        public static SqlServerBuilder Version(this SqlServerBuilder builder, Input<string> version)
         {
             builder.Arguments.Version = version;
             return builder;
@@ -89,6 +89,59 @@ namespace Stize.Infrastructure.Azure.Sql
         public static SqlServerBuilder AdministratorPassword(this SqlServerBuilder builder, Input<string> password)
         {
             builder.Arguments.AdministratorLoginPassword = password;
+            return builder;
+        }
+        /// <summary>
+        /// Whether or not public endpoint access is allowed for this server. Value is optional but if passed in, must be 'Enabled' or 'Disabled'
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="publicNetworkAccess"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder PublicNetworkAccess(this SqlServerBuilder builder, InputUnion<string, ServerPublicNetworkAccess> publicNetworkAccess)
+        {
+            builder.Arguments.PublicNetworkAccess = publicNetworkAccess;
+            return builder;
+        }
+        /// <summary>
+        /// Sets the Minimal TLS Version to 1.0
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder TLSVersion_1_0(this SqlServerBuilder builder)
+        {
+            builder.Arguments.MinimalTlsVersion = "1.0";
+            return builder;
+        }
+        /// <summary>
+        /// Sets the Minimal TLS Version to 1.1
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder TLSVersion_1_1(this SqlServerBuilder builder)
+        {
+            builder.Arguments.MinimalTlsVersion = "1.1";
+            return builder;
+        }
+        /// <summary>
+        /// Sets the Minimal TLS Version to 1.2
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder TLSVersion_1_2(this SqlServerBuilder builder)
+        {
+            builder.Arguments.MinimalTlsVersion = "1.2";
+            return builder;
+        }
+        /// <summary>
+        /// The Azure Active Directory identity type of the server. 
+        /// Set this to 'SystemAssigned' in order to automatically create and assign an Azure Active Directory principal for the resource.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="identityType"></param>
+        /// <returns></returns>
+        public static SqlServerBuilder IdentityType(this SqlServerBuilder builder, InputUnion<string, IdentityType> identityType)
+        {
+            builder.Arguments.Identity = new Pulumi.AzureNative.Sql.Inputs.ResourceIdentityWithUserAssignedIdentitiesArgs { Type = identityType};
             return builder;
         }
     }

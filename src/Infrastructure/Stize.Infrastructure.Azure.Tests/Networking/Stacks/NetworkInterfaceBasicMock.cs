@@ -25,9 +25,9 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 
             switch (type)
             {
-                case "azure-nextgen:network/latest:NetworkInterface": return NewNetworkInterface(type, name, inputs, provider, id, outputs);
-                case "azure-nextgen:network/latest:NetworkSecurityGroup": return NewNetworkSecurityGroup(type, name, inputs, provider, id, outputs);
-                case "azure-nextgen:network/latest:Subnet": return NewSubnet(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:NetworkInterface": return NewNetworkInterface(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:NetworkSecurityGroup": return NewNetworkSecurityGroup(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:Subnet": return NewSubnet(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }

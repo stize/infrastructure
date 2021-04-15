@@ -1,5 +1,5 @@
 ﻿using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 
 namespace Stize.Infrastructure.Azure.Networking
 {

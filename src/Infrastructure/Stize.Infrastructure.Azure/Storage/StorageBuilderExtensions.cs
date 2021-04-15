@@ -1,7 +1,7 @@
 using Pulumi;
-using Pulumi.AzureNextGen.Resources.Latest;
-using Pulumi.AzureNextGen.Storage.Latest;
-using Pulumi.AzureNextGen.Storage.Latest.Inputs;
+using Pulumi.AzureNative.Resources;
+using Pulumi.AzureNative.Storage;
+using Pulumi.AzureNative.Storage.Inputs;
 
 namespace Stize.Infrastructure.Azure.Storage
 {
@@ -182,7 +182,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public static StorageAccountBuilder Storage(this StorageAccountBuilder builder)
         {
-            return Kind(builder, Pulumi.AzureNextGen.Storage.Latest.Kind.Storage);
+            return Kind(builder, Pulumi.AzureNative.Storage.Kind.Storage);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public static StorageAccountBuilder StorageV2(this StorageAccountBuilder builder)
         {
-            return Kind(builder, Pulumi.AzureNextGen.Storage.Latest.Kind.StorageV2);
+            return Kind(builder, Pulumi.AzureNative.Storage.Kind.StorageV2);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public static StorageAccountBuilder Blob(this StorageAccountBuilder builder)
         {
-            return Kind(builder, Pulumi.AzureNextGen.Storage.Latest.Kind.BlobStorage);
+            return Kind(builder, Pulumi.AzureNative.Storage.Kind.BlobStorage);
         }
 
         /// <summary>
@@ -212,7 +212,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public static StorageAccountBuilder BlockBlobStorage(this StorageAccountBuilder builder)
         {
-            return Kind(builder, Pulumi.AzureNextGen.Storage.Latest.Kind.BlockBlobStorage);
+            return Kind(builder, Pulumi.AzureNative.Storage.Kind.BlockBlobStorage);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Stize.Infrastructure.Azure.Storage
         /// <returns></returns>
         public static StorageAccountBuilder FileStorage(this StorageAccountBuilder builder)
         {
-            return Kind(builder, Pulumi.AzureNextGen.Storage.Latest.Kind.FileStorage);
+            return Kind(builder, Pulumi.AzureNative.Storage.Kind.FileStorage);
         }        
 
         /// <summary>

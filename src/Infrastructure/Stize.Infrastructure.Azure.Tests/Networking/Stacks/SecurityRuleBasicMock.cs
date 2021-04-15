@@ -22,8 +22,8 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
             outputs.Add("id", id);
             switch (type)
             {
-                case "azure-nextgen:network/latest:SecurityRule": return NewSecurityRule(type, name, inputs, provider, id, outputs);
-                case "azure-nextgen:network/latest:ApplicationSecurityGroup": return NewApplicationSecurityGroup(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:SecurityRule": return NewSecurityRule(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:ApplicationSecurityGroup": return NewApplicationSecurityGroup(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }

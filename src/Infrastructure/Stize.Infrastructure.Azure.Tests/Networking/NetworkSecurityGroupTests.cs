@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 using Stize.Infrastructure.Test;
 using Xunit;
 using System.Threading.Tasks;
