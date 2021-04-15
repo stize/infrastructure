@@ -5,7 +5,7 @@ using Pulumi.Testing;
 using Xunit;
 using Pulumi;
 using Stize.Infrastructure.Azure.Tests.Networking.Stacks;
-using Pulumi.AzureNextGen.Network.Latest;
+using Pulumi.AzureNative.Network;
 using Stize.Infrastructure.Test;
 
 namespace Stize.Infrastructure.Azure.Tests.Networking

@@ -1,7 +1,5 @@
 ﻿using Pulumi;
-using Pulumi.AzureNextGen.Network.Latest;
-using Pulumi.AzureNextGen.Network.Latest.Inputs;
-using Inputs = Pulumi.AzureNextGen.Network.Latest.Inputs;
+using Pulumi.AzureNative.Network.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -61,12 +59,9 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="builder"></param>
         /// <param name="ipAddresses">List of IP addresses for the A record</param>
         /// <returns></returns>
-        public static PrivateDnsZoneRecordBuilder CreateARecord(this PrivateDnsZoneRecordBuilder builder, InputList<string> ipAddresses)
+        public static PrivateDnsZoneRecordBuilder CreateARecord(this PrivateDnsZoneRecordBuilder builder, Input<string> ipAddress)
         {
-            foreach (var ip in ipAddresses.Apply(ips => ips).GetValueAsync().Result)
-            {
-                builder.Arguments.ARecords.Add(new ARecordArgs { Ipv4Address = ip });
-            }
+            builder.Arguments.ARecords.Add(new ARecordArgs { Ipv4Address = ipAddress });
             return SetRecordType(builder, "A");
         }
 

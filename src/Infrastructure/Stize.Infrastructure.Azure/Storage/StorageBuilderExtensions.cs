@@ -2,6 +2,7 @@ using Pulumi;
 using Pulumi.AzureNative.Resources;
 using Pulumi.AzureNative.Storage;
 using Pulumi.AzureNative.Storage.Inputs;
+using Network = Pulumi.AzureNative.Network;
 
 namespace Stize.Infrastructure.Azure.Storage
 {
@@ -330,6 +331,83 @@ namespace Stize.Infrastructure.Azure.Storage
         public static StorageAccountBuilder DenySharedKeyAccess(this StorageAccountBuilder builder)
         {
             builder.Arguments.AllowSharedKeyAccess = false;
+            return builder;
+        }
+
+        /// <summary>
+        /// Set the default action for the storage account firewall to Deny
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder DenyAccessByDefault(this StorageAccountBuilder builder)
+        {
+            builder.NetworkRulesArguments.DefaultAction = DefaultAction.Deny;
+            return builder;
+        }
+
+        /// <summary>
+        /// Set the default action for the storage account firewall to Allow
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowAccessByDefault(this StorageAccountBuilder builder)
+        {
+            builder.NetworkRulesArguments.DefaultAction = DefaultAction.Allow;
+            return builder;
+        }
+
+        /// <summary>
+        /// Add an IP or range of IPs to the storage account firewall 
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="ipAddress"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowAccessFrom(this StorageAccountBuilder builder, Input<string> ipAddress)
+        {
+            builder.NetworkRulesArguments.IpRules.Add(new IPRuleArgs()
+            {
+                Action = Action.Allow,
+                IPAddressOrRange = ipAddress
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Allow access to the storage account from a subnet with the Microsoft.Storage service endpoint
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="subnet"></param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowAccessFrom(this StorageAccountBuilder builder, Input<Network.Subnet> subnet)
+        {
+            builder.NetworkRulesArguments.VirtualNetworkRules.Add(new VirtualNetworkRuleArgs()
+            {
+                VirtualNetworkResourceId = subnet.Apply(s => s.Id)
+            });
+            return builder;
+        }
+
+        /// <summary>
+        /// Allow access to the storage account from a trusted Microsoft service.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="exception">Valid arguments are AzureServices, Logging, Metrics, None</param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowAccessFrom(this StorageAccountBuilder builder, Input<Bypass> exception)
+        {
+            builder.NetworkRulesExceptions.Add(exception.Apply(e => e).GetValueAsync().Result);
+            return builder;
+        }
+
+        /// <summary>
+        /// Allow access to the storage account from a list of trusted Microsoft services.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="exceptions">Valid arguments are AzureServices, Logging, Metrics, None</param>
+        /// <returns></returns>
+        public static StorageAccountBuilder AllowAccessFrom(this StorageAccountBuilder builder, InputList<Bypass> exceptions)
+        {
+            builder.NetworkRulesExceptions.AddRange(exceptions.Apply(e => e).GetValueAsync().Result);
             return builder;
         }
     }

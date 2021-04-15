@@ -8,9 +8,16 @@
     <ProjectReference Include="..\Stize.Infrastructure\Stize.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Pulumi.AzureAD" Version="3.6.0" />
+<<<<<<< Updated upstream
     <PackageReference Include="Pulumi.AzureNative" Version="0.8.0" />
+    <PackageReference Include="Pulumi.AzureAD" Version="3.5.1" />
     <PackageReference Include="Pulumi.Tls" Version="3.3.1" />
+=======
+    <PackageReference Include="Pulumi.AzureAD" Version="3.4.0" />
+    <PackageReference Include="Pulumi.AzureNative" Version="0.8.0" />
+    <PackageReference Include="Pulumi.AzureNextGen" Version="0.6.1" />
+    <PackageReference Include="Pulumi.Tls" Version="3.2.0" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig" />

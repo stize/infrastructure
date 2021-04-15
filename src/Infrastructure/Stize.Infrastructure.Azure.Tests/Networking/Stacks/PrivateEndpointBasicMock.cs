@@ -4,7 +4,7 @@ using Pulumi.Testing;
 
 namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
-    public class PrivateDnsZoneVnetLinkBasicMock : IMocks
+    public class PrivateEndpointBasicMock : IMocks
     {
         public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id)
@@ -21,8 +21,8 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             }
             outputs.Add("id", id);
             switch (type)
-            {
-                case "azure-nextgen:network/latest:VirtualNetworkLink": return NewPrivateDnsZoneVnetLink(type, name, inputs, provider, id, outputs);
+            {   // TODO change from next gen to native
+                case "azure-nextgen:network/latest:PrivateEndpoint": return NewPrivateEndpoint(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -34,10 +34,10 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             return Task.FromResult((object)inputs);
         }
 
-        public Task<(string? id, object state)> NewPrivateDnsZoneVnetLink(string type, string name, ImmutableDictionary<string, object> inputs,
+        public Task<(string? id, object state)> NewPrivateEndpoint(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["privateZoneName"]);
+            outputs.Add("name", inputs["privateEndpointName"]);
 
             return Task.FromResult((id, (object)outputs));
         }

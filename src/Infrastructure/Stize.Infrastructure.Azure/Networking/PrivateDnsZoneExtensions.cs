@@ -1,5 +1,6 @@
 ﻿using Pulumi;
-
+using Pulumi.AzureNative.Network;
+using Inputs = Pulumi.AzureNative.Network.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
 {
@@ -34,7 +35,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneBuilder CreateBlobStoragePrivateDnsZone(this PrivateDnsZoneBuilder builder)
+        public static PrivateDnsZoneBuilder ForBlobStorage(this PrivateDnsZoneBuilder builder)
         {
             return Name(builder, "privatelink.blob.core.windows.net");
         }
@@ -44,7 +45,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneBuilder CreateFileStoragePrivateDnsZone(this PrivateDnsZoneBuilder builder)
+        public static PrivateDnsZoneBuilder ForFileStorage(this PrivateDnsZoneBuilder builder)
         {
             return Name(builder, "privatelink.file.core.windows.net");
         }
@@ -54,7 +55,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneBuilder CreateTableStoragePrivateDnsZone(this PrivateDnsZoneBuilder builder)
+        public static PrivateDnsZoneBuilder ForTableStorage(this PrivateDnsZoneBuilder builder)
         {
             return Name(builder, "privatelink.table.core.windows.net");
         }
@@ -64,7 +65,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneBuilder CreateQueueStoragePrivateDnsZone(this PrivateDnsZoneBuilder builder)
+        public static PrivateDnsZoneBuilder ForQueueStorage(this PrivateDnsZoneBuilder builder)
         {
             return Name(builder, "privatelink.queue.core.windows.net");
         }
@@ -74,13 +75,13 @@ namespace Stize.Infrastructure.Azure.Networking
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static PrivateDnsZoneBuilder CreateKeyVaultPrivateDnsZone(this PrivateDnsZoneBuilder builder)
+        public static PrivateDnsZoneBuilder ForKeyVault(this PrivateDnsZoneBuilder builder)
         {          
             return Name(builder, "privatelink.vaultcore.azure.net");
         }
 
         /// <summary>
-        /// Set the resource group of this private DNS zone
+        /// Set the resource group of the private DNS zone
         /// </summary>
         /// <param name="builder"></param>
         /// <param name="resourceGroup"></param>
@@ -88,6 +89,30 @@ namespace Stize.Infrastructure.Azure.Networking
         public static PrivateDnsZoneBuilder In(this PrivateDnsZoneBuilder builder, Input<string> resourceGroup)
         {
             builder.Arguments.ResourceGroupName = resourceGroup;
+            return builder;
+        }
+
+        /// <summary>
+        /// Link a virtual network to the private DNS zone
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="vnet">Virtual network to be linked</param>
+        /// <param name="linkName">Name of virtual network link</param>
+        /// <param name="enableAutoRegistration">Is auto-registration of virtual machine records in the virtual network in the Private DNS zone enabled?</param>
+        /// <returns></returns>
+        public static PrivateDnsZoneBuilder LinkTo(this PrivateDnsZoneBuilder builder, Input<VirtualNetwork> vnet, Input<string> linkName, Input<bool> enableAutoRegistration)
+        {
+            builder.VnetLinks.Add(new VirtualNetworkLinkArgs()
+            {
+                VirtualNetworkLinkName = linkName,
+                Location = builder.Arguments.Location,
+                PrivateZoneName = builder.Arguments.PrivateZoneName,
+                ResourceGroupName = builder.Arguments.ResourceGroupName,
+                Tags = builder.Arguments.Tags,
+                RegistrationEnabled = enableAutoRegistration,
+                VirtualNetwork = new Inputs.SubResourceArgs { Id = vnet.Apply(v => v.Id) }
+
+            });
             return builder;
         }
     }

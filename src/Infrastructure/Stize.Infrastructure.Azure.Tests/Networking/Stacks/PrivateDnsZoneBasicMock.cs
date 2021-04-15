@@ -21,7 +21,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             }
             outputs.Add("id", id);
             switch (type)
-            {
+            {   // TODO Change from next gen to native
                 case "azure-nextgen:network/latest:PrivateZone": return NewPrivateDnsZone(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }

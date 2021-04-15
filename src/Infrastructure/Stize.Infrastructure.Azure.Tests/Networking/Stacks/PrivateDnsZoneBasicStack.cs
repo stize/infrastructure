@@ -1,5 +1,6 @@
 ﻿using Pulumi;
 using Stize.Infrastructure.Azure.Networking;
+using Stize.Infrastructure.Azure.Storage;
 
 namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
