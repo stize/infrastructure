@@ -11,7 +11,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <summary>
         /// VNet arguments
         /// </summary>
-        public SubnetArgs Arguments { get; private set; } = new SubnetArgs();
+        public SubnetArgs Arguments { get; private set; } = new SubnetArgs() 
+        {
+            PrivateEndpointNetworkPolicies = VirtualNetworkPrivateEndpointNetworkPolicies.Enabled,
+            PrivateLinkServiceNetworkPolicies = VirtualNetworkPrivateLinkServiceNetworkPolicies.Enabled
+        };
 
         /// <summary>
         /// Creates a new instance of <see cref="SubnetBuilder"/>

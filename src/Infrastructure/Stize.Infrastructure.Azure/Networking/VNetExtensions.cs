@@ -57,6 +57,27 @@ namespace Stize.Infrastructure.Azure.Networking
         {
             builder.Arguments.Location = location;
             return builder;
-        }        
+        }
+
+        /// <summary>
+        /// A DDoS protection plan is a paid service that offers enhanced DDoS mitigation capabilities via adaptive tuning, attack notification, 
+        /// and telemetry to protect against the impacts of a DDoS attack for all protected resources within this virtual network. 
+        /// Basic DDoS protection is integrated into the Azure platform by default and at no additional cost.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="resourceId">Resource ID of the DDoS Protection Plan</param>
+        /// <returns></returns>
+        public static VNetBuilder DdosProtectionPlan(this VNetBuilder builder, Input<string> resourceId)
+        {
+            builder.Arguments.DdosProtectionPlan = new SubResourceArgs { Id = resourceId };
+            builder.Arguments.EnableDdosProtection = true;
+            return builder;
+        }
+
+        public static VNetBuilder EnableVmProtection(this VNetBuilder builder, Input<bool> vmProtection)
+        {
+            builder.Arguments.EnableVmProtection = vmProtection;
+            return builder;
+        }
     }
 }

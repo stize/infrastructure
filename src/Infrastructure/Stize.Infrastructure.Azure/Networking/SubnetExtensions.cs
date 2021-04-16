@@ -1,5 +1,6 @@
 ﻿using System;
 using Pulumi;
+using Pulumi.AzureNative.Network;
 using Pulumi.AzureNative.Network.Inputs;
 
 namespace Stize.Infrastructure.Azure.Networking
@@ -48,25 +49,28 @@ namespace Stize.Infrastructure.Azure.Networking
         }
 
         /// <summary>
-        /// Enfoces private link endpoint network policies
+        /// Enfoces private link endpoint network policies.
+        /// See <see cref="VirtualNetworkPrivateEndpointNetworkPolicies"/> - Valid values: "Enabled" or "Disabled".
         /// </summary>
         /// <param name="builder"></param>
+        /// <param name="active"><see cref="VirtualNetworkPrivateEndpointNetworkPolicies"/> - Valid values: "Enabled" or "Disabled".</param>
         /// <returns></returns>
-        public static SubnetBuilder EnforcePrivateEndpointNetworkPolicies(this SubnetBuilder builder, bool active = true)
+        public static SubnetBuilder EnforcePrivateEndpointNetworkPolicies(this SubnetBuilder builder, InputUnion<string, VirtualNetworkPrivateEndpointNetworkPolicies> active)
         {
-            builder.Arguments.PrivateEndpointNetworkPolicies = active.ToString(); // TODO Confirm if this is correct after the migration to nextgen
+            builder.Arguments.PrivateEndpointNetworkPolicies = active; 
             return builder;
         }
 
 
         /// <summary>
         /// Enfoces private link service network policies
+        /// See <see cref="VirtualNetworkPrivateLinkServiceNetworkPolicies"/> - Valid values: "Enabled" or "Disabled".
         /// </summary>
         /// <param name="builder"></param>
         /// <returns></returns>
-        public static SubnetBuilder EnforcePrivateLinkServiceNetworkPolicies(this SubnetBuilder builder, bool active = true)
+        public static SubnetBuilder EnforcePrivateLinkServiceNetworkPolicies(this SubnetBuilder builder, InputUnion<string, VirtualNetworkPrivateLinkServiceNetworkPolicies> active)
         {
-            builder.Arguments.PrivateLinkServiceNetworkPolicies = active.ToString(); // TODO Confirm if this is correct after the migration to nextgen
+            builder.Arguments.PrivateLinkServiceNetworkPolicies = active;
             return builder;
         }
 
@@ -202,6 +206,68 @@ namespace Stize.Infrastructure.Azure.Networking
             builder.Arguments.ServiceEndpoints.Add(new ServiceEndpointPropertiesFormatArgs{
                 Service = serviceEndpoint
             });
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds the subnet to an existing Network Security Group (NSG), using the NSG's resource ID.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="id">The resource ID of the Network Security Group.</param>
+        /// <returns></returns>
+        public static SubnetBuilder NetworkSecurityGroupId(this SubnetBuilder builder, Input<string> id)
+        {
+            builder.Arguments.NetworkSecurityGroup = new Pulumi.AzureNative.Network.Inputs.NetworkSecurityGroupArgs
+            {
+                Id = id,
+            };
+            return builder;
+        }
+
+        /// <summary>
+        /// Adds an array of <see cref="ServiceEndpointPolicy"/>s to the subnet.
+        /// List the <see cref="ServiceEndpointPolicy"/> resource IDs in a comma-seperated list of arguments.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="policyIDs"><see cref="ServiceEndpointPolicy"/> resource ID.</param>
+        /// <returns></returns>
+        public static SubnetBuilder ServiceEndpointPolicies(this SubnetBuilder builder, params Input<string>[] policyIDs)
+        {
+            foreach (var id in policyIDs)
+            {
+                builder.Arguments.ServiceEndpointPolicies.Add(new Pulumi.AzureNative.Network.Inputs.ServiceEndpointPolicyArgs { Id = id });
+            }
+            return builder;
+        }
+
+        /// <summary>
+        /// Reference to the Route Table.  
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="id">The resource ID of the Route Table.</param>
+        /// <returns></returns>
+        public static SubnetBuilder RouteTableId(this SubnetBuilder builder, Input<string> id)
+        {
+            builder.Arguments.RouteTable = new Pulumi.AzureNative.Network.Inputs.RouteTableArgs
+            {
+                Id = id,
+            };
+            return builder;
+        }
+
+
+        /// <summary>
+        /// Nat Gateway associated with this subnet.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="id">Resource ID of the NatGateway.</param>
+        /// <returns></returns>
+        public static SubnetBuilder NatGateway(this SubnetBuilder builder, Input<string> id)
+        {
+            builder.Arguments.NatGateway = new SubResourceArgs
+            {
+                Id = id,
+            };
             return builder;
         }
     }
