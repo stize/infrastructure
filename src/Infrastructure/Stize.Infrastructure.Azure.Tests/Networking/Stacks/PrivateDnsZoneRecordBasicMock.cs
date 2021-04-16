@@ -4,7 +4,7 @@ using Pulumi.Testing;
 
 namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
-    public class PrivateEndpointBasicMock : IMocks
+    public class PrivateDnsZoneRecordBasicMock : IMocks
     {
         public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id)
@@ -21,9 +21,8 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             }
             outputs.Add("id", id);
             switch (type)
-            {   
-                case "azure-native:network:PrivateEndpoint": return NewPrivateEndpoint(type, name, inputs, provider, id, outputs);
-                case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);
+            {   // TODO Change from next gen to native
+                case "azure-native:network:RecordSet": return NewPrivateDnsZoneRecord(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -35,18 +34,11 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             return Task.FromResult((object)inputs);
         }
 
-        public Task<(string? id, object state)> NewPrivateEndpoint(string type, string name, ImmutableDictionary<string, object> inputs,
+        public Task<(string? id, object state)> NewPrivateDnsZoneRecord(string type, string name, ImmutableDictionary<string, object> inputs,
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["privateEndpointName"]);
+            outputs.Add("name", inputs["relativeRecordSetName"]);
 
-            return Task.FromResult((id, (object)outputs));
-        }
-
-        public Task<(string? id, object state)> NewStorageAccount(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
-        {
-            outputs.Add("name", inputs["accountName"]);
             return Task.FromResult((id, (object)outputs));
         }
     }

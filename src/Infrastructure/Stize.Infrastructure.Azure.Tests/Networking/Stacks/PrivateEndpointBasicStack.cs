@@ -48,7 +48,8 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
                 .Location("uksouth")
                 .InSubnet(subnet)
                 .ForResource(storageAccount, "pe-connection", new InputList<string> { "blob" })
-                //.WithARecord(storageAccount.Name, zone.Name, 3600)
+                .DnsRecord(storageAccount.Name, 3360)
+                .PrivateDnsZone(zone.Name, rg)
                 .Build();
         }
     }
