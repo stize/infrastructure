@@ -121,15 +121,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            string[] aps = new string[] { "22", "80-1024" };
-            var t = await sr.DestinationPortRanges.GetValueAsync();
-            if (aps.Length > 0)
-            {
-                for (int i = 0; i < aps.Length; i++)
-                {
-                    t.Should().Contain(aps[i].Trim());
-                }
-            }
+            (await sr.DestinationPortRanges.GetValueAsync()).Should().Contain("22", "80-1024");
         }
         /// <summary>
         /// Checks the SourceAddressPrefix is correctly assigned
@@ -150,16 +142,9 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         public async Task SourceAddressPrefixesIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
-            var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            string[] aps = new string[] { };
-            var t = await sr.SourceAddressPrefixes.GetValueAsync();
-            if (aps.Length > 0)
-            {
-                for (int i = 0; i < aps.Length; i++)
-                {
-                    t.Should().Contain(aps[i].Trim());
-                }
-            }
+            var sr = resources.OfType<SecurityRule>().ToArray()[1];
+            (await sr.SourceAddressPrefixes.GetValueAsync()).Should().Contain("172.68.0.0/28", "172.68.0.16/28");
+
         }
         /// <summary>
         /// Checks the DestinationAddressPrefix is correctly assigned
@@ -180,16 +165,8 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         public async Task DestinationAddressPrefixesIsCorrect()
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
-            var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            string[] aps = new string[] { };
-            var t = await sr.DestinationAddressPrefixes.GetValueAsync();
-            if (aps.Length > 0)
-            {
-                for (int i = 0; i < aps.Length; i++)
-                {
-                    t.Should().Contain(aps[i].Trim());
-                }
-            }            
+            var sr = resources.OfType<SecurityRule>().ToArray()[1];
+            (await sr.DestinationAddressPrefixes.GetValueAsync()).Should().Contain("172.68.0.0/28", "172.68.0.16/28");
         }
         /// <summary>
         /// Checks the first Source ASG in the list by using the properties from the last SR and the first ASG defined
