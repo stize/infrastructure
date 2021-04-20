@@ -9,53 +9,49 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
     public class NetworkInterfaceBasicMock :IMocks
     {
-        public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id)
+        public Task<(string? id, object state)> NewResourceAsync(MockResourceArgs args)
         {
             var outputs = ImmutableDictionary.CreateBuilder<string, object>();
 
             // Forward all input parameters as resource outputs, so that we could test them.
-            outputs.AddRange(inputs);
+            outputs.AddRange(args.Inputs);
 
             // Default the resource ID to `{name}_id`.
-            if (id == null || id == "")
+            if (args.Id == null || args.Id == "")
             {
-                id = $"{name}_id";
+                args.Id = $"{args.Name}_id";
             }
 
-            switch (type)
+            switch (args.Type)
             {
-                case "azure-native:network:NetworkInterface": return NewNetworkInterface(type, name, inputs, provider, id, outputs);
-                case "azure-native:network:NetworkSecurityGroup": return NewNetworkSecurityGroup(type, name, inputs, provider, id, outputs);
-                case "azure-native:network:Subnet": return NewSubnet(type, name, inputs, provider, id, outputs);
-                default: return Task.FromResult((id, (object)outputs));
+                case "azure-native:network:NetworkInterface": return NewNetworkInterface(args, outputs);
+                case "azure-native:network:NetworkSecurityGroup": return NewNetworkSecurityGroup(args, outputs);
+                case "azure-native:network:Subnet": return NewSubnet(args, outputs);
+                default: return Task.FromResult((args.Id, (object)outputs));
             }
         }
 
-        public Task<object> CallAsync(string token, ImmutableDictionary<string, object> inputs, string? provider)
+        public Task<object> CallAsync(MockCallArgs args)
         {
             // We don't use this method in this particular test suite.
             // Default to returning whatever we got as input.
-            return Task.FromResult((object)inputs);
+            return Task.FromResult((object)args.Args);
         }
 
-        public Task<(string? id, object state)> NewNetworkInterface(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewNetworkInterface(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["networkInterfaceName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["networkInterfaceName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
-        public Task<(string? id, object state)> NewNetworkSecurityGroup(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewNetworkSecurityGroup(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["networkSecurityGroupName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["networkSecurityGroupName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
-        public Task<(string? id, object state)> NewSubnet(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewSubnet(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["subnetName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["subnetName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
     }
 }

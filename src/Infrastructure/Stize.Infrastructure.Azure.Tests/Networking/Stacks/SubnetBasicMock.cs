@@ -1,10 +1,11 @@
 ﻿using Pulumi.Testing;
+using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 
-namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
+namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
 {
-    public class SecretBasicMock : IMocks
+    public class SubnetBasicMock : IMocks
     {
         public Task<(string? id, object state)> NewResourceAsync(MockResourceArgs args)
         {
@@ -19,12 +20,10 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
                 args.Id = $"{args.Name}_id";
             }
             outputs.Add("id", args.Id);
-
             switch (args.Type)
             {
-                case "azure-native:keyvault:Secret": return NewSecret(args, outputs);
-                case "azure-native:keyvault:Vault": return NewVault(args, outputs);
-                case "azure-native:resources:ResourceGroup": return NewResourceGroup(args, outputs);
+                case "azure-native:network:Subnet": return NewSubnet(args, outputs);
+                case "azure-native:network:VirtualNetwork": return NewVNet(args, outputs);
                 default: return Task.FromResult((args.Id, (object)outputs));
             }
         }
@@ -34,24 +33,22 @@ namespace Stize.Infrastructure.Tests.Azure.KeyVault.Stacks
             // Default to returning whatever we got as input.
             return Task.FromResult((object)args.Args);
         }
-        public Task<(string? id, object state)> NewSecret(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
-        {
-            outputs.Add("name", args.Inputs["secretName"]);
 
-            return Task.FromResult((args.Id, (object)outputs));
-        }
-        public Task<(string? id, object state)> NewVault(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
+        private Task<(string? id, object state)> NewSubnet(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", args.Inputs["vaultName"]);
-
-            return Task.FromResult((args.Id, (object)outputs));
-        }
-        public Task<(string? id, object state)> NewResourceGroup(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
-        {
-            outputs.Add("name", args.Inputs["resourceGroupName"]);
+            outputs.Add("name", args.Inputs["subnetName"]);
 
             return Task.FromResult((args.Id, (object)outputs));
         }
 
+        private Task<(string? id, object state)> NewVNet(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", args.Inputs["virtualNetworkName"]);
+
+            return Task.FromResult((args.Id, (object)outputs));
+        }
+
+
+        
     }
 }
