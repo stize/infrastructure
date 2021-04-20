@@ -23,6 +23,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             switch (type)
             {   
                 case "azure-native:network:PrivateEndpoint": return NewPrivateEndpoint(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:Subnet": return NewSubnet(type, name, inputs, provider, id, outputs);
                 case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
@@ -39,7 +40,6 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
             outputs.Add("name", inputs["privateEndpointName"]);
-
             return Task.FromResult((id, (object)outputs));
         }
 
@@ -47,6 +47,13 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
             outputs.Add("name", inputs["accountName"]);
+            return Task.FromResult((id, (object)outputs));
+        }
+        public Task<(string? id, object state)> NewSubnet(string type, string name, ImmutableDictionary<string, object> inputs,
+            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", inputs["subnetName"]);
+
             return Task.FromResult((id, (object)outputs));
         }
     }

@@ -54,8 +54,7 @@ namespace Stize.Infrastructure.Azure.Networking
             Arguments.PrivateEndpointName = ResourceStrategy.Naming.GenerateName(Arguments.PrivateEndpointName);
             ResourceStrategy.Tagging.AddTags(Arguments.Tags);
             var endpoint = new PrivateEndpoint(Name, Arguments, cro);
-            var record = BuildARecord(RecordBuilder, endpoint.CustomDnsConfigs.Apply(configs => configs).First()
-                                                                              .Apply(dns => dns.IpAddresses).First());
+            var record = BuildARecord(RecordBuilder, endpoint.CustomDnsConfigs.Apply(configs => configs).First().Apply(dns => dns.IpAddresses).First());
             return endpoint;
         }
     }

@@ -33,11 +33,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Set the resource group of the record
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="resourceGroup"></param>
+        /// <param name="privateDnsZone"></param>
         /// <returns></returns>
         public static PrivateDnsZoneRecordBuilder InPrivateDnsZone(this PrivateDnsZoneRecordBuilder builder, Input<string> privateDnsZone)
         {
-            builder.Arguments.PrivateZoneName = privateDnsZone;
+            builder.Arguments.ZoneName = privateDnsZone;
             return builder;
         }
 
@@ -57,7 +57,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Create an A record
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="ipAddresses">List of IP addresses for the A record</param>
+        /// <param name="ipAddress">IP address for the A record</param>
         /// <returns></returns>
         public static PrivateDnsZoneRecordBuilder CreateARecord(this PrivateDnsZoneRecordBuilder builder, Input<string> ipAddress)
         {

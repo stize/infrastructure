@@ -37,5 +37,15 @@ namespace Stize.Infrastructure.Azure.Tests.Networking
             var endpoint = resources.OfType<PrivateEndpoint>().FirstOrDefault();
             (await endpoint.Location.GetValueAsync()).Should().Be("uksouth");
         }
+
+        [Fact]
+        public async Task SubnetIsCorrect() 
+        {
+            var resources = await Deployment.TestAsync<PrivateEndpointBasicStack>(new PrivateEndpointBasicMock(), new TestOptions { IsPreview = false });
+            var endpoint = resources.OfType<PrivateEndpoint>().FirstOrDefault();
+            var subnet = resources.OfType<Subnet>().FirstOrDefault();
+            var subId = await subnet.Id.GetValueAsync();
+            (await endpoint.Subnet.GetValueAsync())?.Id.Should().Be(subId);
+        }
     }
 }

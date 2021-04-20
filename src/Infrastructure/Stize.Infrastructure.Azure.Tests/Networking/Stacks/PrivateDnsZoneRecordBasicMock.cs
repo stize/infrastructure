@@ -23,6 +23,7 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             switch (type)
             {   // TODO Change from next gen to native
                 case "azure-native:network:RecordSet": return NewPrivateDnsZoneRecord(type, name, inputs, provider, id, outputs);
+                case "azure-native:network:PrivateZone": return NewPrivateDnsZone(type, name, inputs, provider, id, outputs);
                 default: return Task.FromResult((id, (object)outputs));
             }
         }
@@ -38,6 +39,13 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
             string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
         {
             outputs.Add("name", inputs["relativeRecordSetName"]);
+
+            return Task.FromResult((id, (object)outputs));
+        }
+        public Task<(string? id, object state)> NewPrivateDnsZone(string type, string name, ImmutableDictionary<string, object> inputs,
+            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", inputs["privateZoneName"]);
 
             return Task.FromResult((id, (object)outputs));
         }
