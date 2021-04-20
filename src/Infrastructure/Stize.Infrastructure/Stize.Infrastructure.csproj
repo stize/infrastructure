@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Pulumi" Version="2.25.1" />
-    <PackageReference Include="Pulumi.Random" Version="3.2.0" />
+    <PackageReference Include="Pulumi" Version="3.0.0" />
+    <PackageReference Include="Pulumi.Random" Version="4.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Strategies\" />
