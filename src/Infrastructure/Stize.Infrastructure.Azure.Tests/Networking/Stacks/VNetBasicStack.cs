@@ -5,9 +5,9 @@ using Stize.Infrastructure.Azure.Networking;
 
 namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
 {
-    public class NetworkingBasicStack : Stack
+    public class VNetBasicStack : Stack
     {
-        public NetworkingBasicStack()
+        public VNetBasicStack()
         {
 
             var rg = new ResourceGroupBuilder("rg1")

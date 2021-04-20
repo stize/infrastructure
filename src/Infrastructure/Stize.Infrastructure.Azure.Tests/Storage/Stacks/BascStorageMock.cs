@@ -6,44 +6,44 @@ namespace Stize.Infrastructure.Azure.Tests.Storage.Stacks
 {
     public class BasicStorageMock : IMocks
     {
-        public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id)
+        public Task<(string? id, object state)> NewResourceAsync(MockResourceArgs args)
         {
             var outputs = ImmutableDictionary.CreateBuilder<string, object>();
 
             // Forward all input parameters as resource outputs, so that we could test them.
-            outputs.AddRange(inputs);
+            outputs.AddRange(args.Inputs);
 
             // Default the resource ID to `{name}_id`.
-            id ??= $"{name}_id";
-
-            switch (type)
+            if (args.Id == null || args.Id == "")
             {
-                case "azure-native:resources:ResourceGroup": return NewResourceGroup(type, name, inputs, provider, id, outputs);
-                case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);                
-                default: return Task.FromResult((id, (object)outputs));
+                args.Id = $"{args.Name}_id";
+            }
+            outputs.Add("id", args.Id);
+
+            switch (args.Type)
+            {
+                case "azure-native:resources:ResourceGroup": return NewResourceGroup(args, outputs);
+                case "azure-native:storage:StorageAccount": return NewStorageAccount(args, outputs);
+                default: return Task.FromResult((args.Id, (object)outputs));
             }
         }
 
-        public Task<object> CallAsync(string token, ImmutableDictionary<string, object> inputs, string? provider)
+        public Task<object> CallAsync(MockCallArgs args)
         {
             // We don't use this method in this particular test suite.
             // Default to returning whatever we got as input.
-            return Task.FromResult((object)inputs);
+            return Task.FromResult((object)args.Args);
+        }
+        public Task<(string? id, object state)> NewResourceGroup(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
+        {
+            outputs.Add("name", args.Inputs["resourceGroupName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
 
-        public Task<(string? id, object state)> NewResourceGroup(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewStorageAccount(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["resourceGroupName"]);
-            return Task.FromResult((id, (object)outputs));
-        }
-
-        public Task<(string? id, object state)> NewStorageAccount(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
-        {
-            outputs.Add("name", inputs["accountName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["accountName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }        
     }
 }
