@@ -8,7 +8,7 @@
     <ProjectReference Include="..\Stize.Infrastructure\Stize.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Pulumi.AzureNative" Version="0.8.0" />
+    <PackageReference Include="Pulumi.AzureNative" Version="1.0.1" />
     <PackageReference Include="Pulumi.AzureAD" Version="3.6.0" />
     <PackageReference Include="Pulumi.Tls" Version="3.4.0" />
   </ItemGroup>
