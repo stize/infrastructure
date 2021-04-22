@@ -23,19 +23,20 @@ namespace Stize.Infrastructure.Azure.Tests.Networking
             var zone = resources.OfType<PrivateZone>().FirstOrDefault();
 
             zone.Should().NotBeNull("A private DNS zone should be created");
-            zone.Name.OutputShould().Be("zone1");
+            zone.Name.OutputShould().Be("privatelink.blob.core.windows.net");
+            (await zone.Location.GetValueAsync()).Should().Be("global");
         }
 
-        /// <summary>
-        /// Checks the location for the resource is assigned correctly
-        /// </summary>
-        /// <returns></returns>
         [Fact]
-        public async Task LocationIsCorrect()
+        public async Task VnetLinksareCorrect()
         {
             var resources = await Deployment.TestAsync<PrivateDnsZoneBasicStack>(new PrivateDnsZoneBasicMock(), new TestOptions { IsPreview = false });
-            var zone = resources.OfType<PrivateZone>().FirstOrDefault();
-            (await zone.Location.GetValueAsync()).Should().Be("global");
+            var links = resources.OfType<VirtualNetworkLink>().ToArray();
+            var vnetId = await resources.OfType<VirtualNetwork>().FirstOrDefault().Id.GetValueAsync();
+            links[0].Name.OutputShould().Be("link1");
+            (await links[0].Id.GetValueAsync()).Should().Be("link1_id");
+            (await links[0].RegistrationEnabled.GetValueAsync()).Should().Be(true);
+            (await links[0].VirtualNetwork.GetValueAsync())?.Id.Should().Be(vnetId);
         }
     }
 }

@@ -24,18 +24,8 @@ namespace Stize.Infrastructure.Azure.Tests.Networking
 
             endpoint.Should().NotBeNull("A private endpoint should be created");
             endpoint.Name.OutputShould().Be("pe1");
-        }
-
-        /// <summary>
-        /// Checks the location for the resource is assigned correctly
-        /// </summary>
-        /// <returns></returns>
-        [Fact]
-        public async Task LocationIsCorrect()
-        {
-            var resources = await Deployment.TestAsync<PrivateEndpointBasicStack>(new PrivateEndpointBasicMock(), new TestOptions { IsPreview = false });
-            var endpoint = resources.OfType<PrivateEndpoint>().FirstOrDefault();
             (await endpoint.Location.GetValueAsync()).Should().Be("uksouth");
+
         }
 
         [Fact]
@@ -46,6 +36,19 @@ namespace Stize.Infrastructure.Azure.Tests.Networking
             var subnet = resources.OfType<Subnet>().FirstOrDefault();
             var subId = await subnet.Id.GetValueAsync();
             (await endpoint.Subnet.GetValueAsync())?.Id.Should().Be(subId);
+        }
+
+        [Fact]
+        public async Task PrivateLinkServiceConnectionIsCorrect()
+        {
+            var resources = await Deployment.TestAsync<PrivateEndpointBasicStack>(new PrivateEndpointBasicMock(), new TestOptions { IsPreview = false });
+            var endpoint = resources.OfType<PrivateEndpoint>().FirstOrDefault();
+            var sa = resources.OfType<Pulumi.AzureNative.Storage.StorageAccount>().FirstOrDefault();
+            var saId = await sa.Id.GetValueAsync();
+            (await endpoint.PrivateLinkServiceConnections.GetValueAsync())[0].PrivateLinkServiceId.Should().Be(saId);
+            (await endpoint.PrivateLinkServiceConnections.GetValueAsync())[0].Name.Should().Be("pe-connection");
+            (await endpoint.PrivateLinkServiceConnections.GetValueAsync())[0].GroupIds.Should().Contain("blob");
+            (await endpoint.PrivateLinkServiceConnections.GetValueAsync())[0].RequestMessage.Should().Contain("test message");
         }
     }
 }
