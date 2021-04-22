@@ -10,20 +10,20 @@ namespace Stize.Infrastructure.Azure.ContainerService
     {
         public static ManagedClusterBuilder WithNewAppAndServicePrincipal(this ManagedClusterBuilder builder)
         {
-            var adApp = new Application($"{builder.Name}-app");
+            var adApp = new Application($"{builder.Arguments.ResourceName}-app");
 
-            var adSp = new ServicePrincipal($"{builder.Name}-sp", new ServicePrincipalArgs
+            var adSp = new ServicePrincipal($"{builder.Arguments.ResourceName}-sp", new ServicePrincipalArgs
             {
                 ApplicationId = adApp.Id
             });
 
-            var password = new RandomPassword($"{builder.Name}-password", new RandomPasswordArgs
+            var password = new RandomPassword($"{builder.Arguments.ResourceName}-password", new RandomPasswordArgs
             {
                 Length = 20,
                 Special = true
             });
 
-            var adSpPassword = new ServicePrincipalPassword($"{builder.Name}-sp-password", new ServicePrincipalPasswordArgs
+            var adSpPassword = new ServicePrincipalPassword($"{builder.Arguments.ResourceName}-sp-password", new ServicePrincipalPasswordArgs
             {
                 ServicePrincipalId = adSp.Id,
                 Value = password.Result,
@@ -40,7 +40,7 @@ namespace Stize.Infrastructure.Azure.ContainerService
 
         public static ManagedClusterBuilder WithNewRsaKey(this ManagedClusterBuilder builder, int rsaBits = 4096)
         {
-            var sshKey = new PrivateKey($"{builder.Name}-ssh-key", new PrivateKeyArgs
+            var sshKey = new PrivateKey($"{builder.Arguments.ResourceName}-ssh-key", new PrivateKeyArgs
             {
                 Algorithm = "RSA",
                 RsaBits = rsaBits
