@@ -82,21 +82,36 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
             var nic = resources.OfType<NetworkInterface>().LastOrDefault();
-            (await nic.ExtendedLocation.GetValueAsync()).Should().NotBeNull();
+            (await nic.ExtendedLocation.GetValueAsync())?.Name.Should().Be("easteurope");
         }
         /// <summary>
-        /// Checks the IP Configs of the NIC by checking if the subnet is null and checking the name of the IP Config
+        /// Checks the Subnet of the NIC 
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task IPConfigIsCorrect()
+        public async Task SubnetIsCorrect()
         {
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
             var nic = resources.OfType<NetworkInterface>().LastOrDefault();
             var subnet = resources.OfType<Subnet>().LastOrDefault();
-            var t = await nic.IpConfigurations.GetValueAsync();
             var id = await subnet.Id.GetValueAsync();
-            t[0]?.Subnet?.Id?.Should().Be(id);
+            (await nic.IpConfigurations.GetValueAsync())[0]?.Subnet?.Id.Should().Be(id);
+        }
+
+        [Fact]
+        public async Task IPAddressVersionIsCorrect()
+        {
+            var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
+            var nic = resources.OfType<NetworkInterface>().FirstOrDefault();
+            (await nic.IpConfigurations.GetValueAsync())[0].PrivateIPAddressVersion.Should().Be("IPv4");
+        }
+
+        [Fact]
+        public async Task StaticIPAddressIsCorrect()
+        {
+            var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
+            var nic = resources.OfType<NetworkInterface>().FirstOrDefault();
+            (await nic.IpConfigurations.GetValueAsync())[0].PrivateIPAddress.Should().Be("172.16.0.5");
         }
         /// <summary>
         /// Checks the NSG associated with the NIC by checking if the Id of NSG property in the NIC to see if it matches the Id of the NSG resource created

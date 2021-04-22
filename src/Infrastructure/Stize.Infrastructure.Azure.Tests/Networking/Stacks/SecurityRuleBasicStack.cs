@@ -59,7 +59,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .DestinationIPAddresses("172.68.0.0/28", "172.68.0.16/28")
                 .Build();
 
-            var sr3 = new SecurityRuleBuilder("sr2")
+            var sr3 = new SecurityRuleBuilder("sr3")
                 .Name("sr3")
                 .NsgName(nsg.Name)
                 .Direction(SecurityRuleDirection.Outbound)

@@ -217,7 +217,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<SecurityRuleBasicStack>(new SecurityRuleBasicMock(), new TestOptions { IsPreview = false });
             var sr = resources.OfType<SecurityRule>().LastOrDefault();
-            (await sr.Description.GetValueAsync()).Should().Be("test2");
+            (await sr.Description.GetValueAsync()).Should().Be("test3");
         }
     }
 }
