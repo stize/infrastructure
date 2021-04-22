@@ -6,55 +6,51 @@ namespace Stize.Infrastructure.Azure.Tests.Networking.Stacks
 {
     public class PrivateEndpointBasicMock : IMocks
     {
-        public Task<(string? id, object state)> NewResourceAsync(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id)
+        public Task<(string? id, object state)> NewResourceAsync(MockResourceArgs args)
         {
             var outputs = ImmutableDictionary.CreateBuilder<string, object>();
 
             // Forward all input parameters as resource outputs, so that we could test them.
-            outputs.AddRange(inputs);
+            outputs.AddRange(args.Inputs);
 
             // Default the resource ID to `{name}_id`.
-            if (id == null || id == "")
+            if (args.Id == null || args.Id == "")
             {
-                id = $"{name}_id";
+                args.Id = $"{args.Name}_id";
             }
-            outputs.Add("id", id);
-            switch (type)
+            outputs.Add("id", args.Id);
+            switch (args.Type)
             {   
-                case "azure-native:network:PrivateEndpoint": return NewPrivateEndpoint(type, name, inputs, provider, id, outputs);
-                case "azure-native:network:Subnet": return NewSubnet(type, name, inputs, provider, id, outputs);
-                case "azure-native:storage:StorageAccount": return NewStorageAccount(type, name, inputs, provider, id, outputs);
-                default: return Task.FromResult((id, (object)outputs));
+                case "azure-native:network:PrivateEndpoint": return NewPrivateEndpoint(args, outputs);
+                case "azure-native:network:Subnet": return NewSubnet(args, outputs);
+                case "azure-native:storage:StorageAccount": return NewStorageAccount(args, outputs);
+                default: return Task.FromResult((args.Id, (object)outputs));
             }
         }
 
-        public Task<object> CallAsync(string token, ImmutableDictionary<string, object> inputs, string? provider)
+        public Task<object> CallAsync(MockCallArgs args)
         {
             // We don't use this method in this particular test suite.
             // Default to returning whatever we got as input.
-            return Task.FromResult((object)inputs);
+            return Task.FromResult((object)args.Args);
         }
 
-        public Task<(string? id, object state)> NewPrivateEndpoint(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewPrivateEndpoint(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["privateEndpointName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["privateEndpointName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
 
-        public Task<(string? id, object state)> NewStorageAccount(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewStorageAccount(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["accountName"]);
-            return Task.FromResult((id, (object)outputs));
+            outputs.Add("name", args.Inputs["accountName"]);
+            return Task.FromResult((args.Id, (object)outputs));
         }
-        public Task<(string? id, object state)> NewSubnet(string type, string name, ImmutableDictionary<string, object> inputs,
-            string? provider, string? id, ImmutableDictionary<string, object>.Builder outputs)
+        public Task<(string? id, object state)> NewSubnet(MockResourceArgs args, ImmutableDictionary<string, object>.Builder outputs)
         {
-            outputs.Add("name", inputs["subnetName"]);
+            outputs.Add("name", args.Inputs["subnetName"]);
 
-            return Task.FromResult((id, (object)outputs));
+            return Task.FromResult((args.Id, (object)outputs));
         }
     }
 }
