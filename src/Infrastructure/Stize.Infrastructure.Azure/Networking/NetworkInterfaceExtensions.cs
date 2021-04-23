@@ -26,7 +26,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Enable or disable IP Forwarding for the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="ipForwarding"></param>
+        /// <param name="ipForwarding">Set to ture for enabling IP forwarding.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder EnableIPForwarding(this NetworkInterfaceBuilder builder, Input<bool> ipForwarding)
         {
@@ -37,7 +37,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Enable or disable Accelerated Networking for the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="accleratedNetworking"></param>
+        /// <param name="accleratedNetworking">Set to true for enabling accelerated networking.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder EnableAcceleratedNetworking(this NetworkInterfaceBuilder builder, Input<bool> accleratedNetworking)
         {
@@ -48,7 +48,8 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the DNS Settings of the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="dnsSettings"></param>
+        /// <param name="internalDnsNameLabel">Relative DNS name for this NIC used for internal communications between VMs in the same virtual network.</param>
+        /// <param name="dnsServerIpAddresses">List of DNS servers IP addresses. Use ‘AzureProvidedDNS’ to switch to azure provided DNS resolution. ‘AzureProvidedDNS’ value cannot be combined with other IPs, it must be the only value in dnsServers collection.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder DnsSettings(this NetworkInterfaceBuilder builder, Input<string> internalDnsNameLabel, params Input<string>[] dnsServerIpAddresses)
         {
@@ -134,7 +135,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// appends the hex value of the RandomId to the end of the name
         /// </summary>
         /// <param name="builder">Builder instance</param>
-        /// <param name="name">Builder name</param>
+        /// <param name="name">Resource name</param>
         /// <returns>The builder argument</returns>
         public static NetworkInterfaceBuilder Name(this NetworkInterfaceBuilder builder, Input<string> name)
         {
