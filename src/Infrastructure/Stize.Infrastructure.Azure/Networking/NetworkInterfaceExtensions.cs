@@ -8,21 +8,25 @@ namespace Stize.Infrastructure.Azure.Networking
     {
 
         /// <summary>
-        /// The extended location of the NIC
+        /// The extended location (also known as 'Edge Zone') for the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="extendedLocationArgs"></param>
+        /// <param name="extLocation">Extended Location (also known as 'Edge Zone').</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder ExtendedLocation(this NetworkInterfaceBuilder builder, Input<Inputs.ExtendedLocationArgs> extendedLocationArgs)
+        public static NetworkInterfaceBuilder ExtendedLocation(this NetworkInterfaceBuilder builder, Input<string> extLocation)
         {
-            builder.Arguments.ExtendedLocation = extendedLocationArgs;
+            builder.Arguments.ExtendedLocation = new Inputs.ExtendedLocationArgs
+            {
+                Name = extLocation,
+                Type = ExtendedLocationTypes.EdgeZone
+            };
             return builder;
         }
         /// <summary>
         /// Enable or disable IP Forwarding for the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="ipForwarding"></param>
+        /// <param name="ipForwarding">Set to ture for enabling IP forwarding.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder EnableIPForwarding(this NetworkInterfaceBuilder builder, Input<bool> ipForwarding)
         {
@@ -33,69 +37,85 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Enable or disable Accelerated Networking for the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="accleratedNetworking"></param>
+        /// <param name="accleratedNetworking">Set to true for enabling accelerated networking.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder EnableAcceleratedNetworking(this NetworkInterfaceBuilder builder, Input<bool> accleratedNetworking)
         {
             builder.Arguments.EnableAcceleratedNetworking = accleratedNetworking;
             return builder;
         }
+
         /// <summary>
         /// Sets the DNS Settings of the NIC
         /// </summary>
         /// <param name="builder"></param>
-        /// <param name="dnsSettings"></param>
+        /// <param name="internalDnsNameLabel">Relative DNS name for this NIC used for internal communications between VMs in the same virtual network.</param>
+        /// <param name="dnsServerIpAddresses">List of DNS servers IP addresses. Use ‘AzureProvidedDNS’ to switch to azure provided DNS resolution. ‘AzureProvidedDNS’ value cannot be combined with other IPs, it must be the only value in dnsServers collection.</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder DnsSettings(this NetworkInterfaceBuilder builder, Input<Inputs.NetworkInterfaceDnsSettingsArgs> dnsSettings)
+        public static NetworkInterfaceBuilder DnsSettings(this NetworkInterfaceBuilder builder, Input<string> internalDnsNameLabel, params Input<string>[] dnsServerIpAddresses)
         {
-            builder.Arguments.DnsSettings = dnsSettings;
+            builder.Arguments.DnsSettings = new Inputs.NetworkInterfaceDnsSettingsArgs
+            {
+                InternalDnsNameLabel = internalDnsNameLabel,
+                DnsServers = dnsServerIpAddresses
+            };
             return builder;
         }
 
         /// <summary>
-        /// Sets the name of this Ip Configuration for this NIC
+        /// Add an IP configuration, with a dynamic IP address, to the Network Interface. 
+        /// Must specify the IP Configuration name, Subnet Resource ID, and a true/false for whether the IP configuration is primary.
+        /// The IP Version can be specified, but the default value is 'IPv4'.
         /// </summary>
-        /// <param name="builder">NI builder</param>
-        /// <param name="name">Ip Config name</param>
+        /// <param name="builder"></param>
+        /// <param name="ipConfigName">IP Configuration name</param>
+        /// <param name="subnetId">Subnet Resource ID</param>
+        /// <param name="primaryIP">State true or false to declare whether the IP configuration is primary, or not.</param>
+        /// <param name="ipVersion">IP Version. Valid values are 'IPv4' and 'IPv6'.</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigName(this NetworkInterfaceBuilder builder, Input<string> name)
+        public static NetworkInterfaceBuilder AddDynamicIPConfiguration(this NetworkInterfaceBuilder builder, Input<string> ipConfigName, 
+            Input<string> subnetId, Input<bool> primaryIP, InputUnion<string, IPVersion> ipVersion = null)
         {
-            builder.IpConfigArgs.Name = name;
+            builder.IpConfigArgs.Add(new Inputs.NetworkInterfaceIPConfigurationArgs
+            {
+                Name = ipConfigName,
+                Subnet = new Inputs.SubnetArgs { Id = subnetId },
+                PrivateIPAddressVersion = ipVersion ?? IPVersion.IPv4,
+                PrivateIPAllocationMethod = IPAllocationMethod.Dynamic,
+                Primary = primaryIP
+
+            });
             return builder;
         }
+
+
         /// <summary>
-        /// Sets the Subnet for the <see cref="Inputs.NetworkInterfaceIPConfigurationArgs"/> using the subnet's ID
+        /// Add an IP configuration, with a static IP address, to the Network Interface. 
+        /// Must specify the IP Configuration name, Subnet Resource ID, private static IP address, and a true/false for whether the IP configuration is primary.
+        /// The IP Version can be specified, but the default value is 'IPv4'.
         /// </summary>
-        /// <param name="builder">NI builder</param>
-        /// <param name="subnetId">Subnet Id</param>
+        /// <param name="builder"></param>
+        /// <param name="ipConfigName">IP Configuration name</param>
+        /// <param name="subnetId">Subnet Resource ID</param>
+        /// <param name="privateIpAddress">Private static IP address</param>
+        /// <param name="isPrimaryIP">Set as true to set this IP configuration as the primary one; set as false to set it as secondary</param>
+        /// <param name="ipVersion">IP Version. Valid values are 'IPv4' and 'IPv6'.</param>
         /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigSubnetID(this NetworkInterfaceBuilder builder, Input<string> subnetId)
+        public static NetworkInterfaceBuilder AddStaticIPConfiguration(this NetworkInterfaceBuilder builder, Input<string> ipConfigName, Input<string> subnetId, 
+            Input<string> privateIpAddress, Input<bool> isPrimaryIP, InputUnion<string, IPVersion> ipVersion = null)
         {
-            builder.IpConfigArgs.Subnet = new Inputs.SubnetArgs { Id = subnetId }; // TODO: Check if this successfully associates the NIC with the subnet specified.
+            builder.IpConfigArgs.Add(new Inputs.NetworkInterfaceIPConfigurationArgs
+            {
+                Name = ipConfigName,
+                Subnet = new Inputs.SubnetArgs { Id = subnetId },
+                PrivateIPAddressVersion = ipVersion ?? IPVersion.IPv4,
+                PrivateIPAllocationMethod = IPAllocationMethod.Static,
+                PrivateIPAddress = privateIpAddress,
+                Primary = isPrimaryIP
+            });
             return builder;
         }
-        /// <summary>
-        /// Sets the private IP address version for the IP config for this NIC
-        /// </summary>
-        /// <param name="builder">NI builder</param>
-        /// <param name="version">Address Version; i.e. 'IPv4', 'IPv6'</param>
-        /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigAddressVersion(this NetworkInterfaceBuilder builder, InputUnion<string, IPVersion> version)
-        {
-            builder.IpConfigArgs.PrivateIPAddressVersion = version;
-            return builder;
-        }
-        /// <summary>
-        /// Sets the private IP allocation method for the IP config of this NIC
-        /// </summary>
-        /// <param name="builder">NI builder</param>
-        /// <param name="method">IP allocation method; i.e. 'Dynamic', 'Static'</param>
-        /// <returns></returns>
-        public static NetworkInterfaceBuilder IpConfigAllocationMethod(this NetworkInterfaceBuilder builder, InputUnion<string, IPAllocationMethod> method)
-        {
-            builder.IpConfigArgs.PrivateIPAllocationMethod = method;
-            return builder;
-        }
+
         /// <summary>
         /// Sets the resource group the <see cref="NetworkInterface" /> will be created on
         /// </summary>
@@ -125,7 +145,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// appends the hex value of the RandomId to the end of the name
         /// </summary>
         /// <param name="builder">Builder instance</param>
-        /// <param name="name">Builder name</param>
+        /// <param name="name">Resource name</param>
         /// <returns>The builder argument</returns>
         public static NetworkInterfaceBuilder Name(this NetworkInterfaceBuilder builder, Input<string> name)
         {

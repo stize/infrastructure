@@ -37,10 +37,10 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Direction(SecurityRuleDirection.Inbound)
                 .Access(SecurityRuleAccess.Allow)
                 .ResourceGroup(rg.Name)
-                .SourcePortRange("*")
-                .DestinationPortRange("*")
-                .SourcePrefix("*")
-                .DestinationPrefix("*")
+                .AnySourcePorts()
+                .AnyDestinationPorts()
+                .AnySourceTraffic()
+                .AnyDestinationTraffic()
                 .Protocol(SecurityRuleProtocol.Asterisk)
                 .Build();
 
@@ -51,15 +51,30 @@ namespace Stize.Infrastructure.Tests.Azure.Networking.Stacks
                 .Access(SecurityRuleAccess.Deny)
                 .Priority(101)
                 .ResourceGroup(rg.Name)
-                .SourcePortRanges("22, 80-1024")
-                .DestinationPortRanges("22, 80-1024")
-                .SourcePrefix("*")
-                .DestinationPrefix("*")
+                .AnySourcePorts()
+                .AnyDestinationPorts()
                 .Protocol(SecurityRuleProtocol.Tcp)
                 .Description("test2")
+                .SourceIPAddresses("172.68.0.0/28", "172.68.0.16/28")
+                .DestinationIPAddresses("172.68.0.0/28", "172.68.0.16/28")
+                .Build();
+
+            var sr3 = new SecurityRuleBuilder("sr3")
+                .Name("sr3")
+                .NsgName(nsg.Name)
+                .Direction(SecurityRuleDirection.Outbound)
+                .Access(SecurityRuleAccess.Deny)
+                .Priority(101)
+                .ResourceGroup(rg.Name)
+                .SourcePortRanges("22", "80-1024")
+                .DestinationPortRanges("22","80-1024")
+                .Protocol(SecurityRuleProtocol.Tcp)
+                .Description("test3")
                 .SourceASGs(asg1.Id)
                 .DestinationASGs(asg2.Id)
                 .Build();
+
+
 
         }
     }

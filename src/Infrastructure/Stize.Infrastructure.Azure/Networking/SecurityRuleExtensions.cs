@@ -32,27 +32,26 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
 
+
         /// <summary>
-        /// Sets the Source Port Range for the <see cref="SecurityRule"/>.
+        /// Sets the Source Port Range for the <see cref="SecurityRule"/> to allow/deny all ports.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRange">Source Port Range. Provide a single port, such as 80; a port range, such as 1024-65535; or an asterisk (*) to indicate any port.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourcePortRange(this SecurityRuleBuilder builder, Input<string> portRange)
+        public static SecurityRuleBuilder AnySourcePorts(this SecurityRuleBuilder builder)
         {
-            builder.Arguments.SourcePortRange = portRange;
+            builder.Arguments.SourcePortRange = "*";
             return builder;
         }
 
         /// <summary>
-        /// Sets the Destination Port Range for the <see cref="SecurityRule"/>.
+        /// Sets the Destination Port Range for the <see cref="SecurityRule"/> to allow/deny all ports.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRange">Destination Port Range. Provide a single port, such as 80; a port range, such as 1024-65535; or an asterisk (*) to indicate any port.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationPortRange(this SecurityRuleBuilder builder, Input<string> portRange)
+        public static SecurityRuleBuilder AnyDestinationPorts(this SecurityRuleBuilder builder)
         {
-            builder.Arguments.DestinationPortRange = portRange;
+            builder.Arguments.DestinationPortRange = "*";
             return builder;
         }
 
@@ -60,14 +59,13 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Source Port Ranges for the <see cref="SecurityRule"/>.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRanges">Source Port Ranges. Provide a single port, such as '80'; a port range, such as '1024-65535'; or a comma seperated list of ports and/or port ranges in a string, such as '22 ,80 , 1024-65535'.</param>
+        /// <param name="portRanges">Source Port Ranges. Provide a single port, such as '80'; a port range, such as '1024-65535'; or a multiple, using a comma-seperated list of arguments.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourcePortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
+        public static SecurityRuleBuilder SourcePortRanges(this SecurityRuleBuilder builder, params Input<string>[] portRanges)
         {
-            string[] prs = portRanges.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < prs.Length; i++)
+            foreach (var pr in portRanges)
             {
-                builder.Arguments.SourcePortRanges.Add(prs[i].Trim());
+                builder.Arguments.SourcePortRanges.Add(pr);
             }
             return builder;
         }
@@ -76,14 +74,13 @@ namespace Stize.Infrastructure.Azure.Networking
         /// Sets the Destination Port Range for the <see cref="SecurityRule"/>.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="portRanges">Destination Port Range. Provide a single port, such as '80'; a port range, such as '1024-65535'; or a comma seperated list of ports and/or port ranges in a string, such as '22 ,80 , 1024-65535'.</param>
+        /// <param name="portRanges">Destination Port Range. Provide a single port, such as '80'; a port range, such as '1024-65535'; or multiple, using a comma seperated list of arguments.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationPortRanges(this SecurityRuleBuilder builder, Input<string> portRanges)
+        public static SecurityRuleBuilder DestinationPortRanges(this SecurityRuleBuilder builder, params Input<string>[] portRanges)
         {
-            string[] prs = portRanges.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < prs.Length; i++)
+            foreach (var pr in portRanges)
             {
-                builder.Arguments.DestinationPortRanges.Add(prs[i].Trim());
+                builder.Arguments.DestinationPortRanges.Add(pr);
             }
             return builder;
         }
@@ -113,45 +110,66 @@ namespace Stize.Infrastructure.Azure.Networking
         }
 
         /// <summary>
-        /// Sets the Source address for the <see cref="SecurityRule"/>.
-        /// This is required if <see cref="SourcePrefixes(SecurityRuleBuilder, Input{string})"/> is not specified. 
+        /// Sets the source traffic for the security rule to 'Any', allowing/denying all source traffic.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SecurityRuleBuilder AnySourceTraffic(this SecurityRuleBuilder builder)
+        {
+            builder.Arguments.SourceAddressPrefix = "*";
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the destination traffic for the security rule to 'Any', allowing/denying all destination traffic.
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
+        public static SecurityRuleBuilder AnyDestinationTraffic(this SecurityRuleBuilder builder)
+        {
+            builder.Arguments.DestinationAddressPrefix = "*";
+            return builder;
+        }
+
+        /// <summary>
+        /// Sets the source service tag for the <see cref="SecurityRule"/>.
+        /// This is required if <see cref="SourceIPAddresses(SecurityRuleBuilder, Input{string}[])"/> and <see cref="SourceASGs(SecurityRuleBuilder, Input{string}[])"/> are not specified. 
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="prefix">CIDR or source IP range or * to match any IP. Tags such as ‘VirtualNetwork’, ‘AzureLoadBalancer’ and ‘Internet’ can also be used.</param>
+        /// <param name="tag">Service Tag; i.e. 'VirtualNetwork', 'AzureLoadBalancer' and 'Internet' </param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourcePrefix(this SecurityRuleBuilder builder, Input<string> prefix)
+        public static SecurityRuleBuilder SourceServiceTag(this SecurityRuleBuilder builder, Input<string> tag)
         {
-            builder.Arguments.SourceAddressPrefix = prefix;
+            builder.Arguments.SourceAddressPrefix = tag;
             return builder;
         }
 
         /// <summary>
         /// Sets the Destination address for the <see cref="SecurityRule"/>.
-        /// This is required if <see cref="DestinationPrefixes(SecurityRuleBuilder, Input{string})"/> is not specified.
+        /// This is required if <see cref="DestinationIPAddresses(SecurityRuleBuilder, Input{string}[])"/> and <see cref="DestinationASGs(SecurityRuleBuilder, Input{string}[])"/> are not specified.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="prefix">CIDR or destination IP range or * to match any IP. Tags such as ‘VirtualNetwork’, ‘AzureLoadBalancer’ and ‘Internet’ can also be used. 
-        /// Besides, it also supports all available Service Tags like ‘Sql.WestEurope‘, ‘Storage.EastUS‘, etc. </param>
+        /// <param name="tag">Service tags; i.e. 'VirtualNetwork', 'AzureLoadBalancer' and 'Internet' . 
+        /// Also supports all available Service Tags like ‘Sql.WestEurope‘, ‘Storage.EastUS‘, etc. </param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationPrefix(this SecurityRuleBuilder builder, Input<string> prefix)
+        public static SecurityRuleBuilder DestinationServiceTag(this SecurityRuleBuilder builder, Input<string> tag)
         {
-            builder.Arguments.DestinationAddressPrefix = prefix;
+            builder.Arguments.DestinationAddressPrefix = tag;
             return builder;
         }
 
         /// <summary>
         /// Sets the Source addresses for the security rule.
-        /// This is required if <see cref="SourcePrefix(SecurityRuleBuilder, Input{string})"/> is not specified.
+        /// This is required if <see cref="SourceServiceTag(SecurityRuleBuilder, Input{string})"/> and <see cref="SourceASGs(SecurityRuleBuilder, Input{string}[])"/> are not specified.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="prefixes">List of source address prefixes. Tags may not be used. </param>
+        /// <param name="ipAddresses">List of source address prefixes. </param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourcePrefixes(this SecurityRuleBuilder builder, Input<string> prefixes)
+        public static SecurityRuleBuilder SourceIPAddresses(this SecurityRuleBuilder builder, params Input<string>[] ipAddresses)
         {
-            string[] pfs = prefixes.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < pfs.Length; i++)
+            foreach (var ip in ipAddresses)
             {
-                builder.Arguments.DestinationAddressPrefixes.Add(pfs[i].Trim());
+                builder.Arguments.SourceAddressPrefixes.Add(ip);
             }
             return builder;
         }
@@ -161,48 +179,45 @@ namespace Stize.Infrastructure.Azure.Networking
         /// This is required if DestinationPrefix is not specified.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="prefixes">List of destination address prefixes. Tags may not be used.</param>
+        /// <param name="ipAddresses">List of destination address prefixes. </param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationPrefixes(this SecurityRuleBuilder builder, Input<string> prefixes)
+        public static SecurityRuleBuilder DestinationIPAddresses(this SecurityRuleBuilder builder, params Input<string>[] ipAddresses)
         {
-            string[] pfs = prefixes.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < pfs.Length; i++)
+            foreach (var ip in ipAddresses)
             {
-                builder.Arguments.DestinationAddressPrefixes.Add(pfs[i].Trim());
+                builder.Arguments.DestinationAddressPrefixes.Add(ip);
             }
             return builder;
         }
 
         /// <summary>
         /// Sets the Source <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
-        /// Use comma seperated list for multiple ASGs
+        /// Use comma seperated list of arguments for multiple ASGs.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="asg">Source <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list for multiple ASGs.</param>
+        /// <param name="asg">Source <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list of arguments for multiple ASGs.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder SourceASGs(this SecurityRuleBuilder builder, Input<string> asgIDs)
+        public static SecurityRuleBuilder SourceASGs(this SecurityRuleBuilder builder, params Input<string>[] asgIDs)
         {
-            string[] asgIDStrings = asgIDs.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < asgIDStrings.Length; i++)
+            foreach (var id in asgIDs)
             {
-                builder.Arguments.SourceApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = asgIDStrings[i].Trim() });
+                builder.Arguments.SourceApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = id });
             }
             return builder;
         }
 
         /// <summary>
         /// Sets the Destination <see cref="ApplicationSecurityGroup"/> for the <see cref="SecurityRule"/>.
-        /// Use comma seperated list for multiple ASGs
+        /// Use comma seperated list of arguments for multiple ASGs.
         /// </summary>
         /// <param name="builder"><see cref="SecurityRule"/> builder</param>
-        /// <param name="asg">Destination <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list for multiple ASGs.</param>
+        /// <param name="asg">Destination <see cref="ApplicationSecurityGroup"/> IDs. Use comma seperated list of arguments for multiple ASGs.</param>
         /// <returns></returns>
-        public static SecurityRuleBuilder DestinationASGs(this SecurityRuleBuilder builder, Input<string> asgIDs)
+        public static SecurityRuleBuilder DestinationASGs(this SecurityRuleBuilder builder, params Input<string>[] asgIDs)
         {
-            string[] asgIDStrings = asgIDs.Apply(x => x.Split(',')).GetValueAsync().Result;
-            for (int i = 0; i < asgIDStrings.Length; i++)
+            foreach (var id in asgIDs)
             {
-                builder.Arguments.DestinationApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = asgIDStrings[i].Trim() });
+                builder.Arguments.DestinationApplicationSecurityGroups.Add(new Inputs.ApplicationSecurityGroupArgs { Id = id });
             }
             return builder;
         }
