@@ -116,64 +116,6 @@ namespace Stize.Infrastructure.Azure.Networking
             return builder;
         }
 
-        ///// <summary>
-        ///// Set the name of the Ip Configuration.
-        ///// </summary>
-        ///// <param name="builder"></param>
-        ///// <param name="name">Name of the Ip Configuration.</param>
-        ///// <returns></returns>
-        //public static NetworkInterfaceBuilder IPConfigName(this NetworkInterfaceBuilder builder, Input<string> name)
-        //{
-        //    builder.IpConfigArgs.Name = name;
-        //    return builder;
-        //}
-
-        ///// <summary>
-        ///// Assigns the type of IP allocation to 'Dynamic'.
-        ///// </summary>
-        ///// <param name="builder"></param>
-        ///// <returns></returns>
-        //public static NetworkInterfaceBuilder EnableDynamicIPAllocation(this NetworkInterfaceBuilder builder)
-        //{
-        //    builder.IpConfigArgs.PrivateIPAllocationMethod = IPAllocationMethod.Dynamic;
-        //    return builder;
-        //}
-
-        ///// <summary>
-        ///// Assigns the type of IP allocation to 'Static' and expects IP address as an argument.
-        ///// </summary>
-        ///// <param name="builder"></param>
-        ///// <param name="ip">IP address for the Network Interface.</param>
-        ///// <returns></returns>
-        //public static NetworkInterfaceBuilder EnableStaticIPAllocation(this NetworkInterfaceBuilder builder, Input<string> ip)
-        //{
-        //    builder.IpConfigArgs.PrivateIPAddress = ip;
-        //    return builder;
-        //}
-
-        ///// <summary>
-        ///// Sets the Subnet for the Network Interface using the subnet's resource ID.
-        ///// </summary>
-        ///// <param name="builder">NI builder</param>
-        ///// <param name="subnetId">Subnet Id</param>
-        ///// <returns></returns>
-        //public static NetworkInterfaceBuilder Subnet(this NetworkInterfaceBuilder builder, Input<string> subnetId)
-        //{
-        //    builder.IpConfigArgs.Subnet = new Inputs.SubnetArgs { Id = subnetId }; // TODO: Check if this successfully associates the NIC with the subnet specified.
-        //    return builder;
-        //}
-        ///// <summary>
-        ///// Sets the private IP address version for the IP configuration for this NIC.
-        ///// </summary>
-        ///// <param name="builder">NI builder</param>
-        ///// <param name="version">Address Version; i.e. 'IPv4', 'IPv6'</param>
-        ///// <returns></returns>
-        //public static NetworkInterfaceBuilder IpAddressVersion(this NetworkInterfaceBuilder builder, InputUnion<string, IPVersion> version)
-        //{
-        //    builder.IpConfigArgs.PrivateIPAddressVersion = version;
-        //    return builder;
-        //}
-
         /// <summary>
         /// Sets the resource group the <see cref="NetworkInterface" /> will be created on
         /// </summary>
