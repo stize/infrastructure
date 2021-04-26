@@ -98,11 +98,11 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <param name="ipConfigName">IP Configuration name</param>
         /// <param name="subnetId">Subnet Resource ID</param>
         /// <param name="privateIpAddress">Private static IP address</param>
-        /// <param name="primaryIP">State true or false to declare whether the IP configuration is primary, or not.</param>
+        /// <param name="isPrimaryIP">Set as true to set this IP configuration as the primary one; set as false to set it as secondary</param>
         /// <param name="ipVersion">IP Version. Valid values are 'IPv4' and 'IPv6'.</param>
         /// <returns></returns>
         public static NetworkInterfaceBuilder AddStaticIPConfiguration(this NetworkInterfaceBuilder builder, Input<string> ipConfigName, Input<string> subnetId, 
-            Input<string> privateIpAddress, Input<bool> primaryIP, InputUnion<string, IPVersion> ipVersion = null)
+            Input<string> privateIpAddress, Input<bool> isPrimaryIP, InputUnion<string, IPVersion> ipVersion = null)
         {
             builder.IpConfigArgs.Add(new Inputs.NetworkInterfaceIPConfigurationArgs
             {
@@ -111,7 +111,7 @@ namespace Stize.Infrastructure.Azure.Networking
                 PrivateIPAddressVersion = ipVersion ?? IPVersion.IPv4,
                 PrivateIPAllocationMethod = IPAllocationMethod.Static,
                 PrivateIPAddress = privateIpAddress,
-                Primary = primaryIP
+                Primary = isPrimaryIP
             });
             return builder;
         }
