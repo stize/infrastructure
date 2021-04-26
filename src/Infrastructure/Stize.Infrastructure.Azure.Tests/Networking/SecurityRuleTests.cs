@@ -25,7 +25,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var sr = resources.OfType<SecurityRule>().ToArray();
 
             sr.Should().NotBeNull("Security Rules not found");
-            sr.Length.Should().Be(2);
+            sr.Length.Should().Be(3);
         }
         /// <summary>
         /// Checks that the name of the resource is assigned correctly

@@ -18,7 +18,7 @@ namespace Stize.Infrastructure.Azure.Networking
         /// <summary>
         /// NI IP Config arguments
         /// </summary>
-        public NetworkInterfaceIPConfigurationArgs IpConfigArgs { get; private set; } = new NetworkInterfaceIPConfigurationArgs();
+        public InputList<NetworkInterfaceIPConfigurationArgs> IpConfigArgs { get; private set; } = new InputList<NetworkInterfaceIPConfigurationArgs>();
         /// <summary>
         /// Creates a new instance of <see cref="NetworkInterfaceBuilder"/>
         /// </summary>

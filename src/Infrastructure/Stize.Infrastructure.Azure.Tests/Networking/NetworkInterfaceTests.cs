@@ -49,7 +49,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
             var nic = resources.OfType<NetworkInterface>().LastOrDefault();
             var t = await nic.DnsSettings.GetValueAsync();
-            t.Should().NotBeNull();            
+            t?.InternalDnsNameLabel.Should().Be("dnsLabel");            
         }
         /// <summary>
         /// Checks if the Accelerated Networking for the NIC is correct by checking if it is enabled or disabled.
@@ -82,7 +82,7 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         {
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
             var nic = resources.OfType<NetworkInterface>().LastOrDefault();
-            (await nic.ExtendedLocation.GetValueAsync())?.Name.Should().Be("easteurope");
+            (await nic.ExtendedLocation.GetValueAsync())?.Name.Should().Be("edgelocation");
         }
         /// <summary>
         /// Checks the Subnet of the NIC 
@@ -102,16 +102,32 @@ namespace Stize.Infrastructure.Tests.Azure.Networking
         public async Task IPAddressVersionIsCorrect()
         {
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
-            var nic = resources.OfType<NetworkInterface>().FirstOrDefault();
+            var nic = resources.OfType<NetworkInterface>().LastOrDefault();
             (await nic.IpConfigurations.GetValueAsync())[0].PrivateIPAddressVersion.Should().Be("IPv4");
+        }
+
+        [Fact]
+        public async Task IPConfigNameIsCorrect()
+        {
+            var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
+            var nic = resources.OfType<NetworkInterface>().LastOrDefault();
+            (await nic.IpConfigurations.GetValueAsync())[0].Name.Should().Be("ipconfig1");
         }
 
         [Fact]
         public async Task StaticIPAddressIsCorrect()
         {
             var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
-            var nic = resources.OfType<NetworkInterface>().FirstOrDefault();
-            (await nic.IpConfigurations.GetValueAsync())[0].PrivateIPAddress.Should().Be("172.16.0.5");
+            var nic = resources.OfType<NetworkInterface>().LastOrDefault();
+            (await nic.IpConfigurations.GetValueAsync())[1].PrivateIPAddress.Should().Be("172.16.0.69");
+        }
+
+        [Fact]
+        public async Task PrimaryIPIsCorrect()
+        {
+            var resources = await Deployment.TestAsync<NetworkInterfaceBasicStack>(new NetworkInterfaceBasicMock(), new TestOptions { IsPreview = false });
+            var nic = resources.OfType<NetworkInterface>().LastOrDefault();
+            (await nic.IpConfigurations.GetValueAsync())[1].Primary.Should().Be(true);
         }
         /// <summary>
         /// Checks the NSG associated with the NIC by checking if the Id of NSG property in the NIC to see if it matches the Id of the NSG resource created
